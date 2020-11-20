@@ -16,11 +16,11 @@ executable: fonction.o main.o
 
 # Pour créer le fichier fonction.o, il nous faut le fonction.c ..
 fonction.o: fonction.c
-	gcc -o fonction.o -c fonction.c
+	gcc -c fonction.c -o fonction.o
 
 # Idem pour le main.o :
 main.o: main.c fonction.h
-	gcc -o main.o -c main.c
+	gcc -c main.c -o main.o
 
 # clean : elle permet de supprimer tout les fichiers intermédiaires.
 clean:

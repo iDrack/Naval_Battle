@@ -55,7 +55,7 @@ Matrice* genererMatriceVide(char *titre, int taille_matrice){
 
 void afficherMatrice(Matrice *m){
     printf("\n%s : \n", m->titre);
-    printf("\t");
+    printf("     ");
     for(int i = 0; i < m->taille; i++) printf("  %c  ", 65+i);
     printf("\n");
     for(int i = 0; i < m->taille; i++){
@@ -82,4 +82,5 @@ void choisirTaille(int *ptr){
 
     *ptr = taille_matrice;
 }
+
 
