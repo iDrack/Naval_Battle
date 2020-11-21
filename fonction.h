@@ -3,15 +3,15 @@
 
 #define TAILLE_FLOTTE 5
 
-typedef enum etat {ATTENTE,PLACEE,TOUCHE,COULE} Etat;
+typedef enum etat {OK,TOUCHE,COULE} Etat;
 typedef enum navireType {PORTEAVION,CROISER,DESTROYER,SOUSMARIN,TORPILLEUR} NavireType;
-
+typedef enum orientation {H,V} Orientation; // H=Horizontal, V=Vertical
 typedef struct matrice Matrice;
 typedef struct navire Navire;
 
 struct matrice{
     int taille; // Taille de notre matrice.
-    char **value; // Notre matrice (tableau à 2D).
+    char **value; // Notre matrice (tableau ï¿½ 2D).
     char *titre;
 };
 
@@ -31,15 +31,19 @@ struct navire{
 int getTailleNavire(NavireType nt);
 // Fonction "genererNavire" permettant d'initialer un navire, sans affectation de position.
 Navire *genererNavire(NavireType nt, Matrice *m);
-// Fonction "placementNavire" permettant de créer et placer un navire à une position donné.
-void placementNavire(Matrice *m, NavireType nt, int *posX, int *posY);
-// Fonction "genererMatriceVide" permettant de créer une matrice vide (initialisation de la grille de jeu).
+// Fonction "placementNavire" permettant de crï¿½er et placer un navire ï¿½ une position donnï¿½.
+void placementNavire(Matrice *m, NavireType nt, int posX, int posY, Orientation o);
+// Fonction "genererMatriceVide" permettant de crï¿½er une matrice vide (initialisation de la grille de jeu).
 Matrice* genererMatriceVide(char *titre, int taille_matrice);
 // Fonction "afficherMatrice" qui permet d'afficher la matrice/grille de jeu.
 void afficherMatrice(Matrice *m);
 // Fonction "choisirTaille" qui permet de choisir la taille de la grille. Passage par adresse de l'entier.
 void choisirTaille(int *ptr);
-// Fonction "placementAleatoire" permettant de placer aléatoirement les navires sur une matrice donné.
+// Fonction "genererArmada" permettant au joueur de generer son armada et de placer ses navires
+void genererArmadaJoueur(Matrice *m, Navire **armada);
+
+void afficherArmada(Navire **armada);
+// Fonction "placementAleatoire" permettant de placer alï¿½atoirement les navires sur une matrice donnï¿½.
 void placementAleatoire(Matrice *m);
 
 #endif
