@@ -5,7 +5,7 @@
 
 typedef enum etat {OK,TOUCHE,COULE} Etat;
 typedef enum navireType {PORTEAVION,CROISER,DESTROYER,SOUSMARIN,TORPILLEUR} NavireType;
-typedef enum orientation {H,V} Orientation; // H=Horizontal, V=Vertical
+typedef enum orientation {H,V} Orientation; // H = Horizontal, V = Vertical
 typedef struct matrice Matrice;
 typedef struct navire Navire;
 
@@ -31,7 +31,7 @@ struct navire{
 int getTailleNavire(NavireType nt);
 // Fonction "genererNavire" permettant d'initialer un navire, sans affectation de position.
 Navire *genererNavire(NavireType nt, Matrice *m);
-// Fonction "placementNavire" permettant de cr�er et placer un navire � une position donn�.
+// Fonction "placementNavire" permettant de créer et placer un navire à une position donné.
 void placementNavire(Matrice *m, NavireType nt, int posX, int posY, Orientation o);
 // Fonction "genererMatriceVide" permettant de cr�er une matrice vide (initialisation de la grille de jeu).
 Matrice* genererMatriceVide(char *titre, int taille_matrice);
@@ -41,9 +41,9 @@ void afficherMatrice(Matrice *m);
 void choisirTaille(int *ptr);
 // Fonction "genererArmada" permettant au joueur de generer son armada et de placer ses navires
 void genererArmadaJoueur(Matrice *m, Navire **armada);
-
+//
 void afficherArmada(Navire **armada);
-// Fonction "placementAleatoire" permettant de placer al�atoirement les navires sur une matrice donn�.
+// Fonction "placementAleatoire" permettant de placer aléatoirement les navires sur une matrice donné.
 void placementAleatoire(Matrice *m);
 
 #endif
