@@ -1,6 +1,8 @@
 #ifndef FONCTION_H
 #define FONCTION_H
 
+#define TAILLE_FLOTTE 5
+
 typedef enum etat {ATTENTE,PLACEE,TOUCHE,COULE} Etat;
 typedef enum navireType {PORTEAVION,CROISER,DESTROYER,SOUSMARIN,TORPILLEUR} NavireType;
 
@@ -24,21 +26,20 @@ struct navire{
     // Ajouter les tirs speciaux
 };
 
-// -- Variable(s) globale(s)
-
-
 // -- Fonctions :
 // Retourne la taille d'un navire en fonction de son type.
 int getTailleNavire(NavireType nt);
-// Fonction "genererNavire" permettant d'initialer un navire.
+// Fonction "genererNavire" permettant d'initialer un navire, sans affectation de position.
 Navire *genererNavire(NavireType nt, Matrice *m);
-// Fonction "placementNavire" permettant de placer un navire.
+// Fonction "placementNavire" permettant de créer et placer un navire à une position donné.
 void placementNavire(Matrice *m, NavireType nt, int *posX, int *posY);
-// Fonction "genererMatriceVide" permettant de créer une matrice vide.
+// Fonction "genererMatriceVide" permettant de créer une matrice vide (initialisation de la grille de jeu).
 Matrice* genererMatriceVide(char *titre, int taille_matrice);
-// Fonction "afficherMatrice" qui permet d'afficher la matrice.
+// Fonction "afficherMatrice" qui permet d'afficher la matrice/grille de jeu.
 void afficherMatrice(Matrice *m);
 // Fonction "choisirTaille" qui permet de choisir la taille de la grille. Passage par adresse de l'entier.
 void choisirTaille(int *ptr);
+// Fonction "placementAleatoire" permettant de placer aléatoirement les navires sur une matrice donné.
+void placementAleatoire(Matrice *m);
 
 #endif

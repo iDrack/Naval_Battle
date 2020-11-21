@@ -46,7 +46,7 @@ void placementNavire(Matrice *m, NavireType nt, int *posX, int *posY){
         m->value[posY[i]][posX[i]] = 'O';
     }
 
-    /*
+
      // ---------- ZONE TEST ----------
     printf("\n Verif navire aloué : \n");
     printf("Etat : %d \n", notre_navire->etat);
@@ -55,7 +55,7 @@ void placementNavire(Matrice *m, NavireType nt, int *posX, int *posY){
     printf("Taille : %d \n", notre_navire->taille);
     printf("De X%d a X%d \n", notre_navire->posX[0], notre_navire->posX[notre_navire->taille - 1]);
     printf("De Y%d a Y%d \n\n", notre_navire->posY[0], notre_navire->posY[notre_navire->taille - 1]);
-    */
+
 }
 
 Matrice* genererMatriceVide(char *titre, int taille_matrice){
@@ -109,4 +109,9 @@ void choisirTaille(int *ptr){
     *ptr = taille_matrice;
 }
 
+void placementAleatoire(Matrice *m){
+    // Parcours tout les types de navires pour le créer et l'ajouter ..
+
+    // En cours ..
+}
 

@@ -14,7 +14,7 @@ int main(){
 
     printf("\n");
 
-    /*
+
     // ---------- ZONE TEST ----------
     printf("Creation d'un navire de type DESTROYER. \n");
     NavireType le_type = DESTROYER;
@@ -29,8 +29,10 @@ int main(){
     placementNavire(matriceJoueur, le_type, posX, posY);
     afficherMatrice(matriceJoueur);
 
+
+
     // ---------- ZONE TEST ----------
-    */
+
 
     return EXIT_SUCCESS;
 }
