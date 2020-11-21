@@ -23,15 +23,15 @@ int getTailleNavire(NavireType nt){
     return -1;
 }
 
-/*
-Génére un navire selon le type souhaitée pour la matrice passée en paramètre.
-Param. :
-    nt : type de navire voulue, type : NavireType.
-    m : pointeur de la matrice que l'on veut modifier, type : pointeur de Matrice.
-Returne :
-    Navire venant d'être généree, type : Pointeur de Navire.
-*/
 Navire *genererNavire(NavireType nt, Matrice *m){
+    /*
+    Génére un navire selon le type souhaitée pour la matrice passée en paramètre.
+    Param. :
+        nt : type de navire voulue, type : NavireType.
+        m : pointeur de la matrice que l'on veut modifier, type : pointeur de Matrice.
+    Return :
+        Navire venant d'être généree, type : Pointeur de Navire.
+    */
     Navire *n = malloc(sizeof(Navire));
     n->nom = nt;
     n->etat = OK;
@@ -45,16 +45,16 @@ Navire *genererNavire(NavireType nt, Matrice *m){
     return n;
 }
 
-/*
-Permet de placer un navire selon des coordonées et une orientation sur la matrice voulu.
-Param. :
-    m : matrice que l'on veut modifier, type : pointeur de Matrice.
-    nt : type de navire a placer, type : NavireType.
-    x : coordonee de l'axe des abcisses, type : int.
-    y : coordonne de l'axe des ordonnees, type : int.
-    o : orientation voulu du navire, type : Orientation.
-*/
 void placementNavire(Matrice *m, NavireType nt, int x, int y, Orientation o){
+    /*
+    Permet de placer un navire selon des coordonées et une orientation sur la matrice voulu.
+    Param. :
+        m : matrice que l'on veut modifier, type : pointeur de Matrice.
+        nt : type de navire a placer, type : NavireType.
+        x : coordonee de l'axe des abcisses, type : int.
+        y : coordonne de l'axe des ordonnees, type : int.
+        o : orientation voulu du navire, type : Orientation.
+    */
     Navire *notre_navire = genererNavire(nt, m);
     int taille = getTailleNavire(nt);
     int posX[taille], posY[taille];
@@ -77,15 +77,15 @@ void placementNavire(Matrice *m, NavireType nt, int x, int y, Orientation o){
     }
 }
 
-/*
-Permet de générer une matrice vide.
-Param :
-    titre : nom que l'on veut donner a la matrice, type: chaine de caractere.
-    taille_matrice : taille de la matrice, type : int.
-Return:
-    Matrice venant d'etre generer, type: pointeur vers Matrice.
-*/
 Matrice* genererMatriceVide(char *titre, int taille_matrice){
+    /*
+    Permet de générer une matrice vide.
+    Param :
+        titre : nom que l'on veut donner a la matrice, type: chaine de caractere.
+        taille_matrice : taille de la matrice, type : int.
+    Return:
+        Matrice venant d'etre generer, type: pointeur vers Matrice.
+    */
     Matrice *m = malloc(sizeof(Matrice));
     m->titre = titre;
     m->taille = taille_matrice;
@@ -105,12 +105,12 @@ Matrice* genererMatriceVide(char *titre, int taille_matrice){
     return m;
 }
 
-/*
-Permet d'afficher dans la sortie standard la matrice passée en paramètre.
-Param. :
-    m : pointeur de la matrice aue l'on veut afficher, type : pointeur de Matrice.
-*/
 void afficherMatrice(Matrice *m){
+    /*
+    Permet d'afficher dans la sortie standard la matrice passée en paramètre.
+    Param. :
+        m : pointeur de la matrice aue l'on veut afficher, type : pointeur de Matrice.
+    */
     printf("\n%s : \n", m->titre);
     printf("     ");
     for(int i = 0; i < m->taille; i++) printf("%c ", 65+i);
@@ -126,12 +126,12 @@ void afficherMatrice(Matrice *m){
     }
 }
 
-/*
-Permet de deternimer la taille d'une matrice.
-Param. :
-    ptr : pointeur de la taille de matrice que l'on veut modifier, type: pointeur d'int.
-*/
 void choisirTaille(int *ptr){
+    /*
+    Permet de deternimer la taille d'une matrice.
+    Param. :
+        ptr : pointeur de la taille de matrice que l'on veut modifier, type: pointeur d'int.
+    */
     int taille_matrice;
     printf("Choisissez la taille de la grille de jeu (26 max) : ");
     scanf("%d", &taille_matrice);
@@ -147,19 +147,59 @@ void choisirTaille(int *ptr){
 
 void afficherArmada(Navire **armada){
     //TODO trouver comment faire pour afficher des enum
-    puts("Votre armada : ");
+    puts("Votre armada :\n");
+    char* st;
+    char* st2;
     for(int i = 0; i < 5; i++){
-        printf("%s \t Etat:%s\n",(armada[i]->nom+""),(armada[i]->etat+""));
+        NavireType nt=armada[i]->nom;
+        switch(nt){
+            case PORTEAVION:
+                st="Porte-avion";
+                break;
+            case CROISER:
+                st="Croiser  ";
+                break;
+            case DESTROYER:
+                st="Destroyer";
+                break;
+            case SOUSMARIN:
+                st="Sous-marin";
+                break;
+            case TORPILLEUR:
+                st="Torpilleur";
+                break;
+            default:
+                st="";
+                break;
+        }
+        Etat et=armada[i]->etat;
+        switch(et){
+            case OK:
+                st2="OK";
+                break;
+            case TOUCHE:
+                st2="TOUCHE";
+                break;
+            case COULE:
+                st2="COULE";
+                break;
+            default:
+                st2="";
+                break;
+        }
+        if(st != "")printf("%s\tEtat:%s\n",st,st2);
     }
+    printf("\n");
 }
 
-/*
-Génére l'armada du joueur.
-Param. :
-    m : matrice ou l'on ajoute, type : pointeur de navire.
-    armada : liste des navire du joueur, type : liste de pointeur de Navire.
-*/
 void genererArmadaJoueur(Matrice *m, Navire **armada){
+    /*
+    Génére l'armada du joueur.
+    Param. :
+        m : matrice ou l'on ajoute, type : pointeur de navire.
+        armada : liste des navire du joueur, type : liste de pointeur de Navire.
+    */
+   //TODO gerer collisions
     int tmp, x, y;
     NavireType nt;
     Orientation o;
@@ -192,17 +232,16 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
         n->taille=getTailleNavire(nt);
         armada[i]=n;
 
-        printf("\nPosition ?\nx=");
-        scanf("%d",&x);
-        printf("y=");
+        printf("\nPosition ?");
+        printf("\ny=");
         scanf("%s",&y);
-
+        printf("x=");
+        scanf("%d",&x);
         printf("Orientation (H ou V)\n>");
         scanf("%s",&tmpO);
 
         if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
-
-        placementNavire(m,nt,(x-1),(y-97),o);
+        placementNavire(m,nt,(y-97),(x-1),o);
         afficherMatrice(m);
 
         printf("\n");

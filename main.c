@@ -12,7 +12,7 @@ int main(){
     afficherMatrice(matriceJoueur);
     printf("\n");
     genererArmadaJoueur(matriceJoueur,armadaJoueur);
-
+    afficherArmada(armadaJoueur);
     return EXIT_SUCCESS;
 }
 

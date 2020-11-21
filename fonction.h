@@ -41,7 +41,7 @@ void afficherMatrice(Matrice *m);
 void choisirTaille(int *ptr);
 // Fonction "genererArmada" permettant au joueur de generer son armada et de placer ses navires
 void genererArmadaJoueur(Matrice *m, Navire **armada);
-//
+// Fonction "afficherArmada" permettant d'afficher l'armada d'un joueur
 void afficherArmada(Navire **armada);
 // Fonction "placementAleatoire" permettant de placer aléatoirement les navires sur une matrice donné.
 void placementAleatoire(Matrice *m);
