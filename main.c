@@ -12,6 +12,26 @@ int main(){
     afficherMatrice(matriceAdversaire);
     afficherMatrice(matriceJoueur);
 
+    printf("\n");
+
+    /*
+    // ---------- ZONE TEST ----------
+    printf("Creation d'un navire de type DESTROYER. \n");
+    NavireType le_type = DESTROYER;
+    int la_taille = getTailleNavire(le_type);
+    printf("Placement du navire en : \n");
+    int posX[la_taille], posY[la_taille];
+    for(int i = 0; i < la_taille; i++){
+        posX[i] = (i+2); printf(" X%d ", posX[i]);
+        posY[i] = 2; printf(" Y%d ", posY[i]);
+    }
+    printf("\n");
+    placementNavire(matriceJoueur, le_type, posX, posY);
+    afficherMatrice(matriceJoueur);
+
+    // ---------- ZONE TEST ----------
+    */
+
     return EXIT_SUCCESS;
 }
 

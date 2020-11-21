@@ -2,34 +2,60 @@
 #include <stdlib.h>
 #include "fonction.h"
 
+int getTailleNavire(NavireType nt){
+    switch(nt){
+        case PORTEAVION:
+            return 5;
+            break;
+        case CROISER:
+            return 4;
+            break;
+        case DESTROYER:
+            return 3;
+            break;
+        case SOUSMARIN:
+            return 3;
+            break;
+        case TORPILLEUR:
+            return 2;
+            break;
+    }
+
+    return -1;
+}
+
 Navire *genererNavire(NavireType nt, Matrice *m){
     Navire *n = malloc(sizeof(Navire));
     n->nom = nt;
     n->etat = ATTENTE;
-    n->matrice = m;
+    n->matrice = m; // Pointeur de la matrice afin de connaitre la grille/matrice d'origine.
 
-    switch (nt){
-        case PORTEAVION:
-            n->taille = 5;
-            break;
-        case CROISER:
-            n->taille = 4;
-            break;
-        case DESTROYER:
-            n->taille = 3;
-            break;
-        case SOUSMARIN:
-            n->taille = 3;
-            break;
-        case TORPILLEUR:
-            n->taille = 2;
-            break;
+    n->taille = getTailleNavire(nt);
 
-        default:
-            break;
-    }
+    n->posX = (int*)malloc(n->taille * sizeof(int));
+    n->posY = (int*)malloc(n->taille * sizeof(int));
 
     return n;
+}
+
+void placementNavire(Matrice *m, NavireType nt, int *posX, int *posY){
+    Navire *notre_navire = genererNavire(nt, m);
+    for(int i = 0; i < notre_navire->taille; i++){
+        notre_navire->posX[i] = posX[i];
+        notre_navire->posY[i] = posY[i];
+        m->value[posY[i]][posX[i]] = 'O';
+    }
+
+    /*
+     // ---------- ZONE TEST ----------
+    printf("\n Verif navire aloué : \n");
+    printf("Etat : %d \n", notre_navire->etat);
+    printf("A la matrice : '%s' \n", notre_navire->matrice->titre);
+    printf("Type : %d \n", notre_navire->nom);
+    printf("Taille : %d \n", notre_navire->taille);
+    printf("De X%d a X%d \n", notre_navire->posX[0], notre_navire->posX[notre_navire->taille - 1]);
+    printf("De Y%d a Y%d \n\n", notre_navire->posY[0], notre_navire->posY[notre_navire->taille - 1]);
+    */
 }
 
 Matrice* genererMatriceVide(char *titre, int taille_matrice){
