@@ -9,11 +9,10 @@ int main(){
 
     Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
     Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice);
-
+    afficherMatrice(matriceJoueur);
     printf("\n");
-
     genererArmadaJoueur(matriceJoueur,armadaJoueur);
-    
+
     return EXIT_SUCCESS;
 }
 
