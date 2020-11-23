@@ -233,15 +233,15 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
         armada[i]=n;
 
         printf("\nPosition ?");
-        printf("\ny=");
-        scanf("%s",&y);
-        printf("x=");
+        printf("\nx=");
         scanf("%d",&x);
+        printf("y=");
+        scanf("%d",&y);
         printf("Orientation (H ou V)\n>");
         scanf("%s",&tmpO);
 
         if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
-        placementNavire(m,nt,(y-97),(x-1),o);
+        placementNavire(m,nt,(y-1),(x-1),o);
         afficherMatrice(m);
 
         printf("\n");
