@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "fonction.h"
 
 int getTailleNavire(NavireType nt){
@@ -146,7 +147,6 @@ void choisirTaille(int *ptr){
 }
 
 void afficherArmada(Navire **armada){
-    //TODO trouver comment faire pour afficher des enum
     puts("Votre armada :\n");
     char* st;
     char* st2;
@@ -199,44 +199,46 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
         m : matrice ou l'on ajoute, type : pointeur de navire.
         armada : liste des navire du joueur, type : liste de pointeur de Navire.
     */
-   //TODO gerer collisions
+
+    //TODO Gérer les collisions !
     int tmp, x, y;
     NavireType nt;
     Orientation o;
     char tmpO;
-    for(int i=0;i<5;i++){
+    for(int i = 0; i < TAILLE_FLOTTE; i++){
         printf("Choisisser un navire:\n1. Torpilleur\n2. Destroyer\n3. Sous-marin\n4. Croiser\n5. Porte-avion\n> ");
         scanf("%d", &tmp);
         switch(tmp){
-        case 5:
-            nt=PORTEAVION;
-            break;
-        case 4:
-            nt=CROISER;
-            break;
-        case 3:
-            nt=SOUSMARIN;
-            break;
-        case 2:
-            nt=DESTROYER;
-            break;
-        case 1:
-            nt=TORPILLEUR;
-            break;
+            case 5:
+                nt = PORTEAVION;
+                break;
+            case 4:
+                nt = CROISER;
+                break;
+            case 3:
+                nt = SOUSMARIN;
+                break;
+            case 2:
+                nt = DESTROYER;
+                break;
+            case 1:
+                nt = TORPILLEUR;
+                break;
         }
         //Navire *n=genererNavire(nt,m);
         Navire *n = malloc(sizeof(Navire));
-        n->etat=OK;
-        n->matrice=m;
-        n->nom=nt;
-        n->taille=getTailleNavire(nt);
-        armada[i]=n;
+        n->etat = OK;
+        n->matrice = m;
+        n->nom = nt;
+        n->taille = getTailleNavire(nt);
+        armada[i] = n;
 
         printf("\nPosition ?");
         printf("\nx=");
         scanf("%d",&x);
         printf("y=");
         scanf("%d",&y);
+
         printf("Orientation (H ou V)\n>");
         scanf("%s",&tmpO);
 
@@ -248,9 +250,112 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
     }
 }
 
-void placementAleatoire(Matrice *m){
-    // Parcours tout les types de navires pour le cr�er et l'ajouter ..
+void placementAleatoire(Matrice *m, Navire **armada){
+    /*
+    Génére l'armada du joueur.
+    Param. :
+        m : matrice où l'on ajoute, type : pointeur de navire.
+        armada : liste des navire du joueur ou de l'adversaire, type : liste de pointeur de Navire.
+    */
+    generationArmadeStandard(m, armada);
+    int nombreAleatoireX, nombreAleatoireY;
+    int maximum = m->taille, minimum = 1;
+    int orientationAleatoire;
+
+    // Parcours tous les navires de l'armada pour le placement.
+    for(int num = 0; num < TAILLE_FLOTTE; num++){
+        int selection = 0;
+        while(selection == 0){
+            // Génération du nombre aléatoire :
+            srand(time(NULL));
+            // Position ?
+            nombreAleatoireX = (rand() % (maximum - minimum + 1)) + minimum;
+            nombreAleatoireY = (rand() % (maximum - minimum + 1)) + minimum;
+            while( m->value[nombreAleatoireX][nombreAleatoireY] != '.' ){
+                nombreAleatoireX = (rand() % (maximum - minimum + 1)) + minimum;
+                nombreAleatoireY = (rand() % (maximum - minimum + 1)) + minimum;
+            }
+
+            // Orientation ?
+            int orientOK = 0;
+            int recommencer = 0;
+            while(orientOK == 0 && recommencer < 2){
+                orientOK = 1;
+                orientationAleatoire = (rand() % (maximum - minimum + 1)) + minimum;
+                if(orientationAleatoire >= (maximum / 2)){
+                    for(int i = 0; i < armada[num]->taille; i++){
+                        if( m->value[nombreAleatoireX+i][nombreAleatoireY] != '.' ){
+                            orientOK = 0;
+                            recommencer++;
+                            break;
+                        }
+                    }
+
+                    if(orientOK == 1){
+                        selection = 1;
+                        for(int i = 0; i < armada[num]->taille; i++){
+                            armada[num]->posX[i] = nombreAleatoireX+i;
+                            armada[num]->posY[i] = nombreAleatoireY;
+                        }
+                    }
+                } else {
+                    for(int i = 0; i < armada[num]->taille; i++){
+                        if( m->value[nombreAleatoireX][nombreAleatoireY+i] != '.' ){
+                            orientOK = 0;
+                            recommencer++;
+                            break;
+                        }
+                    }
+
+                    if(orientOK == 1){
+                        selection = 1;
+                        for(int i = 0; i < armada[num]->taille; i++){
+                            armada[num]->posX[i] = nombreAleatoireX;
+                            armada[num]->posY[i] = nombreAleatoireY+i;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     // En cours ..
+    afficherMatrice(m);
+}
+
+void generationArmadeStandard(Matrice *m, Navire **armada){
+    /*
+        Génére une flotte standard (soit 1 navire de chaque).
+    */
+    NavireType nt;
+
+    for(int i = 0; i < TAILLE_FLOTTE; i++){
+        // On place en mémoire le navire.
+        armada[i] = (Navire*)malloc(sizeof(Navire));
+        // Type de navire.
+        switch(i){
+            case 5:
+                nt = PORTEAVION;
+                break;
+            case 4:
+                nt = CROISER;
+                break;
+            case 3:
+                nt = DESTROYER;
+                break;
+            case 2:
+                nt = SOUSMARIN;
+                break;
+            case 1:
+                nt = TORPILLEUR;
+                break;
+        }
+        armada[i]->etat = OK;
+        armada[i]->matrice = m;
+        armada[i]->nom = nt;
+        armada[i]->taille = getTailleNavire(nt);
+        armada[i]->posX = (int*)malloc(armada[i]->taille * sizeof(int));
+        armada[i]->posY = (int*)malloc(armada[i]->taille * sizeof(int));
+    }
 }
 

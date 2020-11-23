@@ -44,6 +44,8 @@ void genererArmadaJoueur(Matrice *m, Navire **armada);
 // Fonction "afficherArmada" permettant d'afficher l'armada d'un joueur
 void afficherArmada(Navire **armada);
 // Fonction "placementAleatoire" permettant de placer aléatoirement les navires sur une matrice donné.
-void placementAleatoire(Matrice *m);
+void placementAleatoire(Matrice *m, Navire **armada);
+// Génére une flotte standard composée de 5 bateaux (soit 1 navire de chaque).
+void generationArmadeStandard(Matrice *m, Navire **armada);
 
 #endif
