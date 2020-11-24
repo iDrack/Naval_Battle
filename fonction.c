@@ -258,12 +258,14 @@ void placementAleatoire(Matrice *m, Navire **armada){
         armada : liste des navire du joueur ou de l'adversaire, type : liste de pointeur de Navire.
     */
     generationArmadeStandard(m, armada);
+    //afficherArmada(armada);
     int nombreAleatoireX, nombreAleatoireY;
     int maximum = m->taille, minimum = 1;
     int orientationAleatoire;
 
     // Parcours tous les navires de l'armada pour le placement.
     for(int num = 0; num < TAILLE_FLOTTE; num++){
+        printf("Navire num. %d \n", num);
         int selection = 0;
         while(selection == 0){
             // Génération du nombre aléatoire :
@@ -279,7 +281,17 @@ void placementAleatoire(Matrice *m, Navire **armada){
             // Orientation ?
             int orientOK = 0;
             int recommencer = 0;
-            while(orientOK == 0 && recommencer < 2){
+            while(orientOK == 0){
+                if(recommencer != 0){
+                    srand(time(NULL));
+                    // Position ?
+                    nombreAleatoireX = (rand() % (maximum - minimum + 1)) + minimum;
+                    nombreAleatoireY = (rand() % (maximum - minimum + 1)) + minimum;
+                    while( m->value[nombreAleatoireX][nombreAleatoireY] != '.' ){
+                        nombreAleatoireX = (rand() % (maximum - minimum + 1)) + minimum;
+                        nombreAleatoireY = (rand() % (maximum - minimum + 1)) + minimum;
+                    }
+                }
                 orientOK = 1;
                 orientationAleatoire = (rand() % (maximum - minimum + 1)) + minimum;
                 if(orientationAleatoire >= (maximum / 2)){
@@ -296,6 +308,7 @@ void placementAleatoire(Matrice *m, Navire **armada){
                         for(int i = 0; i < armada[num]->taille; i++){
                             armada[num]->posX[i] = nombreAleatoireX+i;
                             armada[num]->posY[i] = nombreAleatoireY;
+                            m->value[nombreAleatoireX+i][nombreAleatoireY] = 'O';
                         }
                     }
                 } else {
@@ -312,11 +325,18 @@ void placementAleatoire(Matrice *m, Navire **armada){
                         for(int i = 0; i < armada[num]->taille; i++){
                             armada[num]->posX[i] = nombreAleatoireX;
                             armada[num]->posY[i] = nombreAleatoireY+i;
+                            m->value[nombreAleatoireX][nombreAleatoireY+i] = 'O';
                         }
                     }
                 }
             }
         }
+
+        printf("aleaX : %d et aleaY : %d \n", nombreAleatoireX, nombreAleatoireY);
+        for(int i = 0; i < armada[num]->taille; i++) printf("X+%d = %d ", i, armada[num]->posX[i]);
+        printf("\n");
+        for(int i = 0; i < armada[num]->taille; i++) printf("Y+%d = %d ", i, armada[num]->posY[i]);
+        printf("\n------------------\n");
     }
 
     // En cours ..
@@ -328,25 +348,26 @@ void generationArmadeStandard(Matrice *m, Navire **armada){
         Génére une flotte standard (soit 1 navire de chaque).
     */
     NavireType nt;
+    printf("Creation d'une flotte standard .. \n");
 
     for(int i = 0; i < TAILLE_FLOTTE; i++){
         // On place en mémoire le navire.
         armada[i] = (Navire*)malloc(sizeof(Navire));
         // Type de navire.
         switch(i){
-            case 5:
+            case 4:
                 nt = PORTEAVION;
                 break;
-            case 4:
+            case 3:
                 nt = CROISER;
                 break;
-            case 3:
+            case 2:
                 nt = DESTROYER;
                 break;
-            case 2:
+            case 1:
                 nt = SOUSMARIN;
                 break;
-            case 1:
+            case 0:
                 nt = TORPILLEUR;
                 break;
         }
