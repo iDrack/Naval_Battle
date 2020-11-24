@@ -19,8 +19,10 @@ int main(){
     afficherArmada(armadaJoueur);
     */
 
+    /*
     printf("Test placement aleatoire : \n");
     placementAleatoire(matriceJoueur, armadaJoueur);
+    */
 
     return EXIT_SUCCESS;
 }

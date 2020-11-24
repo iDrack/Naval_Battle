@@ -294,6 +294,7 @@ void placementAleatoire(Matrice *m, Navire **armada){
                 }
                 orientOK = 1;
                 orientationAleatoire = (rand() % (maximum - minimum + 1)) + minimum;
+                if(recommencer == 0) printf("Orient : %d \n", orientationAleatoire);
                 if(orientationAleatoire >= (maximum / 2)){
                     for(int i = 0; i < armada[num]->taille; i++){
                         if( m->value[nombreAleatoireX][nombreAleatoireY+i] != '.' ){
