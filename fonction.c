@@ -265,7 +265,7 @@ void placementAleatoire(Matrice *m, Navire **armada){
 
     // Parcours tous les navires de l'armada pour le placement.
     for(int num = 0; num < TAILLE_FLOTTE; num++){
-        printf("Navire num. %d \n", num);
+        printf("Navire num. %d \n", num+1);
         int selection = 0;
         while(selection == 0){
             // Génération du nombre aléatoire :
@@ -296,23 +296,6 @@ void placementAleatoire(Matrice *m, Navire **armada){
                 orientationAleatoire = (rand() % (maximum - minimum + 1)) + minimum;
                 if(orientationAleatoire >= (maximum / 2)){
                     for(int i = 0; i < armada[num]->taille; i++){
-                        if( m->value[nombreAleatoireX+i][nombreAleatoireY] != '.' ){
-                            orientOK = 0;
-                            recommencer++;
-                            break;
-                        }
-                    }
-
-                    if(orientOK == 1){
-                        selection = 1;
-                        for(int i = 0; i < armada[num]->taille; i++){
-                            armada[num]->posX[i] = nombreAleatoireX+i;
-                            armada[num]->posY[i] = nombreAleatoireY;
-                            m->value[nombreAleatoireX+i][nombreAleatoireY] = 'O';
-                        }
-                    }
-                } else {
-                    for(int i = 0; i < armada[num]->taille; i++){
                         if( m->value[nombreAleatoireX][nombreAleatoireY+i] != '.' ){
                             orientOK = 0;
                             recommencer++;
@@ -326,6 +309,23 @@ void placementAleatoire(Matrice *m, Navire **armada){
                             armada[num]->posX[i] = nombreAleatoireX;
                             armada[num]->posY[i] = nombreAleatoireY+i;
                             m->value[nombreAleatoireX][nombreAleatoireY+i] = 'O';
+                        }
+                    }
+                } else {
+                    for(int i = 0; i < armada[num]->taille; i++){
+                        if( m->value[nombreAleatoireX+i][nombreAleatoireY] != '.' ){
+                            orientOK = 0;
+                            recommencer++;
+                            break;
+                        }
+                    }
+
+                    if(orientOK == 1){
+                        selection = 1;
+                        for(int i = 0; i < armada[num]->taille; i++){
+                            armada[num]->posX[i] = nombreAleatoireX+i;
+                            armada[num]->posY[i] = nombreAleatoireY;
+                            m->value[nombreAleatoireX+i][nombreAleatoireY] = 'O';
                         }
                     }
                 }
