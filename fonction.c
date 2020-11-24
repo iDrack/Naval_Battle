@@ -333,9 +333,10 @@ void placementAleatoire(Matrice *m, Navire **armada){
         }
 
         printf("aleaX : %d et aleaY : %d \n", nombreAleatoireX, nombreAleatoireY);
-        for(int i = 0; i < armada[num]->taille; i++) printf("X+%d = %d ", i, armada[num]->posX[i]);
-        printf("\n");
-        for(int i = 0; i < armada[num]->taille; i++) printf("Y+%d = %d ", i, armada[num]->posY[i]);
+        printf("X : ");
+        for(int i = 0; i < armada[num]->taille; i++) printf("%d ", 1+armada[num]->posX[i]);
+        printf("\nY : ");
+        for(int i = 0; i < armada[num]->taille; i++) printf("%c ", 65+armada[num]->posY[i]);
         printf("\n------------------\n");
     }
 
