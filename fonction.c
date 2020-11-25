@@ -193,6 +193,51 @@ void afficherArmada(Navire **armada){
     printf("\n");
 }
 
+int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o){
+    for(int i=0;i<=taille;i++){
+        if(o=H){
+            if(y+i > m->taille)return 1;
+        }else if(o=V){
+            if(x+i > m->taille)return 1;
+        }
+    }
+    return 0;
+}
+
+int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab){
+    int maxi=m->taille-1, mini=0;
+    for(int i=0;i<=taille;i++){
+        if(o==V){
+            if(tab[y+i][x] == 1)return 1;
+        }else if(o==H){
+            if(tab[y][x+i] == 1)return 1;
+        }
+    }
+    for(int i=0;i<taille;i++){
+        if(o==V){
+            tab[y+i][x]=1;
+            if(x+1 < maxi)tab[y+i][x+1]=1;
+            if(x-1 > mini)tab[y+i][x-1]=1;
+            if(y+taille > maxi)tab[y+taille][x]=1;
+            if(y-1 < mini)tab[y+1][x]=1;
+        }else if(o==H){
+            tab[y][x+i]=1;
+            if(y+1 < maxi)tab[y+1][x+i]=1;
+            if(y-1 > mini)tab[y-1][x+i]=1;
+            if(x+taille > maxi)tab[y][x+taille]=1;
+            if(x-1 < mini)tab[y][x-1]=1;
+        }
+    }
+    if(o==H){
+        tab[y][x-1]=1;
+        tab[y][x+taille]=1;
+    }else if(o==V){
+        tab[y-1][x]=1;
+        tab[y+taille][x]=1;
+    }
+    return 0;
+}
+
 void genererArmadaJoueur(Matrice *m, Navire **armada){
     /*
     Génére l'armada du joueur.
@@ -200,8 +245,17 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
         m : matrice ou l'on ajoute, type : pointeur de navire.
         armada : liste des navire du joueur, type : liste de pointeur de Navire.
     */
-
-    //TODO Gérer les collisions !
+    int **tableau2D = (int **)malloc(m->taille * sizeof(int*)); // Mémoire (lignes).
+    // Mémoire (colonnes).
+    for(char i = 0; i < m->taille; i++){
+        tableau2D[i] = (int *)malloc(m->taille * sizeof(int));
+    }
+    // Initialisation à vide.
+    for(int i = 0; i < m->taille; i++){
+        for(int j = 0; j < m->taille; j++){
+            tableau2D[i][j] = 0;
+        }
+    }
     int tmp, x, y;
     NavireType nt;
     Orientation o;
@@ -226,7 +280,6 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
                 nt = TORPILLEUR;
                 break;
         }
-        //Navire *n=genererNavire(nt,m);
         Navire *n = malloc(sizeof(Navire));
         n->etat = OK;
         n->matrice = m;
@@ -235,20 +288,42 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
         armada[i] = n;
 
         printf("\nPosition ?");
-        printf("\nx=");
-        scanf("%d",&x);
-        printf("y=");
+        printf("\ny=");
         scanf("%d",&y);
+        printf("x=");
+        scanf("%d",&x);
 
         printf("Orientation (H ou V)\n>");
         scanf("%s",&tmpO);
 
         if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
+
+        while(sortieMatrice(m,(y-1),(x-1),getTailleNavire(nt),o) == 1){
+            printf("\nHo non ! Le navire est hors du champs de bataille !\n");
+            printf("\ny=");
+            scanf("%d",&y);
+            printf("x=");
+            scanf("%d",&x);
+            printf("Orientation (H ou V)\n>");
+            scanf("%s",&tmpO);
+            if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
+        }
+        while(naviresColles(m,(y-1),(x-1),getTailleNavire(nt),o,tableau2D) == 1){            
+            printf("\nHo non ! Le navire est cote a cote a un autre !\n");
+            printf("\ny=");
+            scanf("%d",&y);
+            printf("x=");
+            scanf("%d",&x);
+            printf("Orientation (H ou V)\n>");
+            scanf("%s",&tmpO);
+            if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
+        }
         placementNavire(m,nt,(y-1),(x-1),o);
         afficherMatrice(m);
 
         printf("\n");
     }
+    free(tableau2D);
 }
 
 void placementAleatoire(Matrice *m, Navire **armada){

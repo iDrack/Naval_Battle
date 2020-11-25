@@ -39,6 +39,10 @@ Matrice* genererMatriceVide(char *titre, int taille_matrice);
 void afficherMatrice(Matrice *m);
 // Fonction "choisirTaille" qui permet de choisir la taille de la grille. Passage par adresse de l'entier.
 void choisirTaille(int *ptr);
+//Fonction "sortieMatrice" permettant de verifier si un navire ne sort pas de la matrice
+int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o);
+// Fonction "naviresColles" permettant de verifier si 2 navires se supperpose ou sont trop proche
+int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab);
 // Fonction "genererArmada" permettant au joueur de generer son armada et de placer ses navires
 void genererArmadaJoueur(Matrice *m, Navire **armada);
 // Fonction "afficherArmada" permettant d'afficher l'armada d'un joueur

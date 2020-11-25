@@ -12,17 +12,15 @@ int main(){
 
     Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
     Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice);
-    afficherMatrice(matriceAdversaire);
-    afficherMatrice(matriceJoueur);
+    //afficherMatrice(matriceAdversaire);
+    //afficherMatrice(matriceJoueur);
 
-    /*
-    genererArmadaJoueur(matriceJoueur,armadaJoueur);
+    genererArmadaJoueur(matriceJoueur,armadaJoueur); //Quand le joueur veut choisir ses navires
+    //placementAleatoire(matriceJoueur, armadaJoueur); //Choix par defaut
+
+    placementAleatoire(matriceAdversaire, armadaAdversaire); //Generation de la grille de l'adversaire
+    
     afficherArmada(armadaJoueur);
-    */
-
-    placementAleatoire(matriceAdversaire, armadaAdversaire);
-    placementAleatoire(matriceJoueur, armadaJoueur);
 
     return EXIT_SUCCESS;
 }
-
