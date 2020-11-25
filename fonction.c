@@ -112,7 +112,7 @@ void afficherMatrice(Matrice *m){
     Param. :
         m : pointeur de la matrice aue l'on veut afficher, type : pointeur de Matrice.
     */
-    printf("\n%s : \n", m->titre);
+    printf("%s : \n", m->titre);
     printf("     ");
     for(int i = 0; i < m->taille; i++) printf("%c ", 65+i);
     printf("\n");
@@ -125,6 +125,7 @@ void afficherMatrice(Matrice *m){
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 void choisirTaille(int *ptr){
@@ -259,6 +260,7 @@ void placementAleatoire(Matrice *m, Navire **armada){
     */
     generationArmadeStandard(m, armada);
     //afficherArmada(armada);
+    printf("Placement aleatoire .. \n");
 
     int **tableau2D = (int **)malloc(m->taille * sizeof(int*)); // Mémoire (lignes).
     // Mémoire (colonnes).

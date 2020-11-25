@@ -12,18 +12,16 @@ int main(){
 
     Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
     Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice);
+    afficherMatrice(matriceAdversaire);
     afficherMatrice(matriceJoueur);
-    printf("\n");
 
     /*
     genererArmadaJoueur(matriceJoueur,armadaJoueur);
     afficherArmada(armadaJoueur);
     */
 
-
-    printf("Test placement aleatoire : \n");
+    placementAleatoire(matriceAdversaire, armadaAdversaire);
     placementAleatoire(matriceJoueur, armadaJoueur);
-
 
     return EXIT_SUCCESS;
 }
