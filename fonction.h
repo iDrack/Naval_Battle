@@ -5,6 +5,7 @@
 
 typedef enum etat {OK,TOUCHE,COULE} Etat;
 typedef enum navireType {PORTEAVION,CROISER,DESTROYER,SOUSMARIN,TORPILLEUR} NavireType;
+typedef enum tirSpecial {NORMAL,BARAGE,CANONS,BONBARDEMENT} TirType;
 typedef enum orientation {H,V} Orientation; // H = Horizontal, V = Vertical
 typedef struct matrice Matrice;
 typedef struct navire Navire;
@@ -23,7 +24,8 @@ struct navire{
     // Positionnement (tableau d'entier).
     int *posX; // ex : 3, 4, 5
     int *posY; // ex : 2, 2, 2
-    // Ajouter les tirs speciaux
+    // Tir(s) :
+    TirType tir;
 };
 
 // -- Fonctions :
@@ -39,19 +41,21 @@ Matrice* genererMatriceVide(char *titre, int taille_matrice);
 void afficherMatrice(Matrice *m);
 // Fonction "choisirTaille" qui permet de choisir la taille de la grille. Passage par adresse de l'entier.
 void choisirTaille(int *ptr);
-//Fonction "sortieMatrice" permettant de verifier si un navire ne sort pas de la matrice
+// Fonction "sortieMatrice" permettant de verifier si un navire ne sort pas de la matrice.
 int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o);
-// Fonction "naviresColles" permettant de verifier si 2 navires se supperpose ou sont trop proche
+// Fonction "naviresColles" permettant de verifier si 2 navires se supperpose ou sont trop proche.
 int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab);
-// Fonction "genererArmada" permettant au joueur de generer son armada et de placer ses navires
+// Fonction "genererArmada" permettant au joueur de generer son armada et de placer ses navires.
 void genererArmadaJoueur(Matrice *m, Navire **armada);
-// Fonction "afficherArmada" permettant d'afficher l'armada d'un joueur
+// Fonction "afficherArmada" permettant d'afficher l'armada d'un joueur.
 void afficherArmada(Navire **armada);
 // Fonction "placementAleatoire" permettant de placer aléatoirement les navires sur une matrice donné (avec des navires non collé entre eux).
 void placementAleatoire(Matrice *m, Navire **armada);
-// Génére une flotte standard composée de 5 bateaux (soit 1 navire de chaque).
-void generationArmadeStandard(Matrice *m, Navire **armada);
-// Fonction permettant de générer un nombre aléatoire entre deux valeurs.
+// Fonction "generationArmadaStandard" permettant de génére une flotte standard composée de 5 bateaux (soit 1 navire de chaque).
+void generationArmadaStandard(Matrice *m, Navire **armada);
+// Fonction "generationIntAleatoire" permettant de générer un nombre aléatoire entre deux valeurs.
 int generationIntAleatoire(int maximum, int minimum);
+// Fonction "fonctionTir" qui renvoie un pointeur sur un tableau alloué dynamiquement.
+int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m);
 
 #endif
