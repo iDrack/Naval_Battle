@@ -2,6 +2,7 @@
 #define FONCTION_H
 
 #define TAILLE_FLOTTE 5
+#define TYPE_TIR 5
 
 typedef enum etat {OK,TOUCHE,COULE} Etat;
 typedef enum navireType {PORTEAVION,CROISER,DESTROYER,SOUSMARIN,TORPILLEUR} NavireType;
@@ -57,5 +58,9 @@ void generationArmadaStandard(Matrice *m, Navire **armada);
 int generationIntAleatoire(int maximum, int minimum);
 // Fonction "fonctionTir" qui renvoie un pointeur sur un tableau alloué dynamiquement.
 int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m);
+// Fonction "effectuerTir" qui permet au joueur d'effectuer un tir sur la matrice cible passé en paramètre.
+void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire);
+// Fonction "modifierEtatNavire" permettant de modifier l'état du navire situé à la position posX et posY de l'armada passé en paramètre.
+void modifierEtatNavire(int positionX, int positionY, Navire **armada);
 
 #endif
