@@ -194,17 +194,31 @@ void afficherArmada(Navire **armada){
 }
 
 int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o){
-    for(int i=0;i<=taille;i++){
-        if(o=H){
-            if(y+i > m->taille)return 1;
-        }else if(o=V){
-            if(x+i > m->taille)return 1;
-        }
-    }
+    /*
+    Fonction permettant d'assurer qu'un nevire ne sort pas de la matrice
+    Param. :
+        m : matrice que l'on veut controller, Type : pointeur de Matrice
+        x : valeur de l'axe des abcisse, Type : int
+        y : valeur de l'axe des ordonnees, Type int
+        taille : taille du navire a poser, Type: int
+        o : Orientation que l'on utilise, Type Orientation
+    */
+    if(o==V && x+taille >= m->taille)return 1;
+    if(o==H && y+taille >= m->taille)return 1;
     return 0;
 }
 
 int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab){
+    /*
+    Fonction permettant d'assurer que les navires ne se touchent pas
+    Param. :
+        m : matrice que l'on veut controller, Type : pointeur de Matrice
+        x : valeur de l'axe des abcisse, Type : int
+        y : valeur de l'axe des ordonnees, Type int
+        taille : taille du navire a poser, Type: int
+        o : Orientation que l'on utilise, Type Orientation
+        tab : matrice temporaire representat la ou il reste des emplacement libre sur m, Type: pointeur de pointeur de int
+    */
     int maxi=m->taille-1, mini=0;
     for(int i=0;i<=taille;i++){
         if(o==V){
@@ -298,7 +312,7 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
 
         if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
 
-        while(sortieMatrice(m,(y-1),(x-1),getTailleNavire(nt),o) == 1){
+        while(sortieMatrice(m,(x-1),(y-1),getTailleNavire(nt),o) == 1){
             printf("\nHo non ! Le navire est hors du champs de bataille !\n");
             printf("\ny=");
             scanf("%d",&y);
