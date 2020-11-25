@@ -4,6 +4,13 @@
 #include "fonction.h"
 
 int getTailleNavire(NavireType nt){
+    /*
+        Permet d'obtenir la taille d'un Navire.
+        Param. :
+            nt : le type de notre navire, type : NavireType.
+        Retourn :
+            Retourne la taille, un entier.
+    */
     switch(nt){
         case PORTEAVION:
             return 5;
@@ -24,14 +31,38 @@ int getTailleNavire(NavireType nt){
     return -1;
 }
 
+TirType getTypeTirSpecial(NavireType nt){
+    /*
+        Permet d'obtenir le type de tir spéciale d'un navire.
+        Param. :
+            nt : le type de notre navire, type : NavireType.
+        Retourn :
+            Retourne le type, un enum.
+    */
+    switch(nt){
+        case PORTEAVION:
+            return BONBARDEMENT;
+            break;
+        case CROISER:
+            return CANONS;
+            break;
+        case SOUSMARIN:
+            return BARAGE;
+            break;
+        default:
+            return NORMAL;
+            break;
+    }
+}
+
 Navire *genererNavire(NavireType nt, Matrice *m){
     /*
-    Génére un navire selon le type souhaitée pour la matrice passée en paramètre.
-    Param. :
-        nt : type de navire voulue, type : NavireType.
-        m : pointeur de la matrice que l'on veut modifier, type : pointeur de Matrice.
-    Return :
-        Navire venant d'être généree, type : Pointeur de Navire.
+        Génére un navire selon le type souhaitée pour la matrice passée en paramètre.
+        Param. :
+            nt : type de navire voulue, type : NavireType.
+            m : pointeur de la matrice que l'on veut modifier, type : pointeur de Matrice.
+        Return :
+            Navire venant d'être généree, type : Pointeur de Navire.
     */
     Navire *n = malloc(sizeof(Navire));
     n->nom = nt;
@@ -48,13 +79,13 @@ Navire *genererNavire(NavireType nt, Matrice *m){
 
 void placementNavire(Matrice *m, NavireType nt, int x, int y, Orientation o){
     /*
-    Permet de placer un navire selon des coordonées et une orientation sur la matrice voulu.
-    Param. :
-        m : matrice que l'on veut modifier, type : pointeur de Matrice.
-        nt : type de navire a placer, type : NavireType.
-        x : coordonee de l'axe des abcisses, type : int.
-        y : coordonne de l'axe des ordonnees, type : int.
-        o : orientation voulu du navire, type : Orientation.
+        Permet de placer un navire selon des coordonées et une orientation sur la matrice voulu.
+        Param. :
+            m : matrice que l'on veut modifier, type : pointeur de Matrice.
+            nt : type de navire a placer, type : NavireType.
+            x : coordonee de l'axe des abcisses, type : int.
+            y : coordonne de l'axe des ordonnees, type : int.
+            o : orientation voulu du navire, type : Orientation.
     */
     Navire *notre_navire = genererNavire(nt, m);
     int taille = getTailleNavire(nt);
@@ -64,7 +95,7 @@ void placementNavire(Matrice *m, NavireType nt, int x, int y, Orientation o){
             posX[i] = x+i;
             posY[i] = y;
         }
-    }else if(o == V){
+    } else if(o == V){
         for(int i = 0; i < taille; i++){
             posX[i] = x;
             posY[i] = y+i;
@@ -80,12 +111,12 @@ void placementNavire(Matrice *m, NavireType nt, int x, int y, Orientation o){
 
 Matrice* genererMatriceVide(char *titre, int taille_matrice){
     /*
-    Permet de générer une matrice vide.
-    Param :
-        titre : nom que l'on veut donner a la matrice, type: chaine de caractere.
-        taille_matrice : taille de la matrice, type : int.
-    Return:
-        Matrice venant d'etre generer, type: pointeur vers Matrice.
+        Permet de générer une matrice vide.
+        Param :
+            titre : nom que l'on veut donner a la matrice, type: chaine de caractere.
+            taille_matrice : taille de la matrice, type : int.
+        Return:
+            Matrice venant d'etre generer, type: pointeur vers Matrice.
     */
     Matrice *m = malloc(sizeof(Matrice));
     m->titre = titre;
@@ -108,9 +139,9 @@ Matrice* genererMatriceVide(char *titre, int taille_matrice){
 
 void afficherMatrice(Matrice *m){
     /*
-    Permet d'afficher dans la sortie standard la matrice passée en paramètre.
-    Param. :
-        m : pointeur de la matrice aue l'on veut afficher, type : pointeur de Matrice.
+        Permet d'afficher dans la sortie standard la matrice passée en paramètre.
+        Param. :
+            m : pointeur de la matrice que l'on veut afficher, type : pointeur de Matrice.
     */
     printf("%s : \n", m->titre);
     printf("     ");
@@ -130,9 +161,9 @@ void afficherMatrice(Matrice *m){
 
 void choisirTaille(int *ptr){
     /*
-    Permet de deternimer la taille d'une matrice.
-    Param. :
-        ptr : pointeur de la taille de matrice que l'on veut modifier, type: pointeur d'int.
+        Permet de deternimer la taille d'une matrice.
+        Param. :
+            ptr : pointeur de la taille de matrice que l'on veut modifier, type: pointeur d'int.
     */
     int taille_matrice;
     printf("Choisissez la taille de la grille de jeu (26 max) : ");
@@ -148,47 +179,54 @@ void choisirTaille(int *ptr){
 }
 
 void afficherArmada(Navire **armada){
+    /*
+        Permet d'afficher l'armada (soit tous les navires).
+        Param. :
+            armada : tableau de pointeur de navire, type: tableau de pointeur de navire.
+    */
     puts("Votre armada :\n");
     char* st;
     char* st2;
-    for(int i = 0; i < 5; i++){
-        NavireType nt=armada[i]->nom;
+    for(int i = 0; i < TAILLE_FLOTTE; i++){
+        NavireType nt = armada[i]->nom;
         switch(nt){
             case PORTEAVION:
-                st="Porte-avion";
+                st = "Porte-avion";
                 break;
             case CROISER:
-                st="Croiser  ";
+                st = "Croiser  ";
                 break;
             case DESTROYER:
-                st="Destroyer";
+                st = "Destroyer";
                 break;
             case SOUSMARIN:
-                st="Sous-marin";
+                st = "Sous-marin";
                 break;
             case TORPILLEUR:
-                st="Torpilleur";
+                st = "Torpilleur";
                 break;
             default:
-                st="";
+                st = "";
                 break;
         }
-        Etat et=armada[i]->etat;
+
+        Etat et = armada[i]->etat;
         switch(et){
             case OK:
-                st2="OK";
+                st2 = "OK";
                 break;
             case TOUCHE:
-                st2="TOUCHE";
+                st2 = "TOUCHE";
                 break;
             case COULE:
-                st2="COULE";
+                st2 = "COULE";
                 break;
             default:
-                st2="";
+                st2 = "";
                 break;
         }
-        if(st != "")printf("%s\tEtat:%s\n",st,st2);
+
+        if(st != "") printf("%s\tEtat:%s\n",st,st2);
     }
     printf("\n");
 }
@@ -202,6 +240,7 @@ int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o){
         y : valeur de l'axe des ordonnees, Type int
         taille : taille du navire a poser, Type: int
         o : Orientation que l'on utilise, Type Orientation
+    Return : Boolean int
     */
     if(o==V && x+taille >= m->taille)return 1;
     if(o==H && y+taille >= m->taille)return 1;
@@ -218,6 +257,7 @@ int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab
         taille : taille du navire a poser, Type: int
         o : Orientation que l'on utilise, Type Orientation
         tab : matrice temporaire representat la ou il reste des emplacement libre sur m, Type: pointeur de pointeur de int
+    Return : Boolean int
     */
     int maxi=m->taille-1, mini=0;
     for(int i=0;i<=taille;i++){
@@ -227,37 +267,40 @@ int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab
             if(tab[y][x+i] == 1)return 1;
         }
     }
-    for(int i=0;i<taille;i++){
-        if(o==V){
-            tab[y+i][x]=1;
-            if(x+1 < maxi)tab[y+i][x+1]=1;
-            if(x-1 > mini)tab[y+i][x-1]=1;
-            if(y+taille > maxi)tab[y+taille][x]=1;
-            if(y-1 < mini)tab[y+1][x]=1;
-        }else if(o==H){
-            tab[y][x+i]=1;
-            if(y+1 < maxi)tab[y+1][x+i]=1;
-            if(y-1 > mini)tab[y-1][x+i]=1;
-            if(x+taille > maxi)tab[y][x+taille]=1;
-            if(x-1 < mini)tab[y][x-1]=1;
+
+    for(int i = 0; i < taille; i++){
+        if(o == V){
+            tab[y+i][x] = 1;
+            if(x+1 < maxi) tab[y+i][x+1] = 1;
+            if(x-1 > mini) tab[y+i][x-1] = 1;
+            if(y+taille > maxi) tab[y+taille][x] = 1;
+            if(y-1 < mini) tab[y+1][x] = 1;
+        }else if(o == H){
+            tab[y][x+i] = 1;
+            if(y+1 < maxi) tab[y+1][x+i] = 1;
+            if(y-1 > mini) tab[y-1][x+i] = 1;
+            if(x+taille > maxi) tab[y][x+taille] = 1;
+            if(x-1 < mini) tab[y][x-1] = 1;
         }
     }
-    if(o==H){
-        tab[y][x-1]=1;
-        tab[y][x+taille]=1;
-    }else if(o==V){
-        tab[y-1][x]=1;
-        tab[y+taille][x]=1;
+
+    if(o == H){
+        tab[y][x-1] = 1;
+        tab[y][x+taille] = 1;
+    }else if(o == V){
+        tab[y-1][x] = 1;
+        tab[y+taille][x] = 1;
     }
+
     return 0;
 }
 
 void genererArmadaJoueur(Matrice *m, Navire **armada){
     /*
-    Génére l'armada du joueur.
-    Param. :
-        m : matrice ou l'on ajoute, type : pointeur de navire.
-        armada : liste des navire du joueur, type : liste de pointeur de Navire.
+        Génére l'armada du joueur.
+        Param. :
+            m : matrice ou l'on ajoute, type : pointeur de navire.
+            armada : liste des navire du joueur, type : liste de pointeur de Navire.
     */
     int **tableau2D = (int **)malloc(m->taille * sizeof(int*)); // Mémoire (lignes).
     // Mémoire (colonnes).
@@ -270,10 +313,12 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
             tableau2D[i][j] = 0;
         }
     }
+
     int tmp, x, y;
     NavireType nt;
     Orientation o;
     char tmpO;
+
     for(int i = 0; i < TAILLE_FLOTTE; i++){
         printf("Choisisser un navire:\n1. Torpilleur\n2. Destroyer\n3. Sous-marin\n4. Croiser\n5. Porte-avion\n> ");
         scanf("%d", &tmp);
@@ -294,6 +339,7 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
                 nt = TORPILLEUR;
                 break;
         }
+
         Navire *n = malloc(sizeof(Navire));
         n->etat = OK;
         n->matrice = m;
@@ -322,7 +368,7 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
             scanf("%s",&tmpO);
             if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
         }
-        while(naviresColles(m,(y-1),(x-1),getTailleNavire(nt),o,tableau2D) == 1){            
+        while(naviresColles(m,(y-1),(x-1),getTailleNavire(nt),o,tableau2D) == 1){
             printf("\nHo non ! Le navire est cote a cote a un autre !\n");
             printf("\ny=");
             scanf("%d",&y);
@@ -332,22 +378,24 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
             scanf("%s",&tmpO);
             if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
         }
+
         placementNavire(m,nt,(y-1),(x-1),o);
         afficherMatrice(m);
 
         printf("\n");
     }
+
     free(tableau2D);
 }
 
 void placementAleatoire(Matrice *m, Navire **armada){
     /*
-    Génére l'armada du joueur.
-    Param. :
-        m : matrice où l'on ajoute, type : pointeur de navire.
-        armada : liste des navire du joueur ou de l'adversaire, type : liste de pointeur de Navire.
+        Génére l'armada du joueur.
+        Param. :
+            m : matrice où l'on ajoute, type : pointeur de navire.
+            armada : liste des navire du joueur ou de l'adversaire, type : liste de pointeur de Navire.
     */
-    generationArmadeStandard(m, armada);
+    generationArmadaStandard(m, armada);
     //afficherArmada(armada);
     printf("Placement aleatoire .. \n");
 
@@ -428,7 +476,6 @@ void placementAleatoire(Matrice *m, Navire **armada){
         } // Fin de boucle, on pose le navire.
 
         // On le place :
-        //printf("C'est ok donc on le place. \n");
         for(int i = 0; i < armada[num]->taille; i++){
             if(angle == 1){
                 tableau2D[aleaX][aleaY-i] = 1;
@@ -485,9 +532,12 @@ void placementAleatoire(Matrice *m, Navire **armada){
     afficherMatrice(m);
 }
 
-void generationArmadeStandard(Matrice *m, Navire **armada){
+void generationArmadaStandard(Matrice *m, Navire **armada){
     /*
         Génére une flotte standard (soit 1 navire de chaque).
+        Param. :
+            m : notre matrice où l'on souhaite ajouter les navires, type : pointeur de Matrice.
+            armada : notre tableau de navire (pointeur), type : tableau de pointeur de navire.
     */
     NavireType nt;
     printf("Creation d'une flotte standard .. \n");
@@ -513,6 +563,7 @@ void generationArmadeStandard(Matrice *m, Navire **armada){
                 nt = TORPILLEUR;
                 break;
         }
+        armada[i]->tir = getTypeTirSpecial(nt);
         armada[i]->etat = OK;
         armada[i]->matrice = m;
         armada[i]->nom = nt;
@@ -523,6 +574,130 @@ void generationArmadeStandard(Matrice *m, Navire **armada){
 }
 
 int generationIntAleatoire(int maximum, int minimum){
+    /*
+        Génére un entier aléatoire entre deux valeur.
+        Param. :
+            maximum : entier maxi, type : entier.
+            minimum : entier mini, type : entier.
+        Return :
+            Retourne l'entier généré aléatoirement.
+    */
     return (rand() % (maximum - minimum + 1)) + minimum;
+}
+
+int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m){
+    /*
+        Crée et alloue un tableau dynamique en fonction du tir.
+        Param. :
+            posX : position en x du tir, type : entier.
+            posY : position en y du tir, type : entier.
+            choixTir : choix du type de tir, type : entier.
+            direction : direction si utilisation du tir par ligne, type : entier.
+            m : la matrice correspondante, type pointeur de Matrice.
+        Return :
+            Retourne un tableau alloué dynamiquement.
+    */
+    int ligne, colonne = 2;
+    int **tableau;
+
+    if(choixTir == 0){
+        ligne = 1;
+    } else if(choixTir == 1){
+        ligne = m->taille;
+    } else if(choixTir == 4) {
+        ligne = 9;
+    } else {
+        ligne = 5;
+    }
+
+    tableau = (int**)malloc((ligne*colonne) * sizeof(int)); // Mémoire (lignes).
+    // Mémoire (colonnes).
+    for(char i = 0; i < ligne; i++){
+        tableau[i] = (int *)malloc(colonne * sizeof(int));
+    }
+
+    if(choixTir == 0){
+        // Si c'est un tir normal.
+        tableau[0][0] = posX;
+        tableau[0][1] = posY;
+    }
+
+    if(choixTir == 1) {
+        // Si c'est un tir en ligne (sous-marin).
+        if(direction == 1){
+            // Si on tir en ligne ..
+            for(int i = 0; i < ligne; i++){
+                tableau[i][0] = posX;
+                tableau[i][1] = i;
+            }
+        } else {
+            // Si on tir en colonne ..
+            for(int i = 0; i < ligne; i++){
+                tableau[i][0] = i;
+                tableau[i][1] = posY;
+            }
+        }
+    }
+
+    if(choixTir == 2){
+        // Si c'est un tir en croix.
+        // On place le 1er tir :
+        tableau[0][0] = posX;
+        tableau[0][1] = posY;
+        // Pour x :
+        tableau[1][0] = posX-1;
+        tableau[2][0] = posX-1;
+        tableau[3][0] = posX+1;
+        tableau[4][0] = posX+1;
+        // Pour y :
+        tableau[1][1] = posY-1;
+        tableau[2][1] = posY+1;
+        tableau[3][1] = posY-1;
+        tableau[4][1] = posY+1;
+    }
+
+    if(choixTir == 3){
+        // Si c'est un tir en plus.
+        // On place le 1er tir :
+        tableau[0][0] = posX;
+        tableau[0][1] = posY;
+        // Pour x :
+        tableau[1][0] = posX-1;
+        tableau[2][0] = posX+1;
+        tableau[3][0] = posX;
+        tableau[4][0] = posX;
+        // Pour y :
+        tableau[1][1] = posY;
+        tableau[2][1] = posY;
+        tableau[3][1] = posY-1;
+        tableau[4][1] = posY+1;
+    }
+
+    if(choixTir == 4){
+        // Si c'est un tir en carré.
+        // On place le 1er tir :
+        tableau[0][0] = posX;
+        tableau[0][1] = posY;
+        // Pour x :
+        tableau[1][0] = posX-1;
+        tableau[2][0] = posX-1;
+        tableau[3][0] = posX-1;
+        tableau[4][0] = posX;
+        tableau[5][0] = posX;
+        tableau[6][0] = posX+1;
+        tableau[7][0] = posX+1;
+        tableau[8][0] = posX+1;
+        // Pour y :
+        tableau[1][1] = posY-1;
+        tableau[2][1] = posY;
+        tableau[3][1] = posY+1;
+        tableau[4][1] = posY-1;
+        tableau[5][1] = posY+1;
+        tableau[6][1] = posY-1;
+        tableau[7][1] = posY;
+        tableau[8][1] = posY+1;
+    }
+
+    return tableau;
 }
 
