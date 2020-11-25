@@ -4,6 +4,7 @@
 #include "fonction.h"
 
 int main(){
+    srand(time(NULL));
     Navire *armadaJoueur[TAILLE_FLOTTE];
     Navire *armadaAdversaire[TAILLE_FLOTTE];
     int taille_matrice = 10;
@@ -19,10 +20,10 @@ int main(){
     afficherArmada(armadaJoueur);
     */
 
-    /*
+
     printf("Test placement aleatoire : \n");
     placementAleatoire(matriceJoueur, armadaJoueur);
-    */
+
 
     return EXIT_SUCCESS;
 }

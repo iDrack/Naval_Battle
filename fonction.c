@@ -259,89 +259,138 @@ void placementAleatoire(Matrice *m, Navire **armada){
     */
     generationArmadeStandard(m, armada);
     //afficherArmada(armada);
-    int nombreAleatoireX, nombreAleatoireY;
-    int maximum = m->taille, minimum = 1;
-    int orientationAleatoire;
 
-    // Parcours tous les navires de l'armada pour le placement.
-    for(int num = 0; num < TAILLE_FLOTTE; num++){
-        printf("Navire num. %d \n", num+1);
-        int selection = 0;
-        while(selection == 0){
-            // Génération du nombre aléatoire :
-            srand(time(NULL));
-            // Position ?
-            nombreAleatoireX = (rand() % (maximum - minimum + 1)) + minimum;
-            nombreAleatoireY = (rand() % (maximum - minimum + 1)) + minimum;
-            while( m->value[nombreAleatoireX][nombreAleatoireY] != '.' ){
-                nombreAleatoireX = (rand() % (maximum - minimum + 1)) + minimum;
-                nombreAleatoireY = (rand() % (maximum - minimum + 1)) + minimum;
-            }
-
-            // Orientation ?
-            int orientOK = 0;
-            int recommencer = 0;
-            while(orientOK == 0){
-                if(recommencer != 0){
-                    srand(time(NULL));
-                    // Position ?
-                    nombreAleatoireX = (rand() % (maximum - minimum + 1)) + minimum;
-                    nombreAleatoireY = (rand() % (maximum - minimum + 1)) + minimum;
-                    while( m->value[nombreAleatoireX][nombreAleatoireY] != '.' ){
-                        nombreAleatoireX = (rand() % (maximum - minimum + 1)) + minimum;
-                        nombreAleatoireY = (rand() % (maximum - minimum + 1)) + minimum;
-                    }
-                }
-                orientOK = 1;
-                orientationAleatoire = (rand() % (maximum - minimum + 1)) + minimum;
-                if(recommencer == 0) printf("Orient : %d \n", orientationAleatoire);
-                if(orientationAleatoire >= (maximum / 2)){
-                    for(int i = 0; i < armada[num]->taille; i++){
-                        if( m->value[nombreAleatoireX][nombreAleatoireY+i] != '.' ){
-                            orientOK = 0;
-                            recommencer++;
-                            break;
-                        }
-                    }
-
-                    if(orientOK == 1){
-                        selection = 1;
-                        for(int i = 0; i < armada[num]->taille; i++){
-                            armada[num]->posX[i] = nombreAleatoireX;
-                            armada[num]->posY[i] = nombreAleatoireY+i;
-                            m->value[nombreAleatoireX][nombreAleatoireY+i] = 'O';
-                        }
-                    }
-                } else {
-                    for(int i = 0; i < armada[num]->taille; i++){
-                        if( m->value[nombreAleatoireX+i][nombreAleatoireY] != '.' ){
-                            orientOK = 0;
-                            recommencer++;
-                            break;
-                        }
-                    }
-
-                    if(orientOK == 1){
-                        selection = 1;
-                        for(int i = 0; i < armada[num]->taille; i++){
-                            armada[num]->posX[i] = nombreAleatoireX+i;
-                            armada[num]->posY[i] = nombreAleatoireY;
-                            m->value[nombreAleatoireX+i][nombreAleatoireY] = 'O';
-                        }
-                    }
-                }
-            }
+    int **tableau2D = (int **)malloc(m->taille * sizeof(int*)); // Mémoire (lignes).
+    // Mémoire (colonnes).
+    for(char i = 0; i < m->taille; i++){
+        tableau2D[i] = (int *)malloc(m->taille * sizeof(int));
+    }
+    // Initialisation à vide.
+    for(int i = 0; i < m->taille; i++){
+        for(int j = 0; j < m->taille; j++){
+            tableau2D[i][j] = 0;
         }
-
-        printf("aleaX : %d et aleaY : %d \n", nombreAleatoireX, nombreAleatoireY);
-        printf("X : ");
-        for(int i = 0; i < armada[num]->taille; i++) printf("%d ", 1+armada[num]->posX[i]);
-        printf("\nY : ");
-        for(int i = 0; i < armada[num]->taille; i++) printf("%c ", 65+armada[num]->posY[i]);
-        printf("\n------------------\n");
     }
 
-    // En cours ..
+    int aleaX, aleaY;
+    int maxi = m->taille-1, mini = 0;
+
+    for(int num = 0; num < TAILLE_FLOTTE; num++){
+        //printf("## Navire %d : \n", num+1);
+        int poser = 0;
+        int angle;
+        while(poser == 0){
+            aleaX = generationIntAleatoire(maxi, mini);
+            aleaY = generationIntAleatoire(maxi, mini);
+            angle = generationIntAleatoire(4, 1);
+            //printf("Angle : %d \n", angle);
+
+            poser = 1;
+            for(int i = 0; i < armada[num]->taille; i++){
+                if(angle == 1){
+                    if(aleaY-i >= mini && tableau2D[aleaX][aleaY-i] == 0){
+                        //printf("--> X : %d  |  Y : %c \n", aleaX+1, 65+aleaY-i);
+                    } else {
+                        //printf("Positionnement en X : %d  |  Y : %c impossible \n", aleaX+1, 65+aleaY-i);
+                        //printf("(%d) On doit changer d'angle .. \n", angle);
+                        poser = 0;
+                        //printf("Var. poser a %d ! \n", poser);
+                        break;
+                    }
+                }
+
+                if(angle == 2){
+                    if(aleaX-i >= mini && tableau2D[aleaX-i][aleaY] == 0){
+                        //printf("--> X : %d  |  Y : %c \n", aleaX-i+1, 65+aleaY);
+                    } else {
+                        //printf("Positionnement en X : %d  |  Y : %c impossible \n", aleaX-i+1, 65+aleaY);
+                        //printf("(%d) On doit changer d'angle .. \n", angle);
+                        poser = 0;
+                        //printf("Var. poser a %d ! \n", poser);
+                        break;
+                    }
+                }
+
+                if(angle == 3){
+                    if(aleaY+i <= maxi && tableau2D[aleaX][aleaY+i] == 0){
+                        //printf("--> X : %d  |  Y : %c \n", aleaX+1, 65+aleaY+i);
+                    } else {
+                        //printf("Positionnement en X : %d  |  Y : %c impossible \n", aleaX+1, 65+aleaY+i);
+                        //printf("(%d) On doit changer d'angle .. \n", angle);
+                        poser = 0;
+                        //printf("Var. poser a %d ! \n", poser);
+                        break;
+                    }
+                }
+
+                if(angle == 4){
+                    if(aleaX+i <= maxi && tableau2D[aleaX+i][aleaY] == 0){
+                        //printf("--> X : %d  |  Y : %c \n", aleaX+i+1, 65+aleaY);
+                    } else {
+                        //printf("Positionnement en X : %d  |  Y : %c impossible \n", aleaX+i+1, 65+aleaY);
+                        //printf("(%d) On doit changer d'angle .. \n", angle);
+                        poser = 0;
+                        break;
+                    }
+                }
+            } // Fin de boucle, on a vérifié que le navire peut être posé.
+        } // Fin de boucle, on pose le navire.
+
+        // On le place :
+        //printf("C'est ok donc on le place. \n");
+        for(int i = 0; i < armada[num]->taille; i++){
+            if(angle == 1){
+                tableau2D[aleaX][aleaY-i] = 1;
+                armada[num]->posX[i] = aleaX;
+                armada[num]->posY[i] = aleaY-i;
+                m->value[aleaX][aleaY-i] = 'O';
+                // Espacement :
+                if(aleaX+1 <= maxi) tableau2D[aleaX+1][aleaY-i] = 2;
+                if(aleaX-1 >= mini) tableau2D[aleaX-1][aleaY-i] = 2;
+                if(aleaY-i+1 <= maxi && tableau2D[aleaX][aleaY-i+1] != 1) tableau2D[aleaX][aleaY-i+1] = 2;
+                if(aleaY-i-1 >= mini && tableau2D[aleaX][aleaY-i-1] != 1) tableau2D[aleaX][aleaY-i-1] = 2;
+            }
+
+            if(angle == 2){
+                tableau2D[aleaX-i][aleaY] = 1;
+                armada[num]->posX[i] = aleaX-i;
+                armada[num]->posY[i] = aleaY;
+                m->value[aleaX-i][aleaY] = 'O';
+                // Espacement :
+                if(aleaY+1 <= maxi) tableau2D[aleaX-i][aleaY+1] = 2;
+                if(aleaY-1 >= mini) tableau2D[aleaX-i][aleaY-1] = 2;
+                if(aleaX-i+1 <= maxi && tableau2D[aleaX-i+1][aleaY] != 1) tableau2D[aleaX-i+1][aleaY] = 2;
+                if(aleaX-i-1 >= mini && tableau2D[aleaX-i-1][aleaY] != 1) tableau2D[aleaX-i-1][aleaY] = 2;
+            }
+
+            if(angle == 3){
+                tableau2D[aleaX][aleaY+i] = 1;
+                armada[num]->posX[i] = aleaX;
+                armada[num]->posY[i] = aleaY+i;
+                m->value[aleaX][aleaY+i] = 'O';
+                // Espacement :
+                if(aleaX+1 <= maxi) tableau2D[aleaX+1][aleaY+i] = 2;
+                if(aleaX-1 >= mini) tableau2D[aleaX-1][aleaY+i] = 2;
+                if(aleaY+i+1 <= maxi && tableau2D[aleaX][aleaY+i+1] != 1) tableau2D[aleaX][aleaY+i+1] = 2;
+                if(aleaY+i-1 >= mini && tableau2D[aleaX][aleaY+i-1] != 1) tableau2D[aleaX][aleaY+i-1] = 2;
+            }
+
+            if(angle == 4){
+                tableau2D[aleaX+i][aleaY] = 1;
+                armada[num]->posX[i] = aleaX+i;
+                armada[num]->posY[i] = aleaY;
+                m->value[aleaX+i][aleaY] = 'O';
+                // Espacement :
+                if(aleaY+1 <= maxi) tableau2D[aleaX+i][aleaY+1] = 2;
+                if(aleaY-1 >= mini) tableau2D[aleaX+i][aleaY-1] = 2;
+                if(aleaX+i+1 <= maxi && tableau2D[aleaX+i+1][aleaY] != 1) tableau2D[aleaX+i+1][aleaY] = 2;
+                if(aleaX+i-1 >= mini && tableau2D[aleaX+i-1][aleaY] != 1) tableau2D[aleaX+i-1][aleaY] = 2;
+            }
+        }
+    }
+
+    free(tableau2D); // On libére la mémoire utilisé avec le tableau temporaire ..
+    // Affichage :
     afficherMatrice(m);
 }
 
@@ -380,5 +429,9 @@ void generationArmadeStandard(Matrice *m, Navire **armada){
         armada[i]->posX = (int*)malloc(armada[i]->taille * sizeof(int));
         armada[i]->posY = (int*)malloc(armada[i]->taille * sizeof(int));
     }
+}
+
+int generationIntAleatoire(int maximum, int minimum){
+    return (rand() % (maximum - minimum + 1)) + minimum;
 }
 

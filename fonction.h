@@ -11,7 +11,7 @@ typedef struct navire Navire;
 
 struct matrice{
     int taille; // Taille de notre matrice.
-    char **value; // Notre matrice (tableau � 2D).
+    char **value; // Notre matrice (tableau à 2D).
     char *titre;
 };
 
@@ -43,9 +43,11 @@ void choisirTaille(int *ptr);
 void genererArmadaJoueur(Matrice *m, Navire **armada);
 // Fonction "afficherArmada" permettant d'afficher l'armada d'un joueur
 void afficherArmada(Navire **armada);
-// Fonction "placementAleatoire" permettant de placer aléatoirement les navires sur une matrice donné.
+// Fonction "placementAleatoire" permettant de placer aléatoirement les navires sur une matrice donné (avec des navires non collé entre eux).
 void placementAleatoire(Matrice *m, Navire **armada);
 // Génére une flotte standard composée de 5 bateaux (soit 1 navire de chaque).
 void generationArmadeStandard(Matrice *m, Navire **armada);
+// Fonction permettant de générer un nombre aléatoire entre deux valeurs.
+int generationIntAleatoire(int maximum, int minimum);
 
 #endif
