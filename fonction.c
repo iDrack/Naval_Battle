@@ -233,14 +233,14 @@ void afficherArmada(Navire **armada){
 
 int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o){
     /*
-    Fonction permettant d'assurer qu'un nevire ne sort pas de la matrice
-    Param. :
-        m : matrice que l'on veut controller, Type : pointeur de Matrice
-        x : valeur de l'axe des abcisse, Type : int
-        y : valeur de l'axe des ordonnees, Type int
-        taille : taille du navire a poser, Type: int
-        o : Orientation que l'on utilise, Type Orientation
-    Return : Boolean int
+        Fonction permettant d'assurer qu'un nevire ne sort pas de la matrice.
+        Param. :
+            m : matrice que l'on veut controller, Type : pointeur de Matrice.
+            x : valeur de l'axe des abcisse, Type : int.
+            y : valeur de l'axe des ordonnees, Type int.
+            taille : taille du navire a poser, Type: int.
+            o : Orientation que l'on utilise, Type Orientation.
+        Return : Boolean int.
     */
     if(o==V && x+taille > m->taille)return 1;
     if(o==H && y+taille > m->taille)return 1;
@@ -249,15 +249,15 @@ int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o){
 
 int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab){
     /*
-    Fonction permettant d'assurer que les navires ne se touchent pas
-    Param. :
-        m : matrice que l'on veut controller, Type : pointeur de Matrice
-        x : valeur de l'axe des abcisse, Type : int
-        y : valeur de l'axe des ordonnees, Type int
-        taille : taille du navire a poser, Type: int
-        o : Orientation que l'on utilise, Type Orientation
-        tab : matrice temporaire representat la ou il reste des emplacement libre sur m, Type: pointeur de pointeur de int
-    Return : Boolean int
+        Fonction permettant d'assurer que les navires ne se touchent pas.
+        Param. :
+            m : matrice que l'on veut controller, Type : pointeur de Matrice.
+            x : valeur de l'axe des abcisse, Type : int.
+            y : valeur de l'axe des ordonnees, Type int.
+            taille : taille du navire a poser, Type: int.
+            o : Orientation que l'on utilise, Type Orientation.
+            tab : matrice temporaire representat la ou il reste des emplacement libre sur m, Type: pointeur de pointeur de int.
+        Return : Boolean int.
     */
     int maxi=m->taille-1, mini=0;
     for(int i=0;i<taille;i++){
@@ -691,5 +691,138 @@ int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m){
     }
 
     return tableau;
+}
+
+void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire){
+    /*
+        Effectue un tir sur la matrice vidé.
+        Param. :
+            m : pointeur de la matrice que le joueur attaque, type : pointeur de Matrice.
+            armadaJoueur : la flotte du joueur, type : tableau de pointeur de navire.
+            armadaAdversaire : la flotte de l'adversaire, type : tableau de pointeur de navire.
+    */
+    // Demander un tir spéciale (donner la liste) ou normal.
+    int choixTir, direction;
+    int tableau_de_tir[TYPE_TIR];
+    for(int i = 0; i < TYPE_TIR; i++) tableau_de_tir[i] = 0;
+    tableau_de_tir[0] = 1;
+    printf("Choisir un tir : \n");
+    for(int i = 1; i < TYPE_TIR; i++){
+        if(armadaJoueur[i]->tir == 1){
+            printf("Tir sur toute une ligne ou colonne [1], ");
+            tableau_de_tir[1] = 1;
+        }
+
+        if(armadaJoueur[i]->tir == 2){
+            printf("Tir en 'x' [2] ou en '+' [3], ");
+            tableau_de_tir[2] = 1;
+            tableau_de_tir[3] = 1;
+        }
+
+        if(armadaJoueur[i]->tir == 3){
+            printf("Tir en carree [4], ");
+            tableau_de_tir[4] = 1;
+        }
+    }
+    printf("Tir normal [0]. \n");
+    printf("Choix : ");
+    scanf("%d", &choixTir);
+    printf("\n");
+    while(choixTir < 0 || choixTir > 5 || tableau_de_tir[choixTir] != 1){
+        printf("Choisir un tir correct : ");
+        scanf("%d", &choixTir);
+        printf("\n");
+    }
+    // On consomme le tir spéciale (on le remplace par un tir normal) :
+    for(int i = 1; i < TYPE_TIR; i++){
+        if(armadaJoueur[i]->tir == 1 && choixTir == 1){
+            armadaJoueur[i]->tir = 0;
+            break;
+        }
+
+        if(armadaJoueur[i]->tir == 2 && choixTir == 2 || armadaJoueur[i]->tir == 2 && choixTir == 3){
+            armadaJoueur[i]->tir = 0;
+            break;
+        }
+
+        if(armadaJoueur[i]->tir == 3 && choixTir == 4){
+            armadaJoueur[i]->tir = 0;
+            break;
+        }
+    }
+
+    // On choisit la position :
+    int posX, posY;
+    printf("Choisir les coordonnées : \n");
+    printf("x = ");
+    scanf("%d", &posX);
+    printf("y = ");
+    scanf("%d", &posY);
+    printf("\n");
+
+    // Choix de la direction pour un tir en ligne ou colonne.
+    if(choixTir == 1){
+        printf("Effectuer un barrage sur une ligne [1] ou une colonne [0] ? \n");
+        printf("Choix : ");
+        scanf("%d", &direction);
+        printf("\n");
+    } else {
+        direction = 1;
+    }
+
+    // On tir :
+    //printf("Tir en %d%c : \n", posX, 65+posY-1);
+    int **tab = fonctionTir(posX-1, posY-1, choixTir, direction, m);
+    int tmp_taille = 0;
+    if(choixTir == 0){
+        tmp_taille = 1;
+    } else if(choixTir == 1){
+        tmp_taille = m->taille;
+    } else if(choixTir == 4) {
+        tmp_taille = 9;
+    } else {
+        tmp_taille = 5;
+    }
+
+    printf("On tire en : \n");
+    for(int i = 0; i < tmp_taille; i++){
+        printf("%d%c  ", tab[i][0]+1, 65+tab[i][1]);
+        if(tab[i][0] >= 0 && tab[i][0] <= m->taille && tab[i][1] >= 0 && tab[i][1] <= m->taille){
+            if(m->value[tab[i][0]][tab[i][1]] == 'O'){
+                m->value[tab[i][0]][tab[i][1]] = '#';
+                printf("(--> %d%c a touche ! ) ", tab[i][0]+1, 65+tab[i][1]);
+                // Rechercher le navire adversaire pour modifier le statue du navire en touché.
+                //modifierEtatNavire(tab[i][0], tab[i][1], armadaAdversaire);
+            }
+            if(m->value[tab[i][0]][tab[i][1]] == '.') m->value[tab[i][0]][tab[i][1]] = 'X';
+        }
+    }
+    printf("\n");
+
+    // Affichage de la matrice de l'adversaire :
+    afficherMatrice(m);
+}
+
+// --> Attention : ne pas l'utiliser pour le moment car il semble que les positions des navires ne soient pas correct.
+// Il faut résoudre le problème (mauvaise allocation mémoire ou autre ?! A voir ..
+void modifierEtatNavire(int positionX, int positionY, Navire **armada){
+    /*
+        Modifie l'état du navire que l'on touche en position X, Y.
+        Param. :
+            positionX : position x que l'on touche, type : entier.
+            positionY : position y que l'on touche, type : entier.
+            armada : flotte de l'adversaire, type : tableau de pointeur de navire.
+    */
+    for(int i = 0; i < TAILLE_FLOTTE; i++){
+        for(int j = 0; j < armada[i]->taille; i++){
+            printf("Pos : %d%c \n", armada[i]->posX[j], armada[i]->posY[j]);
+            if(armada[i]->posX[j] == positionX && armada[i]->posY[j] == positionY){
+                if(armada[i]->etat != COULE){
+                    armada[i]->etat = TOUCHE;
+                    printf("Navire %d touche ! ", armada[i]->nom);
+                }
+            }
+        }
+    }
 }
 
