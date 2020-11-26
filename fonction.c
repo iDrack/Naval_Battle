@@ -242,8 +242,8 @@ int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o){
         o : Orientation que l'on utilise, Type Orientation
     Return : Boolean int
     */
-    if(o==V && x+taille >= m->taille)return 1;
-    if(o==H && y+taille >= m->taille)return 1;
+    if(o==V && x+taille > m->taille)return 1;
+    if(o==H && y+taille > m->taille)return 1;
     return 0;
 }
 
@@ -260,38 +260,30 @@ int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab
     Return : Boolean int
     */
     int maxi=m->taille-1, mini=0;
-    for(int i=0;i<=taille;i++){
+    for(int i=0;i<taille;i++){
         if(o==V){
             if(tab[y+i][x] == 1)return 1;
         }else if(o==H){
             if(tab[y][x+i] == 1)return 1;
         }
     }
-
-    for(int i = 0; i < taille; i++){
-        if(o == V){
+    if(o == V){
+        for(int i=0;i<taille;i++){
             tab[y+i][x] = 1;
-            if(x+1 < maxi) tab[y+i][x+1] = 1;
-            if(x-1 > mini) tab[y+i][x-1] = 1;
-            if(y+taille > maxi) tab[y+taille][x] = 1;
-            if(y-1 < mini) tab[y+1][x] = 1;
-        }else if(o == H){
-            tab[y][x+i] = 1;
-            if(y+1 < maxi) tab[y+1][x+i] = 1;
-            if(y-1 > mini) tab[y-1][x+i] = 1;
-            if(x+taille > maxi) tab[y][x+taille] = 1;
-            if(x-1 < mini) tab[y][x-1] = 1;
+            if(x+1 <= maxi) tab[y+i][x+1] = 1;
+            if(x-1 >= mini) tab[y+i][x-1] = 1;
         }
+        if(y-1 >= mini) tab[y-1][x] = 1;
+        if(y*taille <= maxi) tab[y+taille][x] = 1;
+    }else if(o == H){
+        for(int i=0;i<taille;i++){
+            tab[y][x+i] = 1;
+            if(y+1 <= maxi) tab[y+1][x+i] = 1;
+            if(y-1 >= mini) tab[y-1][x+i] = 1;
+        }
+        if(x-1 >= mini) tab[y][x-1] = 1;
+        if(x+taille <= maxi) tab[y][x+taille] = 1;
     }
-
-    if(o == H){
-        tab[y][x-1] = 1;
-        tab[y][x+taille] = 1;
-    }else if(o == V){
-        tab[y-1][x] = 1;
-        tab[y+taille][x] = 1;
-    }
-
     return 0;
 }
 
