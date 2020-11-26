@@ -48,6 +48,8 @@ int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o);
 int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab);
 // Fonction "genererArmada" permettant au joueur de generer son armada et de placer ses navires.
 void genererArmadaJoueur(Matrice *m, Navire **armada);
+// Fonction "afficherNavirePos" permettant d'afficher les coordonnees d'un navire
+void afficherNavirePos(Navire *n);
 // Fonction "afficherArmada" permettant d'afficher l'armada d'un joueur.
 void afficherArmada(Navire **armada);
 // Fonction "placementAleatoire" permettant de placer aléatoirement les navires sur une matrice donné (avec des navires non collé entre eux).

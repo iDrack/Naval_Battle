@@ -178,6 +178,21 @@ void choisirTaille(int *ptr){
     *ptr = taille_matrice;
 }
 
+void afficherNavirePos(Navire *n){
+    /*
+        Permet d'afficher les coordonees de tout un navire
+        Param. :
+            n : navire dont on veut afficher les coordonnees, type: inteur de Navire;
+    */
+    for(int i=0;i<n->taille;i++){
+        if((n->posX[i]+1)>9){
+            printf(" %c%d",n->posY[i]+65,n->posX[i]+1);
+        }else {
+            printf(" %c%d ",n->posY[i]+65,n->posX[i]+1);
+        }
+    }
+}
+
 void afficherArmada(Navire **armada){
     /*
         Permet d'afficher l'armada (soit tous les navires).
@@ -225,8 +240,9 @@ void afficherArmada(Navire **armada){
                 st2 = "";
                 break;
         }
-
-        if(st != "") printf("%s\tEtat:%s\n",st,st2);
+        if(st != "") printf("%s\tEtat:%s\t",st,st2);
+        afficherNavirePos(armada[i]);
+        printf("\n");
     }
     printf("\n");
 }

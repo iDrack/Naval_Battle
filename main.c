@@ -15,17 +15,16 @@ int main(){
     //afficherMatrice(matriceAdversaire);
     //afficherMatrice(matriceJoueur);
 
-    genererArmadaJoueur(matriceJoueur,armadaJoueur); //Quand le joueur veut choisir ses navires
-    //placementAleatoire(matriceJoueur, armadaJoueur); //Choix par defaut
+    //genererArmadaJoueur(matriceJoueur,armadaJoueur); //Quand le joueur veut choisir ses navires
+    placementAleatoire(matriceJoueur, armadaJoueur); //Choix par defaut
     placementAleatoire(matriceAdversaire, armadaAdversaire); //Generation de la grille de l'adversaire
 
     afficherArmada(armadaJoueur);
 
     // -------- Zone Test --------
 
-    effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire);
+    //effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire);
 
     // -------- Zone Test --------
-    */
     return EXIT_SUCCESS;
 }
