@@ -186,9 +186,9 @@ void afficherNavirePos(Navire *n){
     */
     for(int i=0;i<n->taille;i++){
         if((n->posX[i]+1)>9){
-            printf(" %c%d",n->posY[i]+65,n->posX[i]+1);
+            printf("%d%c  ",n->posX[i]+1,n->posY[i]+65);
         }else {
-            printf(" %c%d ",n->posY[i]+65,n->posX[i]+1);
+            printf(" %d%c  ",n->posX[i]+1,n->posY[i]+65);
         }
     }
 }
