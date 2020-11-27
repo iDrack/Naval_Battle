@@ -25,6 +25,11 @@ int main(){
 
     afficherArmada(armadaAdversaire);
     effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire);
+    // NOTE :
+    // -> cf 'x' et '+' à régler.
+    // -> ".. à condition qu'au tour précédent il ait touché un bateau .." --> variable que l'on peut mettre dans le main que le l'on met à jour lorsque je place un "#" sur la grille. :)
+    // --> ".. et qu'il n'ait pas utilisé de tir spécial " --> Pareil avec une vraible qu'on gére ici et que l'on met à jour. :)
+    // ++ : -> mettre un message lorsque rien touché (easy aussi ^^).
 
     // -------- Zone Test --------
 
