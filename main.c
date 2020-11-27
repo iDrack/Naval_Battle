@@ -23,8 +23,10 @@ int main(){
 
     // -------- Zone Test --------
 
-    //effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire);
+    afficherArmada(armadaAdversaire);
+    effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire);
 
     // -------- Zone Test --------
+
     return EXIT_SUCCESS;
 }

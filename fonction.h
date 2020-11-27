@@ -62,7 +62,7 @@ int generationIntAleatoire(int maximum, int minimum);
 int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m);
 // Fonction "effectuerTir" qui permet au joueur d'effectuer un tir sur la matrice cible passé en paramètre.
 void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire);
-// Fonction "modifierEtatNavire" permettant de modifier l'état du navire situé à la position posX et posY de l'armada passé en paramètre.
-void modifierEtatNavire(int positionX, int positionY, Navire **armada);
+// Fonction "modifierEtatNavire" permettant de modifier l'état du navire situé à la position posX et posY en paramètre.
+void modifierEtatNavire(int positionX, int positionY, Navire *n);
 
 #endif
