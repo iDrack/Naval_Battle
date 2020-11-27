@@ -48,7 +48,7 @@ int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o);
 int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab);
 // Fonction "genererArmada" permettant au joueur de generer son armada et de placer ses navires.
 void genererArmadaJoueur(Matrice *m, Navire **armada);
-// Fonction "afficherNavirePos" permettant d'afficher les coordonnees d'un navire
+// Fonction "afficherNavirePos" permettant d'afficher les coordonnees d'un navire.
 void afficherNavirePos(Navire *n);
 // Fonction "afficherArmada" permettant d'afficher l'armada d'un joueur.
 void afficherArmada(Navire **armada);
@@ -61,7 +61,7 @@ int generationIntAleatoire(int maximum, int minimum);
 // Fonction "fonctionTir" qui renvoie un pointeur sur un tableau alloué dynamiquement.
 int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m);
 // Fonction "effectuerTir" qui permet au joueur d'effectuer un tir sur la matrice cible passé en paramètre.
-void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire);
+void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale);
 // Fonction "modifierEtatNavire" permettant de modifier l'état du navire situé à la position posX et posY en paramètre.
 void modifierEtatNavire(int positionX, int positionY, Navire *n);
 

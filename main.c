@@ -19,17 +19,28 @@ int main(){
     placementAleatoire(matriceJoueur, armadaJoueur); //Choix par defaut
     placementAleatoire(matriceAdversaire, armadaAdversaire); //Generation de la grille de l'adversaire
 
-    afficherArmada(armadaJoueur);
+    //afficherArmada(armadaJoueur);
 
     // -------- Zone Test --------
 
-    afficherArmada(armadaAdversaire);
-    effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire);
+    int toucheJoueur; // Variable à mettre à 0 de base !
+    int joueurTirSpecial; // Idem, à mettre à 0.
+
+    // -> ".. à condition qu'au tour précédent il ait touché un bateau .." --> variable toucheJoueur = 1
+    // --> ".. et qu'il n'ait pas utilisé de tir spécial " --> variable joueurTirSpecial = 0
+    // Imaginons que le joueur a touché au dernier tour jouer, alors toucheJoueur = 1.
+    toucheJoueur = 1;
+    // Imaginons qu'il n'a pas utilisé de tir spécial au dernier tour jouer, alors joueurTirSpecial = 0;
+    joueurTirSpecial = 0;
+
+    printf("Avant : toucheJoueur : %d && joueurTirSpecial : %d \n", toucheJoueur, joueurTirSpecial);
+
+    //afficherArmada(armadaAdversaire);
+    effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial);
+
+    printf("Apres : toucheJoueur : %d && joueurTirSpecial : %d \n", toucheJoueur, joueurTirSpecial);
     // NOTE :
     // -> cf 'x' et '+' à régler.
-    // -> ".. à condition qu'au tour précédent il ait touché un bateau .." --> variable que l'on peut mettre dans le main que le l'on met à jour lorsque je place un "#" sur la grille. :)
-    // --> ".. et qu'il n'ait pas utilisé de tir spécial " --> Pareil avec une vraible qu'on gére ici et que l'on met à jour. :)
-    // ++ : -> mettre un message lorsque rien touché (easy aussi ^^).
 
     // -------- Zone Test --------
 

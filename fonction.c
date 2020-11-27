@@ -709,35 +709,40 @@ int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m){
     return tableau;
 }
 
-void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire){
+void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale){
     /*
         Effectue un tir sur la matrice vidé.
         Param. :
             m : pointeur de la matrice que le joueur attaque, type : pointeur de Matrice.
             armadaJoueur : la flotte du joueur, type : tableau de pointeur de navire.
             armadaAdversaire : la flotte de l'adversaire, type : tableau de pointeur de navire.
+            toucheNavire : on attend l'adresse d'un entier permettant de savoir si le tour d'avant il y a eu une touche ou pas, type : adresse (donc pointeur) d'entier.
+            actionSpeciale : on attend aussi l'adresse d'un entier pour, cette fois, savoir s'il est possible d'effectuer un tir spéciale ou pas, type : adresse (donc pointeur) d'entier.
     */
-    // Demander un tir spéciale (donner la liste) ou normal.
     int choixTir, direction;
     int tableau_de_tir[TYPE_TIR];
     for(int i = 0; i < TYPE_TIR; i++) tableau_de_tir[i] = 0;
     tableau_de_tir[0] = 1;
+    // Demander un tir spéciale (donner la liste) ou normal.
     printf("Choisir un tir : \n");
-    for(int i = 1; i < TYPE_TIR; i++){
-        if(armadaJoueur[i]->tir == 1){
-            printf("Tir sur toute une ligne ou colonne [1], ");
-            tableau_de_tir[1] = 1;
-        }
+    // Si le joueur a touché au dernier tour jouer et qu'il n'a pas utilisé de tir spéciale alors il le peut maintenant :
+    if(*toucheNavire == 1 && *actionSpeciale == 0){
+        for(int i = 1; i < TYPE_TIR; i++){
+            if(armadaJoueur[i]->tir == 1){
+                printf("Tir sur toute une ligne ou colonne [1], ");
+                tableau_de_tir[1] = 1;
+            }
 
-        if(armadaJoueur[i]->tir == 2){
-            printf("Tir en 'x' [2] ou en '+' [3], ");
-            tableau_de_tir[2] = 1;
-            tableau_de_tir[3] = 1;
-        }
+            if(armadaJoueur[i]->tir == 2){
+                printf("Tir en 'x' [2] ou en '+' [3], ");
+                tableau_de_tir[2] = 1;
+                tableau_de_tir[3] = 1;
+            }
 
-        if(armadaJoueur[i]->tir == 3){
-            printf("Tir en carree [4], ");
-            tableau_de_tir[4] = 1;
+            if(armadaJoueur[i]->tir == 3){
+                printf("Tir en carree [4], ");
+                tableau_de_tir[4] = 1;
+            }
         }
     }
     printf("Tir normal [0]. \n");
@@ -749,20 +754,28 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire){
         scanf("%d", &choixTir);
         printf("\n");
     }
-    // On consomme le tir spéciale (on le remplace par un tir normal) :
+
+    // Si c'est un tir normale alors actionSpeciale est à 0.
+    if(choixTir == 0){
+        *actionSpeciale = 0;
+    }
+    // On consomme le tir spéciale (on le remplace par un tir normal) et on modifie la variable des tirs spéciaux :
     for(int i = 1; i < TYPE_TIR; i++){
         if(armadaJoueur[i]->tir == 1 && choixTir == 1){
             armadaJoueur[i]->tir = 0;
+            *actionSpeciale = 1;
             break;
         }
 
         if(armadaJoueur[i]->tir == 2 && choixTir == 2 || armadaJoueur[i]->tir == 2 && choixTir == 3){
             armadaJoueur[i]->tir = 0;
+            *actionSpeciale = 1;
             break;
         }
 
         if(armadaJoueur[i]->tir == 3 && choixTir == 4){
             armadaJoueur[i]->tir = 0;
+            *actionSpeciale = 1;
             break;
         }
     }
@@ -787,7 +800,7 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire){
     }
     printf("\n");
 
-    // Choix de la direction pour un tir en ligne ou colonne.
+    // Choix de la direction pour un tir en ligne ou colonne si on a choissie ce type de tir.
     if(choixTir == 1){
         printf("Effectuer un barrage sur une ligne [1] ou une colonne [0] ? \n");
         printf("Choix : ");
@@ -798,8 +811,7 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire){
     }
 
     // On tir :
-    //printf("Tir en %d%c : \n", posX, 65+posY-1);
-    int **tab = fonctionTir(posX-1, posY-1, choixTir, direction, m);
+    int **tab = fonctionTir(posX-1, posY-1, choixTir, direction, m); // On utilise notre fonction qui retourne un pointeur de tableau.
     int tmp_taille = 0;
     if(choixTir == 0){
         tmp_taille = 1;
@@ -811,12 +823,13 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire){
         tmp_taille = 5;
     }
 
-    //printf("On tire en : \n");
+    *toucheNavire = 0; // On dit que le joueur n'a pas touché, mais si c'est le cas alors c'est mise à jour plus bas (lorsqu'on a un "#").
     for(int i = 0; i < tmp_taille; i++){
         //printf("%d%c  ", tab[i][0]+1, 65+tab[i][1]);
         if(tab[i][0] >= 0 && tab[i][0] <= m->taille && tab[i][1] >= 0 && tab[i][1] <= m->taille){
             if(m->value[tab[i][0]][tab[i][1]] == 'O'){
                 m->value[tab[i][0]][tab[i][1]] = '#';
+                *toucheNavire = 1;
                 //printf("(--> %d%c a touche ! ) ", tab[i][0]+1, 65+tab[i][1]);
                 // Rechercher le(s) navire(s) de l'adversaire pour modifier le statue du navire en touché.
                 int trouve = 0;
@@ -835,7 +848,11 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire){
                     if(trouve == 1) break;
                 }
             }
-            if(m->value[tab[i][0]][tab[i][1]] == '.') m->value[tab[i][0]][tab[i][1]] = 'X';
+
+            if(m->value[tab[i][0]][tab[i][1]] == '.'){
+                m->value[tab[i][0]][tab[i][1]] = 'X';
+                printf("Ne touche rien en %d%c. \n", tab[i][0]+1, 65+tab[i][1]);
+            }
         }
     }
     printf("\n");
