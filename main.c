@@ -7,30 +7,32 @@ int main(){
     srand(time(NULL));
     Navire *armadaJoueur[TAILLE_FLOTTE];
     Navire *armadaAdversaire[TAILLE_FLOTTE];
-    int taille_matrice = 10, choix=0;
+    int taille_matrice = 10, choix = 0;
 
     // ----- Menu Principal -----
-    
+
     printf("\nBienvenue dans la bataille navale.\n\n");
     choisirTaille(&taille_matrice);
     Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
     Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice);
-    while(choix<1 || choix>2){
+    while(choix < 1 || choix > 2){
         printf("Voulez-vous créer votre armada ?\n1. Oui\n2. Non\n>");
         scanf("%d",&choix);
         printf("\n");
     }
-    if(choix==1){
+
+    if(choix == 1){
         genererArmadaJoueur(matriceJoueur,armadaJoueur); //Quand le joueur veut choisir ses navires
     }else if(choix==2){
         placementAleatoire(matriceJoueur, armadaJoueur); //Quand le joueur ne place pas lui meme ses navires
     }
+
     placementAleatoire(matriceAdversaire, armadaAdversaire); //Generation de la grille de l'adversaire
     afficherMatrice(matriceAdversaire);
     puts("");
     afficherMatrice(matriceJoueur);
     afficherArmada(armadaJoueur);
-    
+
     // ---- Fin Menu Principal ----
 
 /*
@@ -48,6 +50,11 @@ int main(){
 
     printf("Avant : toucheJoueur : %d && joueurTirSpecial : %d \n", toucheJoueur, joueurTirSpecial);
 
+    Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
+    Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice);
+    placementAleatoire(matriceAdversaire, armadaAdversaire);
+    afficherMatrice(matriceAdversaire);
+    placementAleatoire(matriceJoueur, armadaJoueur);
     //afficherArmada(armadaAdversaire);
     effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial);
 
@@ -57,5 +64,6 @@ int main(){
 
     // -------- Zone Test --------
 */
+
     return EXIT_SUCCESS;
 }

@@ -330,7 +330,7 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
     for(int i = 0; i < TAILLE_FLOTTE; i++){
         printf("Choisisser un navire:\n1. Torpilleur\n2. Destroyer\n3. Sous-marin\n4. Croiser\n5. Porte-avion\n> ");
         scanf("%d", &tmp);
-        
+
         while(tmp < 1 || tmp > 5){
             printf("\nCe navire n'existe pas !\n\n");
             printf("Choisisser un navire:\n1. Torpilleur\n2. Destroyer\n3. Sous-marin\n4. Croiser\n5. Porte-avion\n> ");
@@ -390,7 +390,7 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
             printf("\nCette orientation n'existe pas !\n");
             printf("Orientation (H ou V)\n>");
             scanf("%s",&tmpO);
-        }        
+        }
         if(tmpO == 104 || tmpO == 118)tmpO = tmpO-32;
         if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
 
@@ -422,7 +422,7 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
                 printf("\nCette orientation n'existe pas !\n");
                 printf("Orientation (H ou V)\n>");
                 scanf("%s",&tmpO);
-            }        
+            }
             if(tmpO == 104 || tmpO == 118)tmpO = tmpO-32;
             if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
         }
@@ -454,7 +454,7 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
                 printf("\nCette orientation n'existe pas !\n");
                 printf("Orientation (H ou V)\n>");
                 scanf("%s",&tmpO);
-            }        
+            }
             if(tmpO == 104 || tmpO == 118)tmpO = tmpO-32;
             if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
         }
@@ -845,13 +845,21 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, 
         scanf("%d", &posX);
     }
     printf("Choisir pour 'y' maintenant .. \n");
+    char tmpY;
     printf("y = ");
-    scanf("%d", &posY);
+    scanf("%s", &tmpY);
+    // Si c'est en minuscule on le met en maj.
+    if(tmpY >= 97 && tmpY <= 122) tmpY = tmpY-32;
+    posY = tmpY-64;
     while(posY < 0 || posY > m->taille){
         printf("Choisir un 'y' correct : \n");
         printf("y = ");
-        scanf("%d", &posY);
+        scanf("%s", &tmpY);
+        // Si c'est en miniscule, on le met en maj.
+        if(tmpY >= 97 && tmpY <= 122) tmpY = tmpY-32;
+        posY = tmpY-64;
     }
+    posY = tmpY-64;
     printf("\n");
 
     // Choix de la direction pour un tir en ligne ou colonne si on a choissie ce type de tir.
