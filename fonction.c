@@ -257,6 +257,7 @@ int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o){
             o : Orientation que l'on utilise, Type Orientation.
         Return : Boolean int.
     */
+    if(x > m->taille || y > m->taille)return 1;
     if(o==V && x+taille > m->taille)return 1;
     if(o==H && y+taille > m->taille)return 1;
     return 0;
