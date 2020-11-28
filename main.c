@@ -7,30 +7,43 @@ int main(){
     srand(time(NULL));
     Navire *armadaJoueur[TAILLE_FLOTTE];
     Navire *armadaAdversaire[TAILLE_FLOTTE];
-    int taille_matrice = 10;
-    //choisirTaille(&taille_matrice);
+    int taille_matrice = 10, choix=0;
 
+    // ----- Menu Principal -----
+    
+    printf("\nBienvenue dans la bataille navale.\n\n");
+    choisirTaille(&taille_matrice);
     Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
     Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice);
-    //afficherMatrice(matriceAdversaire);
-    //afficherMatrice(matriceJoueur);
-
-    //genererArmadaJoueur(matriceJoueur,armadaJoueur); //Quand le joueur veut choisir ses navires
-    placementAleatoire(matriceJoueur, armadaJoueur); //Choix par defaut
+    while(choix<1 || choix>2){
+        printf("Voulez-vous crÃ©er votre armada ?\n1. Oui\n2. Non\n>");
+        scanf("%d",&choix);
+        printf("\n");
+    }
+    if(choix==1){
+        genererArmadaJoueur(matriceJoueur,armadaJoueur); //Quand le joueur veut choisir ses navires
+    }else if(choix==2){
+        placementAleatoire(matriceJoueur, armadaJoueur); //Quand le joueur ne place pas lui meme ses navires
+    }
     placementAleatoire(matriceAdversaire, armadaAdversaire); //Generation de la grille de l'adversaire
+    afficherMatrice(matriceAdversaire);
+    puts("");
+    afficherMatrice(matriceJoueur);
+    afficherArmada(armadaJoueur);
+    
+    // ---- Fin Menu Principal ----
 
-    //afficherArmada(armadaJoueur);
-
+/*
     // -------- Zone Test --------
 
-    int toucheJoueur; // Variable à mettre à 0 de base !
-    int joueurTirSpecial; // Idem, à mettre à 0.
+    int toucheJoueur; // Variable ï¿½ mettre ï¿½ 0 de base !
+    int joueurTirSpecial; // Idem, ï¿½ mettre ï¿½ 0.
 
-    // -> ".. à condition qu'au tour précédent il ait touché un bateau .." --> variable toucheJoueur = 1
-    // --> ".. et qu'il n'ait pas utilisé de tir spécial " --> variable joueurTirSpecial = 0
-    // Imaginons que le joueur a touché au dernier tour jouer, alors toucheJoueur = 1.
+    // -> ".. ï¿½ condition qu'au tour prï¿½cï¿½dent il ait touchï¿½ un bateau .." --> variable toucheJoueur = 1
+    // --> ".. et qu'il n'ait pas utilisï¿½ de tir spï¿½cial " --> variable joueurTirSpecial = 0
+    // Imaginons que le joueur a touchï¿½ au dernier tour jouer, alors toucheJoueur = 1.
     toucheJoueur = 1;
-    // Imaginons qu'il n'a pas utilisé de tir spécial au dernier tour jouer, alors joueurTirSpecial = 0;
+    // Imaginons qu'il n'a pas utilisï¿½ de tir spï¿½cial au dernier tour jouer, alors joueurTirSpecial = 0;
     joueurTirSpecial = 0;
 
     printf("Avant : toucheJoueur : %d && joueurTirSpecial : %d \n", toucheJoueur, joueurTirSpecial);
@@ -40,9 +53,9 @@ int main(){
 
     printf("Apres : toucheJoueur : %d && joueurTirSpecial : %d \n", toucheJoueur, joueurTirSpecial);
     // NOTE :
-    // -> cf 'x' et '+' à régler.
+    // -> cf 'x' et '+' ï¿½ rï¿½gler.
 
     // -------- Zone Test --------
-
+*/
     return EXIT_SUCCESS;
 }

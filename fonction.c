@@ -77,34 +77,33 @@ Navire *genererNavire(NavireType nt, Matrice *m){
     return n;
 }
 
-void placementNavire(Matrice *m, NavireType nt, int x, int y, Orientation o){
+void placementNavire(Matrice *m, Navire *n, int x, int y, Orientation o){
     /*
         Permet de placer un navire selon des coordonées et une orientation sur la matrice voulu.
         Param. :
             m : matrice que l'on veut modifier, type : pointeur de Matrice.
-            nt : type de navire a placer, type : NavireType.
+            n : navire a placer, type : pointeur de Navire.
             x : coordonee de l'axe des abcisses, type : int.
             y : coordonne de l'axe des ordonnees, type : int.
             o : orientation voulu du navire, type : Orientation.
     */
-    Navire *notre_navire = genererNavire(nt, m);
-    int taille = getTailleNavire(nt);
-    int posX[taille], posY[taille];
+    int posX[n->taille], posY[n->taille];
+    //Calcule des coordonnés en fonction de l'orientation
     if(o == H){
-        for(int i = 0; i < taille; i++){
+        for(int i = 0; i < n->taille; i++){
             posX[i] = x+i;
             posY[i] = y;
         }
     } else if(o == V){
-        for(int i = 0; i < taille; i++){
+        for(int i = 0; i < n->taille; i++){
             posX[i] = x;
             posY[i] = y+i;
         }
     }
-
-    for(int i = 0; i < notre_navire->taille; i++){
-        notre_navire->posX[i] = posX[i];
-        notre_navire->posY[i] = posY[i];
+    //Ajout des coordonnées dans le navire et affichage sur la matrice
+    for(int i = 0; i < n->taille; i++){
+        n->posY[i] = posX[i];
+        n->posX[i] = posY[i];
         m->value[posY[i]][posX[i]] = 'O';
     }
 }
@@ -322,14 +321,21 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
         }
     }
 
-    int tmp, x, y;
+    int tmp, x;
     NavireType nt;
     Orientation o;
-    char tmpO;
+    char y, tmpO;
 
     for(int i = 0; i < TAILLE_FLOTTE; i++){
         printf("Choisisser un navire:\n1. Torpilleur\n2. Destroyer\n3. Sous-marin\n4. Croiser\n5. Porte-avion\n> ");
         scanf("%d", &tmp);
+        /*
+        while(tmp < 1 || tmp > 5){
+            printf("\nValeur incorecte !\n\n");
+            printf("Choisisser un navire:\n1. Torpilleur\n2. Destroyer\n3. Sous-marin\n4. Croiser\n5. Porte-avion\n> ");
+            scanf("%d", &tmp);
+        }
+        */
         switch(tmp){
             case 5:
                 nt = PORTEAVION;
@@ -353,30 +359,48 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
         n->matrice = m;
         n->nom = nt;
         n->taille = getTailleNavire(nt);
+        n->posX = (int*)malloc(n->taille * sizeof(int));
+        n->posY = (int*)malloc(n->taille * sizeof(int));
+        n->tir = getTypeTirSpecial(nt);
         armada[i] = n;
 
         printf("\nPosition ?");
         printf("\ny=");
-        scanf("%d",&y);
+        scanf("%s",&y);
         printf("x=");
         scanf("%d",&x);
 
         printf("Orientation (H ou V)\n>");
         scanf("%s",&tmpO);
-
+        while(tmpO != 72 && tmpO != 86 && tmpO != 104 && tmpO != 118 ){
+            printf("\nCette orientation n'existe pas !\n");
+            printf("Orientation (H ou V)\n>");
+            scanf("%s",&tmpO);
+        }
+        //On passe y en majuscule
+        if(y >= 97 && y <= 122)y = y-32;
+        if(tmpO == 104 || tmpO == 118)tmpO = tmpO-32;
         if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
-
-        while(sortieMatrice(m,(x-1),(y-1),getTailleNavire(nt),o) == 1){
+        while(sortieMatrice(m,(x-1),(y-65),getTailleNavire(nt),o) == 1 || (((y-65) > m->taille || (y-65) < 0) || ((x-1) > m->taille || (x-1) < 0))){
             printf("\nHo non ! Le navire est hors du champs de bataille !\n");
             printf("\ny=");
             scanf("%d",&y);
+
             printf("x=");
             scanf("%d",&x);
             printf("Orientation (H ou V)\n>");
             scanf("%s",&tmpO);
+            while(tmpO != 72 && tmpO != 86 && tmpO != 104 && tmpO != 118 ){
+                printf("\nCette orientation n'existe pas !\n");
+                printf("Orientation (H ou V)\n>");
+                scanf("%s",&tmpO);
+            }
+            //On passe y en majuscule
+            if(y >= 97 && y <= 122)y = y-32;
+            if(tmpO == 104 || tmpO == 118)tmpO = tmpO-32;
             if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
         }
-        while(naviresColles(m,(y-1),(x-1),getTailleNavire(nt),o,tableau2D) == 1){
+        while(naviresColles(m,(y-65),(x-1),getTailleNavire(nt),o,tableau2D) == 1){
             printf("\nHo non ! Le navire est cote a cote a un autre !\n");
             printf("\ny=");
             scanf("%d",&y);
@@ -384,12 +408,22 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
             scanf("%d",&x);
             printf("Orientation (H ou V)\n>");
             scanf("%s",&tmpO);
+            while(tmpO != 72 && tmpO != 86 && tmpO != 104 && tmpO != 118 ){
+                printf("\nCette orientation n'existe pas !\n");
+                printf("Orientation (H ou V)\n>");
+                scanf("%s",&tmpO);
+            }
+            //On passe y en majuscule
+            if(y >= 97 && y <= 122)y = y-32;
+            if(tmpO == 104 || tmpO == 118)tmpO = tmpO-32;
             if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
         }
 
-        placementNavire(m,nt,(y-1),(x-1),o);
+        placementNavire(m,n,(y-65),(x-1),o);
+        printf("\n");
         afficherMatrice(m);
-
+        printf("\n");
+        //afficherArmada(armada);
         printf("\n");
     }
 
@@ -404,7 +438,6 @@ void placementAleatoire(Matrice *m, Navire **armada){
             armada : liste des navire du joueur ou de l'adversaire, type : liste de pointeur de Navire.
     */
     generationArmadaStandard(m, armada);
-    //afficherArmada(armada);
     printf("Placement aleatoire .. \n");
 
     int **tableau2D = (int **)malloc(m->taille * sizeof(int*)); // Mémoire (lignes).
@@ -423,59 +456,42 @@ void placementAleatoire(Matrice *m, Navire **armada){
     int maxi = m->taille-1, mini = 0;
 
     for(int num = 0; num < TAILLE_FLOTTE; num++){
-        //printf("## Navire %d : \n", num+1);
         int poser = 0;
         int angle;
         while(poser == 0){
             aleaX = generationIntAleatoire(maxi, mini);
             aleaY = generationIntAleatoire(maxi, mini);
             angle = generationIntAleatoire(4, 1);
-            //printf("Angle : %d \n", angle);
 
             poser = 1;
             for(int i = 0; i < armada[num]->taille; i++){
                 if(angle == 1){
                     if(aleaY-i >= mini && tableau2D[aleaX][aleaY-i] == 0){
-                        //printf("--> X : %d  |  Y : %c \n", aleaX+1, 65+aleaY-i);
                     } else {
-                        //printf("Positionnement en X : %d  |  Y : %c impossible \n", aleaX+1, 65+aleaY-i);
-                        //printf("(%d) On doit changer d'angle .. \n", angle);
                         poser = 0;
-                        //printf("Var. poser a %d ! \n", poser);
                         break;
                     }
                 }
 
                 if(angle == 2){
                     if(aleaX-i >= mini && tableau2D[aleaX-i][aleaY] == 0){
-                        //printf("--> X : %d  |  Y : %c \n", aleaX-i+1, 65+aleaY);
                     } else {
-                        //printf("Positionnement en X : %d  |  Y : %c impossible \n", aleaX-i+1, 65+aleaY);
-                        //printf("(%d) On doit changer d'angle .. \n", angle);
                         poser = 0;
-                        //printf("Var. poser a %d ! \n", poser);
                         break;
                     }
                 }
 
                 if(angle == 3){
                     if(aleaY+i <= maxi && tableau2D[aleaX][aleaY+i] == 0){
-                        //printf("--> X : %d  |  Y : %c \n", aleaX+1, 65+aleaY+i);
                     } else {
-                        //printf("Positionnement en X : %d  |  Y : %c impossible \n", aleaX+1, 65+aleaY+i);
-                        //printf("(%d) On doit changer d'angle .. \n", angle);
                         poser = 0;
-                        //printf("Var. poser a %d ! \n", poser);
                         break;
                     }
                 }
 
                 if(angle == 4){
                     if(aleaX+i <= maxi && tableau2D[aleaX+i][aleaY] == 0){
-                        //printf("--> X : %d  |  Y : %c \n", aleaX+i+1, 65+aleaY);
                     } else {
-                        //printf("Positionnement en X : %d  |  Y : %c impossible \n", aleaX+i+1, 65+aleaY);
-                        //printf("(%d) On doit changer d'angle .. \n", angle);
                         poser = 0;
                         break;
                     }
@@ -536,8 +552,6 @@ void placementAleatoire(Matrice *m, Navire **armada){
     }
 
     free(tableau2D); // On libére la mémoire utilisé avec le tableau temporaire ..
-    // Affichage :
-    afficherMatrice(m);
 }
 
 void generationArmadaStandard(Matrice *m, Navire **armada){

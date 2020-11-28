@@ -35,7 +35,7 @@ int getTailleNavire(NavireType nt);
 // Fonction "genererNavire" permettant d'initialer un navire, sans affectation de position.
 Navire *genererNavire(NavireType nt, Matrice *m);
 // Fonction "placementNavire" permettant de créer et placer un navire à une position donné.
-void placementNavire(Matrice *m, NavireType nt, int posX, int posY, Orientation o);
+void placementNavire(Matrice *m, Navire *n, int posX, int posY, Orientation o);
 // Fonction "genererMatriceVide" permettant de cr�er une matrice vide (initialisation de la grille de jeu).
 Matrice* genererMatriceVide(char *titre, int taille_matrice);
 // Fonction "afficherMatrice" qui permet d'afficher la matrice/grille de jeu.
