@@ -142,7 +142,7 @@ void afficherMatrice(Matrice *m){
         Param. :
             m : pointeur de la matrice que l'on veut afficher, type : pointeur de Matrice.
     */
-    printf("%s : \n", m->titre);
+    printf("%s : \n", (m->titre));
     printf("     ");
     for(int i = 0; i < m->taille; i++) printf("%c ", 65+i);
     printf(" [y] \n");
@@ -364,57 +364,97 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
         n->tir = getTypeTirSpecial(nt);
         armada[i] = n;
 
+        //Demande des coordonées
         printf("\nPosition ?");
         printf("\ny=");
         scanf("%s",&y);
+        //On passe y en majuscule
+        if(y >= 97 && y <= 122)y = y-32;
+        //Vérification de la position y, si c'est bien une lettre
+        while(!( y >= 65 && y <= 90)){
+            printf("\nHo non ! Y n'est pas une lettre !");
+            printf("\ny=");
+            scanf("%s",&y);
+            //On passe y en majuscule
+            if(y >= 97 && y <= 122)y = y-32;
+        }
+        //On demande x
         printf("x=");
         scanf("%d",&x);
-
+        //Demande de l'orientation
         printf("Orientation (H ou V)\n>");
         scanf("%s",&tmpO);
+        //Vérification de l'orientation
         while(tmpO != 72 && tmpO != 86 && tmpO != 104 && tmpO != 118 ){
+            //Si le joueur se trompe de characètre, on lui redemande
             printf("\nCette orientation n'existe pas !\n");
             printf("Orientation (H ou V)\n>");
             scanf("%s",&tmpO);
-        }
-        //On passe y en majuscule
-        if(y >= 97 && y <= 122)y = y-32;
+        }        
         if(tmpO == 104 || tmpO == 118)tmpO = tmpO-32;
         if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
-        while(sortieMatrice(m,(x-1),(y-65),getTailleNavire(nt),o) == 1 || (((y-65) > m->taille || (y-65) < 0) || ((x-1) > m->taille || (x-1) < 0))){
-            printf("\nHo non ! Le navire est hors du champs de bataille !\n");
-            printf("\ny=");
-            scanf("%d",&y);
 
+        while(sortieMatrice(m,(x-1),(y-65),getTailleNavire(nt),o) == 1){
+            printf("\nHo non ! Le navire est hors du champs de bataille !\n");
+            //Demande des coordonées
+            printf("\nPosition ?");
+            printf("\ny=");
+            scanf("%s",&y);
+            //On passe y en majuscule
+            if(y >= 97 && y <= 122)y = y-32;
+            //Vérification de la position y, si c'est bien une lettre
+            while(!( y >= 65 && y <= 90)){
+                printf("\nHo non ! Y n'est pas une lettre !");
+                printf("\ny=");
+                scanf("%s",&y);
+                //On passe y en majuscule
+                if(y >= 97 && y <= 122)y = y-32;
+            }
+            //On demande x
             printf("x=");
             scanf("%d",&x);
+            //Demande de l'orientation
             printf("Orientation (H ou V)\n>");
             scanf("%s",&tmpO);
+            //Vérification de l'orientation
             while(tmpO != 72 && tmpO != 86 && tmpO != 104 && tmpO != 118 ){
+                //Si le joueur se trompe de characètre, on lui redemande
                 printf("\nCette orientation n'existe pas !\n");
                 printf("Orientation (H ou V)\n>");
                 scanf("%s",&tmpO);
-            }
-            //On passe y en majuscule
-            if(y >= 97 && y <= 122)y = y-32;
+            }        
             if(tmpO == 104 || tmpO == 118)tmpO = tmpO-32;
             if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
         }
         while(naviresColles(m,(y-65),(x-1),getTailleNavire(nt),o,tableau2D) == 1){
-            printf("\nHo non ! Le navire est cote a cote a un autre !\n");
+            printf("\nHo non ! Le navire est à coté d'un autre !\n");
+            //Demande des coordonées
+            printf("\nPosition ?");
             printf("\ny=");
-            scanf("%d",&y);
+            scanf("%s",&y);
+            //On passe y en majuscule
+            if(y >= 97 && y <= 122)y = y-32;
+            //Vérification de la position y, si c'est bien une lettre
+            while(!( y >= 65 && y <= 90)){
+                printf("\nHo non ! Y n'est pas une lettre !");
+                printf("\ny=");
+                scanf("%s",&y);
+                //On passe y en majuscule
+                if(y >= 97 && y <= 122)y = y-32;
+            }
+            //On demande x
             printf("x=");
             scanf("%d",&x);
+            //Demande de l'orientation
             printf("Orientation (H ou V)\n>");
             scanf("%s",&tmpO);
+            //Vérification de l'orientation
             while(tmpO != 72 && tmpO != 86 && tmpO != 104 && tmpO != 118 ){
+                //Si le joueur se trompe de characètre, on lui redemande
                 printf("\nCette orientation n'existe pas !\n");
                 printf("Orientation (H ou V)\n>");
                 scanf("%s",&tmpO);
-            }
-            //On passe y en majuscule
-            if(y >= 97 && y <= 122)y = y-32;
+            }        
             if(tmpO == 104 || tmpO == 118)tmpO = tmpO-32;
             if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
         }
