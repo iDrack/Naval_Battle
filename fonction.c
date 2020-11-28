@@ -145,7 +145,7 @@ void afficherMatrice(Matrice *m){
     printf("%s : \n", (m->titre));
     printf("     ");
     for(int i = 0; i < m->taille; i++) printf("%c ", 65+i);
-    printf(" [y] \n");
+    printf("[y] \n");
     for(int i = 0; i < m->taille; i++){
         if(i+1 >= 10) printf(" %d  ", i+1);
         else printf("  %d  ", i+1);
@@ -329,13 +329,12 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
     for(int i = 0; i < TAILLE_FLOTTE; i++){
         printf("Choisisser un navire:\n1. Torpilleur\n2. Destroyer\n3. Sous-marin\n4. Croiser\n5. Porte-avion\n> ");
         scanf("%d", &tmp);
-        /*
+        
         while(tmp < 1 || tmp > 5){
-            printf("\nValeur incorecte !\n\n");
+            printf("\nCe navire n'existe pas !\n\n");
             printf("Choisisser un navire:\n1. Torpilleur\n2. Destroyer\n3. Sous-marin\n4. Croiser\n5. Porte-avion\n> ");
             scanf("%d", &tmp);
         }
-        */
         switch(tmp){
             case 5:
                 nt = PORTEAVION;
