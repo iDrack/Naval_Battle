@@ -41,7 +41,7 @@ TirType getTypeTirSpecial(NavireType nt){
     */
     switch(nt){
         case PORTEAVION:
-            return BONBARDEMENT;
+            return BOMBARDEMENT;
             break;
         case CROISER:
             return CANONS;
@@ -188,8 +188,9 @@ void afficherNavirePos(Navire *n){
     /*
         Permet d'afficher les coordonees de tout un navire.
         Param. :
-            n : navire dont on veut afficher les coordonnees, type: inteur de Navire.
+            n : navire dont on veut afficher les coordonnees, type: pointeur de Navire.
     */
+    printf("\nPosition : ");
     for(int i=0;i<n->taille;i++){
         if((n->posX[i]+1)>9){
             printf("%d%c  ",n->posX[i]+1,n->posY[i]+65);
@@ -199,13 +200,61 @@ void afficherNavirePos(Navire *n){
     }
 }
 
+void afficherNavireArmement(Navire *n){
+    /*
+        Permet d'afficher l'armement disponible d'un navire.
+        Param. :
+            n : navire dont on veut afficher l'armement, type: pointeur de Navire.
+    */
+    printf("Armement disponible : ");
+    switch(n->nom){
+        case PORTEAVION:
+            if(n->armementPrincipale == BOMBARDEMENT){
+                printf("Bombardement (carre de 3x3) et Tir normal. ");
+            } else {
+                printf("Tir normal. ");
+            }
+            break;
+        case CROISER:
+            if(n->armementPrincipale == CANONS){
+                printf("Batterie de canon (en 'x'");
+                if(n->armementSecondaire == CANONS){
+                    printf(" et en '+') et Tir normal. ");
+                } else {
+                    printf(") et Tir normal. ");
+                }
+            } else if(n->armementSecondaire == CANONS) {
+                printf("Batterie de canon (en '+') et Tir normal. ");
+            } else {
+                printf("Tir normal. ");
+            }
+            break;
+        case DESTROYER:
+            printf("Tir normal. ");
+            break;
+        case SOUSMARIN:
+            if(n->armementPrincipale == BARAGE){
+                printf("Tir de barage (ligne ou colonne) et Tir normal. ");
+            } else {
+                printf("Tir normal. ");
+            }
+            break;
+        case TORPILLEUR:
+            printf("Tir normal. ");
+            break;
+        default:
+            printf("Probleme au niveau de l'armement. ");
+            break;
+    }
+}
+
 void afficherArmada(Navire **armada){
     /*
         Permet d'afficher l'armada (soit tous les navires).
         Param. :
             armada : tableau de pointeur de navire, type: tableau de pointeur de navire.
     */
-    puts("Votre armada :\n");
+    puts("Votre armada : ");
     char* st;
     char* st2;
     for(int i = 0; i < TAILLE_FLOTTE; i++){
@@ -246,7 +295,8 @@ void afficherArmada(Navire **armada){
                 st2 = "";
                 break;
         }
-        if(st != "") printf("%s\tEtat:%s\t",st,st2);
+        if(st != "") printf("#%d %s\tEtat : %s\t", i, st, st2);
+        afficherNavireArmement(armada[i]);
         afficherNavirePos(armada[i]);
         printf("\n");
     }

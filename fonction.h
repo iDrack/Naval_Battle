@@ -6,7 +6,7 @@
 
 typedef enum etat {OK,TOUCHE,COULE} Etat;
 typedef enum navireType {PORTEAVION,CROISER,DESTROYER,SOUSMARIN,TORPILLEUR} NavireType;
-typedef enum tirSpecial {NORMAL,BARAGE,CANONS,BONBARDEMENT} TirType;
+typedef enum tirSpecial {NORMAL,BARAGE,CANONS,BOMBARDEMENT} TirType;
 typedef enum orientation {H,V} Orientation; // H = Horizontal, V = Vertical
 typedef struct matrice Matrice;
 typedef struct navire Navire;
@@ -51,6 +51,8 @@ int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab
 void genererArmadaJoueur(Matrice *m, Navire **armada);
 // Fonction "afficherNavirePos" permettant d'afficher les coordonnees d'un navire.
 void afficherNavirePos(Navire *n);
+// Fonction "afficherNavireArmement" permettant d'afficher l'armement disponible d'un navire.
+void afficherNavireArmement(Navire *n);
 // Fonction "afficherArmada" permettant d'afficher l'armada d'un joueur.
 void afficherArmada(Navire **armada);
 // Fonction "placementAleatoire" permettant de placer aléatoirement les navires sur une matrice donné (avec des navires non collé entre eux).

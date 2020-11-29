@@ -53,10 +53,11 @@ int main(){
     Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
     Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice);
     placementAleatoire(matriceAdversaire, armadaAdversaire);
-    afficherMatrice(matriceAdversaire);
     placementAleatoire(matriceJoueur, armadaJoueur);
-    //afficherArmada(armadaAdversaire);
+    afficherMatrice(matriceAdversaire);
+    afficherArmada(armadaJoueur);
     effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial);
+    afficherArmada(armadaJoueur);
 
     printf("Apres : toucheJoueur : %d && joueurTirSpecial : %d \n", toucheJoueur, joueurTirSpecial);
     // NOTE :
