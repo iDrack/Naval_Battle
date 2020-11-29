@@ -54,10 +54,14 @@ int main(){
     placementAleatoire(matriceJoueur, armadaJoueur);
     afficherMatrice(matriceAdversaire);
     afficherArmada(armadaJoueur);
-    effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial);
-    afficherArmada(armadaJoueur);
-
-    printf("Apres : toucheJoueur : %d && joueurTirSpecial : %d \n", toucheJoueur, joueurTirSpecial);
+    int compteur = 0;
+    while(compteur != 5){
+        effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial);
+        printf("(adversaire) ");
+        afficherArmada(armadaAdversaire);
+        compteur++;
+        printf("Apres : toucheJoueur : %d && joueurTirSpecial : %d \n", toucheJoueur, joueurTirSpecial);
+    }
 
     // -------- Zone Test --------
 */

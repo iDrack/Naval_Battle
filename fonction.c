@@ -212,7 +212,11 @@ void afficherNavireArmement(Navire *n){
             if(n->armementPrincipale == BOMBARDEMENT){
                 printf("Bombardement (carre de 3x3) et Tir normal. ");
             } else {
-                printf("Tir normal. ");
+                if(n->armementPrincipale == INDISPONIBLE){
+                    printf("Aucune. ");
+                } else {
+                    printf("Tir normal. ");
+                }
             }
             break;
         case CROISER:
@@ -226,24 +230,40 @@ void afficherNavireArmement(Navire *n){
             } else if(n->armementSecondaire == CANONS) {
                 printf("Batterie de canon (en '+') et Tir normal. ");
             } else {
-                printf("Tir normal. ");
+                if(n->armementPrincipale == INDISPONIBLE){
+                    printf("Aucune. ");
+                } else {
+                    printf("Tir normal. ");
+                }
             }
             break;
         case DESTROYER:
-            printf("Tir normal. ");
+            if(n->armementPrincipale == INDISPONIBLE){
+                printf("Aucune. ");
+            } else {
+                printf("Tir normal. ");
+            }
             break;
         case SOUSMARIN:
             if(n->armementPrincipale == BARAGE){
                 printf("Tir de barage (ligne ou colonne) et Tir normal. ");
             } else {
-                printf("Tir normal. ");
+                if(n->armementPrincipale == INDISPONIBLE){
+                    printf("Aucune. ");
+                } else {
+                    printf("Tir normal. ");
+                }
             }
             break;
         case TORPILLEUR:
-            printf("Tir normal. ");
+            if(n->armementPrincipale == INDISPONIBLE){
+                printf("Aucune. ");
+            } else {
+                printf("Tir normal. ");
+            }
             break;
         default:
-            printf("Probleme au niveau de l'armement. ");
+            printf("Aucune armement disponible. ");
             break;
     }
 }
@@ -979,8 +999,9 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, 
                     //printf("Navire %d : \n", num);
                     for(int ref = 0; ref < armadaAdversaire[num]->taille; ref++){
                         //printf("Pos %d%c \n", armadaAdversaire[num]->posX[ref]+1, 65+armadaAdversaire[num]->posY[ref]);
-                        if(armadaAdversaire[num]->posX[ref]+1 == tab[i][0]+1 && armadaAdversaire[num]->posY[ref] == tab[i][1]){
+                        if(armadaAdversaire[num]->posX[ref] == tab[i][0] && armadaAdversaire[num]->posY[ref] == tab[i][1]){
                             modifierEtatNavire(tab[i][0], tab[i][1], armadaAdversaire[num]);
+                            verifierNavire(m, armadaAdversaire[num]);
                             trouve = 1;
                             break;
                         }
@@ -995,6 +1016,12 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, 
                 m->value[tab[i][0]][tab[i][1]] = 'X';
                 printf("Ne touche rien en %d%c. \n", tab[i][0]+1, 65+tab[i][1]);
             }
+
+            /*
+            if(m->value[tab[i][0]][tab[i][1]] == '#'){
+                printf("Nous avions deja touche le navire a cette endroit commandant .. \n");
+            }
+            */
         }
     }
     printf("\n");
@@ -1015,6 +1042,52 @@ void modifierEtatNavire(int positionX, int positionY, Navire *n){
     if(n->etat != COULE){
         n->etat = TOUCHE;
         printf("Navire touche en %d%c ! \n", positionX+1, positionY+65);
+    }
+}
+
+void verifierFlotteEntiere(Matrice *m, Navire **armada){
+    /*
+        Permet de vérifier l'état de la flotte tout entier (vérifie s'il y a un ou plusieurs navires coulé ou non).
+        Param. :
+            m : pointeur de matrice se situant la flotte, type : pointeur de Matrice.
+            armada : la flotte que l'on veut vérifier, type : tableau de pointeur de Navire.
+    */
+
+    for(int i = 0; i < TAILLE_FLOTTE; i++){
+        verifierNavire(m, armada[i]);
+    }
+}
+
+void verifierNavire(Matrice *m, Navire *n){
+    /*
+        Permet de vérifier l'état d'un seul navire de l'armada passé en paramètre (vérifie s'il est coulé ou non).
+        Param. :
+            m : pointeur de matrice se situant la flotte, type : pointeur de Matrice.
+            n : navire à vérifier, type : pointeur de navire.
+    */
+
+    if(n->etat == TOUCHE){
+        int x, y, compteur = 0;
+        for(int i = 0; i < n->taille; i++){
+            x = n->posX[i];
+            y = n->posY[i];
+            if(m->value[x][y] == '#') compteur++;
+        }
+
+        if(compteur == n->taille){
+            n->etat = COULE;
+            n->armementPrincipale = 4;
+            n->armementSecondaire = 4;
+            printf("Le navire a coule .. \n");
+        }
+    } else {
+        if(n->etat == COULE){
+            printf("Navire est deja coule .. \n");
+        }
+
+        if(n->etat == OK){
+            printf("Navire sans probleme. \n");
+        }
     }
 }
 

@@ -6,7 +6,7 @@
 
 typedef enum etat {OK,TOUCHE,COULE} Etat;
 typedef enum navireType {PORTEAVION,CROISER,DESTROYER,SOUSMARIN,TORPILLEUR} NavireType;
-typedef enum tirSpecial {NORMAL,BARAGE,CANONS,BOMBARDEMENT} TirType;
+typedef enum tirSpecial {NORMAL,BARAGE,CANONS,BOMBARDEMENT,INDISPONIBLE} TirType;
 typedef enum orientation {H,V} Orientation; // H = Horizontal, V = Vertical
 typedef struct matrice Matrice;
 typedef struct navire Navire;
@@ -67,5 +67,9 @@ int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m);
 void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale);
 // Fonction "modifierEtatNavire" permettant de modifier l'état du navire situé à la position posX et posY en paramètre.
 void modifierEtatNavire(int positionX, int positionY, Navire *n);
+// Fonction "verifierFlotteEntiere" qui permet de vérifier l'état de la flotte tout entier (vérifie s'il y a un ou plusieurs navires coulé ou non).
+void verifierFlotteEntiere(Matrice *m, Navire **armada);
+// Fonction "verifierNavire" qui permet de vérifier l'état d'un navire (s'il est coulé, ok ou touché).
+void verifierNavire(Matrice *m, Navire *n);
 
 #endif
