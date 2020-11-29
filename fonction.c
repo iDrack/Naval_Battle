@@ -74,6 +74,13 @@ Navire *genererNavire(NavireType nt, Matrice *m){
     n->posX = (int*)malloc(n->taille * sizeof(int));
     n->posY = (int*)malloc(n->taille * sizeof(int));
 
+    n->armementPrincipale = getTypeTirSpecial(nt);
+    if(nt == CROISER){
+        n->armementSecondaire = CANONS;
+    } else {
+        n->armementSecondaire = NORMAL;
+    }
+
     return n;
 }
 
@@ -361,7 +368,12 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
         n->taille = getTailleNavire(nt);
         n->posX = (int*)malloc(n->taille * sizeof(int));
         n->posY = (int*)malloc(n->taille * sizeof(int));
-        n->tir = getTypeTirSpecial(nt);
+        n->armementPrincipale = getTypeTirSpecial(nt);
+        if(nt == CROISER){
+            n->armementSecondaire = CANONS;
+        } else {
+            n->armementSecondaire = NORMAL;
+        }
         armada[i] = n;
 
         //Demande des coordonées
@@ -426,6 +438,7 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
             if(tmpO == 104 || tmpO == 118)tmpO = tmpO-32;
             if(tmpO == 72) o = H; else if(tmpO == 86) o = V; // 72 et 86 correspond au code ascii de H et V.
         }
+
         while(naviresColles(m,(y-65),(x-1),getTailleNavire(nt),o,tableau2D) == 1){
             printf("\nHo non ! Le navire est à coté d'un autre !\n");
             //Demande des coordonées
@@ -448,6 +461,7 @@ void genererArmadaJoueur(Matrice *m, Navire **armada){
             //Demande de l'orientation
             printf("Orientation (H ou V)\n>");
             scanf("%s",&tmpO);
+
             //Vérification de l'orientation
             while(tmpO != 72 && tmpO != 86 && tmpO != 104 && tmpO != 118 ){
                 //Si le joueur se trompe de characètre, on lui redemande
@@ -607,6 +621,7 @@ void generationArmadaStandard(Matrice *m, Navire **armada){
     for(int i = 0; i < TAILLE_FLOTTE; i++){
         // On place en mémoire le navire.
         armada[i] = (Navire*)malloc(sizeof(Navire));
+        armada[i]->armementSecondaire = NORMAL;
         // Type de navire.
         switch(i){
             case 4:
@@ -614,6 +629,7 @@ void generationArmadaStandard(Matrice *m, Navire **armada){
                 break;
             case 3:
                 nt = CROISER;
+                armada[i]->armementSecondaire = getTypeTirSpecial(nt);
                 break;
             case 2:
                 nt = DESTROYER;
@@ -625,7 +641,7 @@ void generationArmadaStandard(Matrice *m, Navire **armada){
                 nt = TORPILLEUR;
                 break;
         }
-        armada[i]->tir = getTypeTirSpecial(nt);
+        armada[i]->armementPrincipale = getTypeTirSpecial(nt);
         armada[i]->etat = OK;
         armada[i]->matrice = m;
         armada[i]->nom = nt;
@@ -782,30 +798,37 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, 
     // Si le joueur a touché au dernier tour jouer et qu'il n'a pas utilisé de tir spéciale alors il le peut maintenant :
     if(*toucheNavire == 1 && *actionSpeciale == 0){
         for(int i = 1; i < TYPE_TIR; i++){
-            if(armadaJoueur[i]->tir == 1){
+            if(armadaJoueur[i]->armementPrincipale == 1){
                 printf("Tir sur toute une ligne ou colonne [1], ");
                 tableau_de_tir[1] = 1;
             }
 
-            if(armadaJoueur[i]->tir == 2){
-                printf("Tir en 'x' [2] ou en '+' [3], ");
+            if(armadaJoueur[i]->armementPrincipale == 2){
+                printf("Tir en 'x' [2], ");
                 tableau_de_tir[2] = 1;
+            }
+
+            if(armadaJoueur[i]->nom == CROISER && armadaJoueur[i]->armementSecondaire == 2){
+                printf("Tir en '+' [3], ");
                 tableau_de_tir[3] = 1;
             }
 
-            if(armadaJoueur[i]->tir == 3){
+            if(armadaJoueur[i]->armementPrincipale == 3){
                 printf("Tir en carree [4], ");
                 tableau_de_tir[4] = 1;
             }
         }
     }
     printf("Tir normal [0]. \n");
+    int tmpChoix = -1;
     printf("Choix : ");
-    scanf("%d", &choixTir);
+    scanf("%d", &tmpChoix);
+    choixTir = tmpChoix;
     printf("\n");
     while(choixTir < 0 || choixTir > 5 || tableau_de_tir[choixTir] != 1){
         printf("Choisir un tir correct : ");
-        scanf("%d", &choixTir);
+        scanf("%d", &tmpChoix);
+        choixTir = tmpChoix;
         printf("\n");
     }
 
@@ -815,20 +838,26 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, 
     }
     // On consomme le tir spéciale (on le remplace par un tir normal) et on modifie la variable des tirs spéciaux :
     for(int i = 1; i < TYPE_TIR; i++){
-        if(armadaJoueur[i]->tir == 1 && choixTir == 1){
-            armadaJoueur[i]->tir = 0;
+        if(armadaJoueur[i]->armementPrincipale == 1 && choixTir == 1){
+            armadaJoueur[i]->armementPrincipale = 0;
             *actionSpeciale = 1;
             break;
         }
 
-        if(armadaJoueur[i]->tir == 2 && choixTir == 2 || armadaJoueur[i]->tir == 2 && choixTir == 3){
-            armadaJoueur[i]->tir = 0;
+        if(armadaJoueur[i]->armementPrincipale == 2 && choixTir == 2){
+            armadaJoueur[i]->armementPrincipale = 0;
             *actionSpeciale = 1;
             break;
         }
 
-        if(armadaJoueur[i]->tir == 3 && choixTir == 4){
-            armadaJoueur[i]->tir = 0;
+        if(armadaJoueur[i]->nom == CROISER && armadaJoueur[i]->armementSecondaire == 2 && choixTir == 3){
+            armadaJoueur[i]->armementSecondaire = 0;
+            *actionSpeciale = 1;
+            break;
+        }
+
+        if(armadaJoueur[i]->armementPrincipale == 3 && choixTir == 4){
+            armadaJoueur[i]->armementPrincipale = 0;
             *actionSpeciale = 1;
             break;
         }
@@ -873,6 +902,7 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, 
     }
 
     // On tir :
+    printf("ChoixTir : %d \n", choixTir);
     int **tab = fonctionTir(posX-1, posY-1, choixTir, direction, m); // On utilise notre fonction qui retourne un pointeur de tableau.
     int tmp_taille = 0;
     if(choixTir == 0){

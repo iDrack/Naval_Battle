@@ -8,7 +8,7 @@ int main(){
     Navire *armadaJoueur[TAILLE_FLOTTE];
     Navire *armadaAdversaire[TAILLE_FLOTTE];
     int taille_matrice = 10, choix = 0;
-
+/*
     // ----- Menu Principal -----
 
     printf("\nBienvenue dans la bataille navale.\n\n");
@@ -34,8 +34,8 @@ int main(){
     afficherArmada(armadaJoueur);
 
     // ---- Fin Menu Principal ----
+*/
 
-/*
     // -------- Zone Test --------
 
     int toucheJoueur; // Variable � mettre � 0 de base !
@@ -63,7 +63,7 @@ int main(){
     // -> cf 'x' et '+' � r�gler.
 
     // -------- Zone Test --------
-*/
+
 
     return EXIT_SUCCESS;
 }

@@ -26,7 +26,8 @@ struct navire{
     int *posX; // ex : 3, 4, 5
     int *posY; // ex : 2, 2, 2
     // Tir(s) :
-    TirType tir;
+    TirType armementPrincipale;
+    TirType armementSecondaire;
 };
 
 // -- Fonctions :
