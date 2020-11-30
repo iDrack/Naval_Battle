@@ -5,15 +5,17 @@
 
 int main(){
     srand(time(NULL));
+    // Initialisation de toutes les variables
     Navire *armadaJoueur[TAILLE_FLOTTE];
     Navire *armadaAdversaire[TAILLE_FLOTTE];
-    int taille_matrice = 10, choix = 0;
+    int taille_matrice = 10, choix = 0, tour=1, toucheJoueur = 0, joueurTirSpecial = 0;
 
     // ----- Menu Principal -----
 
     printf("\nBienvenue dans la bataille navale.\n\n");
     choisirTaille(&taille_matrice);
     Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
+    Matrice *matriceIntermediaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
     Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice);
     while(choix < 1 || choix > 2){
         printf("Voulez-vous créer votre armada ?\n1. Oui\n2. Non\n>");
@@ -26,20 +28,12 @@ int main(){
     }else if(choix==2){
         placementAleatoire(matriceJoueur, armadaJoueur); //Quand le joueur ne place pas lui meme ses navires
     }
-
     placementAleatoire(matriceAdversaire, armadaAdversaire); //Generation de la grille de l'adversaire
-    afficherMatrice(matriceAdversaire);
-    puts("");
-    afficherMatrice(matriceJoueur);
-    afficherArmada(armadaJoueur);
 
     // ---- Fin Menu Principal ----
 
     // ----- Boucle Principal -----
 
-    int tour=1;
-    int toucheJoueur = 0; // Variable : 0 de base !
-    int joueurTirSpecial = 0; // Idem, 0.
     while(nbNaviresCoulees(armadaJoueur) != 5 && nbNaviresCoulees(armadaAdversaire) != 5){
         //Le joueur joue sur les tours impairs car il commence
         printf("\033[0;36mTour n°%d, \033[0m",tour);
@@ -47,12 +41,11 @@ int main(){
             printf("\033[0;36mjoueur.\033[0m\n\n");
             afficherMatrice(matriceJoueur);
             afficherArmada(armadaJoueur);
-            printf("Nombre de navires ennemis restants: \0033[0;36m%d\033[0m\n\n",(5-nbNaviresCoulees(armadaAdversaire)));
-            effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial);
-
+            printf("Nombre de navires ennemis restants:\033[0;36m% d\033[0m\n\n",(5-nbNaviresCoulees(armadaAdversaire)));
+            effectuerTir(matriceAdversaire, matriceIntermediaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial);
         }else{
             printf("\033[0;36mordi.\033[0m\n\n");
-            afficherMatrice(matriceAdversaire); // A modifier une fois la matrice intermediaire implementee
+            afficherMatrice(matriceIntermediaire);
         }
         puts("-------------------------------------------------------------------------------------------");
         if(tour==20)break;//A retirer apres les tests

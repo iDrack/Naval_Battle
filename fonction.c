@@ -856,11 +856,12 @@ int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m){
     return tableau;
 }
 
-void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale){
+void effectuerTir(Matrice *m, Matrice *m2,Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale){
     /*
         Effectue un tir sur la matrice vidé.
         Param. :
             m : pointeur de la matrice que le joueur attaque, type : pointeur de Matrice.
+            m2 : pointeur de la matrice que le joueur attaque et que l'on affiche, type : pointeur de Matrice.
             armadaJoueur : la flotte du joueur, type : tableau de pointeur de navire.
             armadaAdversaire : la flotte de l'adversaire, type : tableau de pointeur de navire.
             toucheNavire : on attend l'adresse d'un entier permettant de savoir si le tour d'avant il y a eu une touche ou pas, type : adresse (donc pointeur) d'entier.
@@ -950,7 +951,7 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, 
         printf("x = ");
         scanf("%d", &posX);
     }
-    printf("Choisir pour 'y' maintenant .. \n");
+    printf("Choisir pour 'y' maintenant : \n");
     char tmpY;
     printf("y = ");
     scanf("%s", &tmpY);
@@ -998,6 +999,7 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, 
         if(tab[i][0] >= 0 && tab[i][0] <= m->taille && tab[i][1] >= 0 && tab[i][1] <= m->taille){
             if(m->value[tab[i][0]][tab[i][1]] == 'O'){
                 m->value[tab[i][0]][tab[i][1]] = '#';
+                if(m2 != NULL)m2->value[tab[i][0]][tab[i][1]] = '#';
                 *toucheNavire = 1;
                 //printf("(--> %d%c a touche ! ) ", tab[i][0]+1, 65+tab[i][1]);
                 // Rechercher le(s) navire(s) de l'adversaire pour modifier le statue du navire en touché.
@@ -1021,6 +1023,7 @@ void effectuerTir(Matrice *m, Navire **armadaJoueur, Navire **armadaAdversaire, 
 
             if(m->value[tab[i][0]][tab[i][1]] == '.'){
                 m->value[tab[i][0]][tab[i][1]] = 'X';
+                if(m2 != NULL)m2->value[tab[i][0]][tab[i][1]] = 'X';
                 printf("Ne touche rien en %d%c. \n", tab[i][0]+1, 65+tab[i][1]);
             }
 
