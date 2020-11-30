@@ -178,7 +178,7 @@ void choisirTaille(int *ptr){
     printf("Choisissez la taille de la grille de jeu (10 mini, 26 max) : ");
     scanf("%d", &taille_matrice);
     printf("\n");
-    while(taille_matrice > 26 || taille_matrice < 9){
+    while(taille_matrice > 26 || taille_matrice < 10){
         printf("Choisissez une taille conforme de grille (10 mini, 26 max) : ");
         scanf("%d", &taille_matrice);
         printf("\n");

@@ -66,6 +66,13 @@ int main(){
         printf("\n\033[0;31mMalheureusement votre flotte a été détruite. Défaite.\033[0m\n");
     }
 
+    printf("Champ de bataille : \n");
+    afficherMatrice(matriceJoueur);
+    afficherMatrice(matriceAdversaire);
+    printf("Flottes : \n");
+    afficherArmada(armadaJoueur);
+    afficherArmada(armadaAdversaire);
+
     // Libération de la mémoire.
     free(matriceJoueur);
     free(matriceAdversaire);
@@ -75,30 +82,7 @@ int main(){
 /*
     // -------- Zone Test --------
 
-    int toucheJoueur; // Variable : 0 de base !
-    int joueurTirSpecial; // Idem, 0.
-
-    // Imaginons que le joueur a touch� au dernier tour jouer, alors toucheJoueur = 1.
-    toucheJoueur = 1;
-    // Imaginons qu'il n'a pas utilis� de tir sp�cial au dernier tour jouer, alors joueurTirSpecial = 0;
-    joueurTirSpecial = 0;
-
-    printf("Avant : toucheJoueur : %d && joueurTirSpecial : %d \n", toucheJoueur, joueurTirSpecial);
-
-    Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
-    Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice);
-    placementAleatoire(matriceAdversaire, armadaAdversaire);
-    placementAleatoire(matriceJoueur, armadaJoueur);
-    afficherMatrice(matriceAdversaire);
-    afficherArmada(armadaJoueur);
-    int compteur = 0;
-    while(compteur != 5){
-        effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial);
-        printf("(adversaire) ");
-        afficherArmada(armadaAdversaire);
-        compteur++;
-        printf("Apres : toucheJoueur : %d && joueurTirSpecial : %d \n", toucheJoueur, joueurTirSpecial);
-    }
+    //
 
     // -------- Zone Test --------
 */
