@@ -856,7 +856,7 @@ int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m){
     return tableau;
 }
 
-void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale){
+void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale, int tour){
     /*
         Effectue un tir sur la matrice vidé.
         Param. :
@@ -866,13 +866,14 @@ void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armad
             armadaAdversaire : la flotte de l'adversaire, type : tableau de pointeur de navire.
             toucheNavire : on attend l'adresse d'un entier permettant de savoir si le tour d'avant il y a eu une touche ou pas, type : adresse (donc pointeur) d'entier.
             actionSpeciale : on attend aussi l'adresse d'un entier pour, cette fois, savoir s'il est possible d'effectuer un tir spéciale ou pas, type : adresse (donc pointeur) d'entier.
+            tour : tour actuel, type : int
     */
     int choixTir, direction;
     int tableau_de_tir[TYPE_TIR];
     for(int i = 0; i < TYPE_TIR; i++) tableau_de_tir[i] = 0;
     tableau_de_tir[0] = 1;
     // Demander un tir spéciale (donner la liste) ou normal.
-    printf("Choisir un tir : \n");
+    printf("Actions : \n");
     // Si le joueur a touché au dernier tour jouer et qu'il n'a pas utilisé de tir spéciale alors il le peut maintenant :
     if(*toucheNavire == 1 && *actionSpeciale == 0){
         for(int i = 1; i < TYPE_TIR; i++){
@@ -897,14 +898,19 @@ void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armad
             }
         }
     }
+    printf("Sauvegarder [5], ");
     printf("Tir normal [0]. \n");
     int tmpChoix = -1;
-    printf("Choix : ");
+    printf(">");
     scanf("%d", &tmpChoix);
     choixTir = tmpChoix;
+    if(choixTir == 5){
+        sauvegarde(armadaJoueur,armadaAdversaire,tour);
+        puts("\033[0;32mSauvegarde terminée.\033[0;m");
+    }
     printf("\n");
     while(choixTir < 0 || choixTir > 5 || tableau_de_tir[choixTir] != 1){
-        printf("Choisir un tir correct : ");
+        printf("Choisissez un tir : ");
         scanf("%d", &tmpChoix);
         choixTir = tmpChoix;
         printf("\n");
@@ -1105,11 +1111,103 @@ int nbNaviresCoulees(Navire **armada){
     /*
         Permet de retourner le nombre de navire encore en jeu de l'armada séléctionné.
         Param. :
-            armada : armada que l'on veut analyser, type : tableau de pointeur de Navire.
+            armada : armada que l'on veut analyser, type : tableau de pointeurs de Navire.
     */
     int ret = 0;
     for(int i=0;i<TAILLE_FLOTTE;i++){
         if(armada[i]->etat == COULE)ret++;
     }
     return ret;
+}
+
+void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour){
+    /*
+        Permet de sauvegarder une partie
+        Param. :
+            aJoueur : armada du joueur, type : tableau de pointeurs de Navire;
+            aAdversaire : aramda de l'IA, type : tableau de pointeurs de Navire
+            tour : tour auquel nous avons fait la sauvegarde, type : int
+    */
+    char n, e, o;
+    int x, y;
+    FILE* f;
+    f = fopen(".save","w");
+    fprintf(f,"%d\n",tour);
+    for(int i=0; i<TAILLE_FLOTTE;i++){
+        switch(aJoueur[i]->nom){
+            case PORTEAVION:
+                n = 'P';
+                break;
+            case CROISER:
+                n = 'C';
+                break;
+            case DESTROYER:
+                n = 'D';
+                break;
+            case SOUSMARIN:
+                n = 'S';
+                break;
+            case TORPILLEUR:
+                n = 'T';
+                break;
+        }
+        switch(aJoueur[i]->etat){
+            case OK:
+                e = 'O';
+                break;
+            case TOUCHE:
+                e = 'T';
+                break;
+            case COULE:
+                e = 'C';
+                break;
+        }
+        x=aJoueur[i]->posX[0];
+        y=aJoueur[i]->posY[0];
+        if(aJoueur[i]->posX[1] != x){
+            o = 'V';
+        }else{
+            o = 'H';
+        }
+        fprintf(f,"%c %c %d %d %c\n",n,e,x,y,o);
+    }
+    for(int i=0; i<TAILLE_FLOTTE;i++){
+        switch(aAdversaire[i]->nom){
+            case PORTEAVION:
+                n = 'P';
+                break;
+            case CROISER:
+                n = 'C';
+                break;
+            case DESTROYER:
+                n = 'D';
+                break;
+            case SOUSMARIN:
+                n = 'S';
+                break;
+            case TORPILLEUR:
+                n = 'T';
+                break;
+        }
+        switch(aAdversaire[i]->etat){
+            case OK:
+                e = 'O';
+                break;
+            case TOUCHE:
+                e = 'T';
+                break;
+            case COULE:
+                e = 'C';
+                break;
+        }
+        x=aAdversaire[i]->posX[0];
+        y=aAdversaire[i]->posY[0];
+        if(aAdversaire[i]->posX[1] != x){
+            o = 'V';
+        }else{
+            o = 'H';
+        }
+        fprintf(f,"%c %c %d %d %c\n",n,e,x,y,o);
+    }
+    fclose(f);
 }

@@ -36,6 +36,7 @@ int main(){
 
     // ----- Boucle Principal -----
     // La partie s'arrête une fois qu'un joueur n'a plus de flotte.
+
     while(nbNaviresCoulees(armadaJoueur) != 5 && nbNaviresCoulees(armadaAdversaire) != 5){
         // Le joueur joue sur les tours impairs car il commence.
         printf("\033[0;36mTour n°%d, \033[0m",tour);
@@ -46,7 +47,7 @@ int main(){
             afficherArmada(armadaJoueur);
             printf("Nombre de navires ennemis restants:\033[0;36m% d\033[0m\n\n",(5-nbNaviresCoulees(armadaAdversaire)));
             // Ici, on demande au joueur le tir qu'il veut faire ainsi que les coordonnées.
-            effectuerTir(matriceAdversaire, matriceIntermediaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial);
+            effectuerTir(matriceAdversaire, matriceIntermediaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial,tour);
         }else{
             // Durant le tour de l'IA, on affiche la matrice intermédiaire, une matrice où le joueur peut voir là où il a tiré mais il ne verra pas les bateaux adverses.
             // Puis on fait jouer l'automate.
@@ -65,17 +66,13 @@ int main(){
         // Si le joueur n'a plus de navire, l'IA gagne.
         printf("\n\033[0;31mMalheureusement votre flotte a été détruite. Défaite.\033[0m\n");
     }
-
+    // Affichage des statstiques
     printf("Champ de bataille : \n");
     afficherMatrice(matriceJoueur);
     afficherMatrice(matriceAdversaire);
     printf("Flottes : \n");
     afficherArmada(armadaJoueur);
     afficherArmada(armadaAdversaire);
-
-    // Libération de la mémoire.
-    free(matriceJoueur);
-    free(matriceAdversaire);
 
     // --- Fin Boucle principal ---
 
