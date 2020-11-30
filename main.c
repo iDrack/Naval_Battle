@@ -1,6 +1,7 @@
 // Réalisé par Charles Kempa & Thomas Dignoire.
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include "fonction.h"
 
@@ -42,7 +43,7 @@ int main(){
         if(tour % 2 == 1){
             // Durant le tour du joueur, on affiche sa grille, sa flotte ainsi que ses tirs disponibles.
             printf("\033[0;36mjoueur.\033[0m\n\n");
-            afficherMatrice(matriceJoueur);
+            afficherPlateauDeJeu(matriceJoueur, matriceIntermediaire);
             afficherArmada(armadaJoueur);
             printf("Nombre de navires ennemis restants:\033[0;36m% d\033[0m\n\n",(5-nbNaviresCoulees(armadaAdversaire)));
             // Ici, on demande au joueur le tir qu'il veut faire ainsi que les coordonnées.
@@ -51,7 +52,7 @@ int main(){
             // Durant le tour de l'IA, on affiche la matrice intermédiaire, une matrice où le joueur peut voir là où il a tiré mais il ne verra pas les bateaux adverses.
             // Puis on fait jouer l'automate.
             printf("\033[0;36mordi.\033[0m\n\n");
-            afficherMatrice(matriceIntermediaire);
+            afficherPlateauDeJeu(matriceJoueur, matriceIntermediaire);
         }
         puts("-------------------------------------------------------------------------------------------");
         // On augmente le nombre de tours.
@@ -67,8 +68,7 @@ int main(){
     }
 
     printf("Champ de bataille : \n");
-    afficherMatrice(matriceJoueur);
-    afficherMatrice(matriceAdversaire);
+    afficherPlateauDeJeu(matriceJoueur, matriceAdversaire);
     printf("Flottes : \n");
     afficherArmada(armadaJoueur);
     afficherArmada(armadaAdversaire);

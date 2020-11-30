@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include "fonction.h"
 
@@ -1113,3 +1114,53 @@ int nbNaviresCoulees(Navire **armada){
     }
     return ret;
 }
+
+void afficherPlateauDeJeu(Matrice *mat_1, Matrice *mat_2){
+    /*
+        Permet d'afficher dans la sortie standard les matrices passée en paramètre.
+        Param. :
+            mat_1 : pointeur de la 1er matrice que l'on veut afficher, type : pointeur de Matrice.
+            mat_2 : pointeur de la 2eme matrice que l'on veut afficher, type : pointeur de Matrice.
+    */
+    printf("%s : ", (mat_1->titre));
+    for(int i = 0; i < (mat_1->taille - 4); i++) printf("  ");
+    printf("%s : \n", (mat_2->titre));
+
+    printf("     ");
+    for(int i = 0; i < mat_1->taille; i++) printf("%c ", 65+i);
+    printf("[y] ");
+    printf("     ");
+    for(int i = 0; i < mat_2->taille; i++) printf("%c ", 65+i);
+    printf("[y] \n");
+
+    for(int i = 0; i < mat_1->taille; i++){
+        if(i+1 >= 10) printf(" %d  ", i+1);
+        else printf("  %d  ", i+1);
+
+        for(int j = 0; j < mat_1->taille; j++){
+            if(mat_1->value[i][j]=='O')printf("\033[0;32m%c \033[0m",mat_1->value[i][j]);
+            else if(mat_1->value[i][j]=='.')printf("\033[0;34m%c \033[0m",mat_1->value[i][j]);
+            else if(mat_1->value[i][j]=='#')printf("\033[0;31m%c \033[0m",mat_1->value[i][j]);
+            else printf("%c ", mat_1->value[i][j]);
+        }
+
+        printf("     ");
+
+        if(i+1 >= 10) printf(" %d  ", i+1);
+        else printf("  %d  ", i+1);
+
+        for(int j = 0; j < mat_2->taille; j++){
+            if(mat_2->value[i][j]=='O')printf("\033[0;32m%c \033[0m",mat_2->value[i][j]);
+            else if(mat_2->value[i][j]=='.')printf("\033[0;34m%c \033[0m",mat_2->value[i][j]);
+            else if(mat_2->value[i][j]=='#')printf("\033[0;31m%c \033[0m",mat_2->value[i][j]);
+            else printf("%c ", mat_2->value[i][j]);
+        }
+        printf("\n");
+    }
+    printf(" [x] ");
+    printf("     ");
+    for(int i = 0; i < mat_2->taille*2; i++) printf(" ");
+    printf(" [x] \n\n");
+}
+
+

@@ -73,5 +73,7 @@ void verifierFlotteEntiere(Matrice *m, Navire **armada);
 void verifierNavire(Matrice *m, Navire *n);
 // Fonction permetttant de retourner le nombre de navire encore en jeu de l'armada séléctionné.
 int nbNaviresCoulees(Navire **armada);
+// Fonction "afficherPlateauDeJeu" qui permet d'afficher dans la sortie standard les matrices passée en paramètre.
+void afficherPlateauDeJeu(Matrice *mat_1, Matrice *mat_2);
 
 #endif
