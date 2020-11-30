@@ -175,11 +175,11 @@ void choisirTaille(int *ptr){
             ptr : pointeur de la taille de matrice que l'on veut modifier, type: pointeur d'int.
     */
     int taille_matrice;
-    printf("Choisissez la taille de la grille de jeu (26 max) : ");
+    printf("Choisissez la taille de la grille de jeu (10 mini, 26 max) : ");
     scanf("%d", &taille_matrice);
     printf("\n");
-    while(taille_matrice > 26 || taille_matrice < 0){
-        printf("Choisissez une taille conforme de grille (26 max) : ");
+    while(taille_matrice > 26 || taille_matrice < 9){
+        printf("Choisissez une taille conforme de grille (10 mini, 26 max) : ");
         scanf("%d", &taille_matrice);
         printf("\n");
     }
