@@ -35,6 +35,40 @@ int main(){
 
     // ---- Fin Menu Principal ----
 
+    // ----- Boucle Principal -----
+
+    int tour=1;
+    int toucheJoueur = 0; // Variable : 0 de base !
+    int joueurTirSpecial = 0; // Idem, 0.
+    while(nbNaviresCoulees(armadaJoueur) != 5 && nbNaviresCoulees(armadaAdversaire) != 5){
+        //Le joueur joue sur les tours impairs car il commence
+        printf("\033[0;36mTour n°%d, \033[0m",tour);
+        if(tour % 2 == 1){
+            printf("\033[0;36mjoueur.\033[0m\n\n");
+            afficherMatrice(matriceJoueur);
+            afficherArmada(armadaJoueur);
+            printf("Nombre de navires ennemis restants: \0033[0;36m%d\033[0m\n\n",(5-nbNaviresCoulees(armadaAdversaire)));
+            effectuerTir(matriceAdversaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial);
+
+        }else{
+            printf("\033[0;36mordi.\033[0m\n\n");
+            afficherMatrice(matriceAdversaire); // A modifier une fois la matrice intermediaire implementee
+        }
+        puts("-------------------------------------------------------------------------------------------");
+        if(tour==20)break;//A retirer apres les tests
+        tour++;
+    }
+    if(nbNaviresCoulees(armadaAdversaire) == 5){
+        printf("\n\033[0;33mFélicitation Joueur, vous avez gagné !\033[0m\n");
+    }else if(nbNaviresCoulees(armadaJoueur) == 5){
+        printf("\n\033[0;31mMalheureusement votre flotte a été détruite. Défaite.\033[0m\n");
+    }
+    //Libération de la mémoire
+    free(matriceJoueur);
+    free(matriceAdversaire);
+    
+    // --- Fin Boucle principal ---
+
 /*
     // -------- Zone Test --------
 

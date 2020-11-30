@@ -158,7 +158,10 @@ void afficherMatrice(Matrice *m){
         else printf("  %d  ", i+1);
 
         for(int j = 0; j < m->taille; j++){
-            printf("%c ", m->value[i][j]);
+            if(m->value[i][j]=='O')printf("\033[0;32m%c \033[0m",m->value[i][j]);
+            else if(m->value[i][j]=='.')printf("\033[0;34m%c \033[0m",m->value[i][j]);
+            else if(m->value[i][j]=='#')printf("\033[0;31m%c \033[0m",m->value[i][j]);
+            else printf("%c ", m->value[i][j]);
         }
         printf("\n");
     }
@@ -306,21 +309,25 @@ void afficherArmada(Navire **armada){
                 st2 = "OK";
                 break;
             case TOUCHE:
-                st2 = "TOUCHE";
+                st2 = "TOUCHÉ";
                 break;
             case COULE:
-                st2 = "COULE";
+                st2 = "COULÉ";
                 break;
             default:
                 st2 = "";
                 break;
         }
-        if(st != "") printf("#%d %s\tEtat : %s\t", i, st, st2);
+        if(st != "") {
+            if(st2 == "OK")printf("#%d %s\tEtat : \033[0;32m%s\033[0m\n", i, st, st2);
+            else if(st2 == "TOUCHÉ")printf("#%d %s\tEtat : \033[0;33m%s\033[0m\n", i, st, st2);
+            else if(st2 == "COULÉ")printf("#%d %s\tEtat : \033[0;31m%s\033[0m\n", i, st, st2);
+            else printf("#%d %s\tEtat : %s\n", i, st, st2);
+        }
         afficherNavireArmement(armada[i]);
         afficherNavirePos(armada[i]);
-        printf("\n");
+        printf("\n\n");
     }
-    printf("\n");
 }
 
 int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o){
@@ -1082,7 +1089,7 @@ void verifierNavire(Matrice *m, Navire *n){
         }
     } else {
         if(n->etat == COULE){
-            printf("Navire est deja coule .. \n");
+            printf("Navire est deja coulé .. \n");
         }
 
         if(n->etat == OK){
@@ -1091,3 +1098,15 @@ void verifierNavire(Matrice *m, Navire *n){
     }
 }
 
+int nbNaviresCoulees(Navire **armada){
+    /*
+        Permet de retourner le nombre de navire encore en jeu de l'armada séléctionné
+        Param. :
+            armada armada que l'on veut analyser, Type : tableau de pointeur de Navire
+    */
+    int ret = 0;
+    for(int i=0;i<TAILLE_FLOTTE;i++){
+        if(armada[i]->etat == COULE)ret++;
+    }
+    return ret;
+}

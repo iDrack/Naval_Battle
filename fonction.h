@@ -71,5 +71,8 @@ void modifierEtatNavire(int positionX, int positionY, Navire *n);
 void verifierFlotteEntiere(Matrice *m, Navire **armada);
 // Fonction "verifierNavire" qui permet de vérifier l'état d'un navire (s'il est coulé, ok ou touché).
 void verifierNavire(Matrice *m, Navire *n);
+// Fonction permetttant de retourner le nombre de navire encore en jeu de l'armada séléctionné
+int nbNaviresCoulees(Navire **armada);
+
 
 #endif
