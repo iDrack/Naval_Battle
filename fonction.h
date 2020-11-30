@@ -75,4 +75,7 @@ void verifierNavire(Matrice *m, Navire *n);
 int nbNaviresCoulees(Navire **armada);
 // Fonction permettant de sauvegarder une partie
 void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour);
+// Fonction "afficherPlateauDeJeu" qui permet d'afficher dans la sortie standard les matrices passée en paramètre.
+void afficherPlateauDeJeu(Matrice *mat_1, Matrice *mat_2);
+
 #endif
