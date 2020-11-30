@@ -856,7 +856,7 @@ int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m){
     return tableau;
 }
 
-void effectuerTir(Matrice *m, Matrice *m2,Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale){
+void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale){
     /*
         Effectue un tir sur la matrice vidé.
         Param. :
@@ -993,13 +993,14 @@ void effectuerTir(Matrice *m, Matrice *m2,Navire **armadaJoueur, Navire **armada
         tmp_taille = 5;
     }
 
-    *toucheNavire = 0; // On dit que le joueur n'a pas touché, mais si c'est le cas alors c'est mise à jour plus bas (lorsqu'on a un "#").
+    *toucheNavire = 0; // On dit que le joueur n'a pas touché par défaut, mais si c'est le cas alors c'est mise à jour plus bas (lorsqu'on a un "#").
+    // L'objectif étant de répondre à la demande : ".. à condition qu'au tour précédent il ait touché un bateau et qu'il n'ait pas utilisé de tir spécial."
     for(int i = 0; i < tmp_taille; i++){
         //printf("%d%c  ", tab[i][0]+1, 65+tab[i][1]);
         if(tab[i][0] >= 0 && tab[i][0] <= m->taille && tab[i][1] >= 0 && tab[i][1] <= m->taille){
             if(m->value[tab[i][0]][tab[i][1]] == 'O'){
                 m->value[tab[i][0]][tab[i][1]] = '#';
-                if(m2 != NULL)m2->value[tab[i][0]][tab[i][1]] = '#';
+                if(m2 != NULL) m2->value[tab[i][0]][tab[i][1]] = '#';
                 *toucheNavire = 1;
                 //printf("(--> %d%c a touche ! ) ", tab[i][0]+1, 65+tab[i][1]);
                 // Rechercher le(s) navire(s) de l'adversaire pour modifier le statue du navire en touché.
@@ -1023,7 +1024,7 @@ void effectuerTir(Matrice *m, Matrice *m2,Navire **armadaJoueur, Navire **armada
 
             if(m->value[tab[i][0]][tab[i][1]] == '.'){
                 m->value[tab[i][0]][tab[i][1]] = 'X';
-                if(m2 != NULL)m2->value[tab[i][0]][tab[i][1]] = 'X';
+                if(m2 != NULL) m2->value[tab[i][0]][tab[i][1]] = 'X';
                 printf("Ne touche rien en %d%c. \n", tab[i][0]+1, 65+tab[i][1]);
             }
 
@@ -1034,10 +1035,9 @@ void effectuerTir(Matrice *m, Matrice *m2,Navire **armadaJoueur, Navire **armada
             */
         }
     }
-    printf("\n");
-
-    // Affichage de la matrice de l'adversaire :
-    afficherMatrice(m);
+    // Affichage de la matrice de l'adversaire (débug/développement) :
+    //printf("\n");
+    //afficherMatrice(m);
 }
 
 void modifierEtatNavire(int positionX, int positionY, Navire *n){
@@ -1103,9 +1103,9 @@ void verifierNavire(Matrice *m, Navire *n){
 
 int nbNaviresCoulees(Navire **armada){
     /*
-        Permet de retourner le nombre de navire encore en jeu de l'armada séléctionné
+        Permet de retourner le nombre de navire encore en jeu de l'armada séléctionné.
         Param. :
-            armada armada que l'on veut analyser, Type : tableau de pointeur de Navire
+            armada : armada que l'on veut analyser, type : tableau de pointeur de Navire.
     */
     int ret = 0;
     for(int i=0;i<TAILLE_FLOTTE;i++){

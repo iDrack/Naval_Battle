@@ -31,7 +31,7 @@ struct navire{
 };
 
 // -- Fonctions :
-// Retourne la taille d'un navire en fonction de son type.
+// Fonction "getTailleNavire" qui retourne la taille d'un navire en fonction de son type.
 int getTailleNavire(NavireType nt);
 // Fonction "genererNavire" permettant d'initialer un navire, sans affectation de position.
 Navire *genererNavire(NavireType nt, Matrice *m);
@@ -71,8 +71,7 @@ void modifierEtatNavire(int positionX, int positionY, Navire *n);
 void verifierFlotteEntiere(Matrice *m, Navire **armada);
 // Fonction "verifierNavire" qui permet de vérifier l'état d'un navire (s'il est coulé, ok ou touché).
 void verifierNavire(Matrice *m, Navire *n);
-// Fonction permetttant de retourner le nombre de navire encore en jeu de l'armada séléctionné
+// Fonction permetttant de retourner le nombre de navire encore en jeu de l'armada séléctionné.
 int nbNaviresCoulees(Navire **armada);
-
 
 #endif

@@ -1,4 +1,4 @@
-// Réalisé par Charles Kempa & Thomas Dignoire
+// Réalisé par Charles Kempa & Thomas Dignoire.
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -57,17 +57,19 @@ int main(){
         // On augmente le nombre de tours.
         tour++;
     }
+
     if(nbNaviresCoulees(armadaAdversaire) == 5){
         // Si l'IA n'a plus de navire, le joueur gagne.
         printf("\n\033[0;33mFélicitation Joueur, vous avez gagné !\033[0m\n");
-    }else if(nbNaviresCoulees(armadaJoueur) == 5){
+    } else if(nbNaviresCoulees(armadaJoueur) == 5){
         // Si le joueur n'a plus de navire, l'IA gagne.
         printf("\n\033[0;31mMalheureusement votre flotte a été détruite. Défaite.\033[0m\n");
     }
-    // Libération de la mémoire
+
+    // Libération de la mémoire.
     free(matriceJoueur);
     free(matriceAdversaire);
-    
+
     // --- Fin Boucle principal ---
 
 /*
