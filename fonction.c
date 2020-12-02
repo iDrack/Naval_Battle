@@ -882,22 +882,22 @@ void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armad
     // Si le joueur a touché au dernier tour jouer et qu'il n'a pas utilisé de tir spéciale alors il le peut maintenant :
     if(*toucheNavire == 1 && *actionSpeciale == 0){
         for(int i = 1; i < TYPE_TIR; i++){
-            if(armadaJoueur[i]->armementPrincipale == 1){
+            if(tableau_de_tir[1] == 0 && armadaJoueur[i]->armementPrincipale == 1){
                 printf("Tir sur toute une ligne ou colonne [1], ");
                 tableau_de_tir[1] = 1;
             }
 
-            if(armadaJoueur[i]->armementPrincipale == 2){
+            if(tableau_de_tir[2] == 0 && armadaJoueur[i]->armementPrincipale == 2){
                 printf("Tir en 'x' [2], ");
                 tableau_de_tir[2] = 1;
             }
 
-            if(armadaJoueur[i]->nom == CROISER && armadaJoueur[i]->armementSecondaire == 2){
+            if(tableau_de_tir[3] == 0 && armadaJoueur[i]->nom == CROISER && armadaJoueur[i]->armementSecondaire == 2){
                 printf("Tir en '+' [3], ");
                 tableau_de_tir[3] = 1;
             }
 
-            if(armadaJoueur[i]->armementPrincipale == 3){
+            if(tableau_de_tir[4] == 0 && armadaJoueur[i]->armementPrincipale == 3){
                 printf("Tir en carree [4], ");
                 tableau_de_tir[4] = 1;
             }
@@ -927,25 +927,46 @@ void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armad
     // On consomme le tir spéciale (on le remplace par un tir normal) et on modifie la variable des tirs spéciaux :
     for(int i = 1; i < TYPE_TIR; i++){
         if(armadaJoueur[i]->armementPrincipale == 1 && choixTir == 1){
-            armadaJoueur[i]->armementPrincipale = 0;
+            //armadaJoueur[i]->armementPrincipale = 0;
+            // On consomme le tir pour lui mais aussi pour tous les autres navires ayant la même capacité (évitant ainsi la répétition de tir spéciaux dans une flotte avec plusieurs navire de même type).
+            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                if(armadaJoueur[elem]->armementPrincipale == 1){
+                    armadaJoueur[elem]->armementPrincipale = 0;
+                }
+            }
             *actionSpeciale = 1;
             break;
         }
 
         if(armadaJoueur[i]->armementPrincipale == 2 && choixTir == 2){
-            armadaJoueur[i]->armementPrincipale = 0;
+            //armadaJoueur[i]->armementPrincipale = 0;
+            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                if(armadaJoueur[elem]->armementPrincipale == 2){
+                    armadaJoueur[elem]->armementPrincipale = 0;
+                }
+            }
             *actionSpeciale = 1;
             break;
         }
 
         if(armadaJoueur[i]->nom == CROISER && armadaJoueur[i]->armementSecondaire == 2 && choixTir == 3){
-            armadaJoueur[i]->armementSecondaire = 0;
+            //armadaJoueur[i]->armementSecondaire = 0;
+            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                if(armadaJoueur[elem]->nom == CROISER && armadaJoueur[elem]->armementSecondaire == 2){
+                    armadaJoueur[elem]->armementSecondaire = 0;
+                }
+            }
             *actionSpeciale = 1;
             break;
         }
 
         if(armadaJoueur[i]->armementPrincipale == 3 && choixTir == 4){
-            armadaJoueur[i]->armementPrincipale = 0;
+            //armadaJoueur[i]->armementPrincipale = 0;
+            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                if(armadaJoueur[elem]->armementPrincipale == 3){
+                    armadaJoueur[elem]->armementPrincipale = 0;
+                }
+            }
             *actionSpeciale = 1;
             break;
         }
