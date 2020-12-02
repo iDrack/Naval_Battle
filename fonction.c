@@ -278,7 +278,7 @@ void afficherArmada(Navire **armada){
         Param. :
             armada : tableau de pointeur de navire, type: tableau de pointeur de navire.
     */
-    puts("Votre armada : ");
+    //puts("Votre armada : ");
     char* st;
     char* st2;
     for(int i = 0; i < TAILLE_FLOTTE; i++){
@@ -320,14 +320,14 @@ void afficherArmada(Navire **armada){
                 break;
         }
         if(st != "") {
-            if(st2 == "OK")printf("#%d %s\tEtat : \033[0;32m%s\033[0m\n", i, st, st2);
-            else if(st2 == "TOUCHÉ")printf("#%d %s\tEtat : \033[0;33m%s\033[0m\n", i, st, st2);
-            else if(st2 == "COULÉ")printf("#%d %s\tEtat : \033[0;31m%s\033[0m\n", i, st, st2);
-            else printf("#%d %s\tEtat : %s\n", i, st, st2);
+            if(st2 == "OK") printf("\033[0;36m #%d\033[0m %s\tEtat : \033[0;32m%s\033[0m\n", i, st, st2);
+            else if(st2 == "TOUCHÉ") printf("\033[0;36m #%d\033[0m %s\tEtat : \033[0;33m%s\033[0m\n", i, st, st2);
+            else if(st2 == "COULÉ") printf("\033[0;36m #%d\033[0m %s\tEtat : \033[0;31m%s\033[0m\n", i, st, st2);
+            else printf("\033[0;36m #%d\033[0m %s\tEtat : %s\n", i, st, st2);
         }
         afficherNavireArmement(armada[i]);
         afficherNavirePos(armada[i]);
-        printf("\n\n");
+        printf("\n");
     }
 }
 
@@ -570,7 +570,7 @@ void placementAleatoire(Matrice *m, Navire **armada){
             armada : liste des navire du joueur ou de l'adversaire, type : liste de pointeur de Navire.
     */
     generationArmadaStandard(m, armada);
-    printf("Placement aleatoire .. \n");
+    printf("Placement aleatoire .. \n\n");
 
     int **tableau2D = (int **)malloc(m->taille * sizeof(int*)); // Mémoire (lignes).
     // Mémoire (colonnes).
@@ -599,6 +599,7 @@ void placementAleatoire(Matrice *m, Navire **armada){
             for(int i = 0; i < armada[num]->taille; i++){
                 if(angle == 1){
                     if(aleaY-i >= mini && tableau2D[aleaX][aleaY-i] == 0){
+                        // OK
                     } else {
                         poser = 0;
                         break;
@@ -607,6 +608,7 @@ void placementAleatoire(Matrice *m, Navire **armada){
 
                 if(angle == 2){
                     if(aleaX-i >= mini && tableau2D[aleaX-i][aleaY] == 0){
+                        // OK
                     } else {
                         poser = 0;
                         break;
@@ -615,6 +617,7 @@ void placementAleatoire(Matrice *m, Navire **armada){
 
                 if(angle == 3){
                     if(aleaY+i <= maxi && tableau2D[aleaX][aleaY+i] == 0){
+                        // OK
                     } else {
                         poser = 0;
                         break;
@@ -623,6 +626,7 @@ void placementAleatoire(Matrice *m, Navire **armada){
 
                 if(angle == 4){
                     if(aleaX+i <= maxi && tableau2D[aleaX+i][aleaY] == 0){
+                        // OK
                     } else {
                         poser = 0;
                         break;
@@ -875,26 +879,26 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, N
     for(int i = 0; i < TYPE_TIR; i++) tableau_de_tir[i] = 0;
     tableau_de_tir[0] = 1;
     // Demander un tir spéciale (donner la liste) ou normal.
-    printf("Actions : \n");
+    printf("Actions possibles : \n");
     // Si le joueur a touché au dernier tour jouer et qu'il n'a pas utilisé de tir spéciale alors il le peut maintenant :
     if(*toucheNavire == 1 && *actionSpeciale == 0){
         for(int i = 1; i < TYPE_TIR; i++){
-            if(armadaJoueur[i]->armementPrincipale == 1){
+            if(tableau_de_tir[1] == 0 && armadaJoueur[i]->armementPrincipale == 1){
                 printf("Tir sur toute une ligne ou colonne [1], ");
                 tableau_de_tir[1] = 1;
             }
 
-            if(armadaJoueur[i]->armementPrincipale == 2){
+            if(tableau_de_tir[2] == 0 && armadaJoueur[i]->armementPrincipale == 2){
                 printf("Tir en 'x' [2], ");
                 tableau_de_tir[2] = 1;
             }
 
-            if(armadaJoueur[i]->nom == CROISER && armadaJoueur[i]->armementSecondaire == 2){
+            if(tableau_de_tir[3] == 0 && armadaJoueur[i]->nom == CROISER && armadaJoueur[i]->armementSecondaire == 2){
                 printf("Tir en '+' [3], ");
                 tableau_de_tir[3] = 1;
             }
 
-            if(armadaJoueur[i]->armementPrincipale == 3){
+            if(tableau_de_tir[4] == 0 && armadaJoueur[i]->armementPrincipale == 3){
                 printf("Tir en carree [4], ");
                 tableau_de_tir[4] = 1;
             }
@@ -930,25 +934,46 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, N
     // On consomme le tir spéciale (on le remplace par un tir normal) et on modifie la variable des tirs spéciaux :
     for(int i = 1; i < TYPE_TIR; i++){
         if(armadaJoueur[i]->armementPrincipale == 1 && choixTir == 1){
-            armadaJoueur[i]->armementPrincipale = 0;
+            //armadaJoueur[i]->armementPrincipale = 0;
+            // On consomme le tir pour lui mais aussi pour tous les autres navires ayant la même capacité (évitant ainsi la répétition de tir spéciaux dans une flotte avec plusieurs navire de même type).
+            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                if(armadaJoueur[elem]->armementPrincipale == 1){
+                    armadaJoueur[elem]->armementPrincipale = 0;
+                }
+            }
             *actionSpeciale = 1;
             break;
         }
 
         if(armadaJoueur[i]->armementPrincipale == 2 && choixTir == 2){
-            armadaJoueur[i]->armementPrincipale = 0;
+            //armadaJoueur[i]->armementPrincipale = 0;
+            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                if(armadaJoueur[elem]->armementPrincipale == 2){
+                    armadaJoueur[elem]->armementPrincipale = 0;
+                }
+            }
             *actionSpeciale = 1;
             break;
         }
 
         if(armadaJoueur[i]->nom == CROISER && armadaJoueur[i]->armementSecondaire == 2 && choixTir == 3){
-            armadaJoueur[i]->armementSecondaire = 0;
+            //armadaJoueur[i]->armementSecondaire = 0;
+            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                if(armadaJoueur[elem]->nom == CROISER && armadaJoueur[elem]->armementSecondaire == 2){
+                    armadaJoueur[elem]->armementSecondaire = 0;
+                }
+            }
             *actionSpeciale = 1;
             break;
         }
 
         if(armadaJoueur[i]->armementPrincipale == 3 && choixTir == 4){
-            armadaJoueur[i]->armementPrincipale = 0;
+            //armadaJoueur[i]->armementPrincipale = 0;
+            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                if(armadaJoueur[elem]->armementPrincipale == 3){
+                    armadaJoueur[elem]->armementPrincipale = 0;
+                }
+            }
             *actionSpeciale = 1;
             break;
         }
@@ -993,7 +1018,7 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, N
     }
 
     // On tir :
-    printf("ChoixTir : %d \n", choixTir);
+    //printf("ChoixTir : %d \n", choixTir);
     int **tab = fonctionTir(posX-1, posY-1, choixTir, direction, m); // On utilise notre fonction qui retourne un pointeur de tableau.
     int tmp_taille = 0;
     if(choixTir == 0){
@@ -1070,14 +1095,24 @@ void modifierEtatNavire(int positionX, int positionY, Navire *n){
 
 void verifierFlotteEntiere(Matrice *m, Navire **armada){
     /*
-        Permet de vérifier l'état de la flotte tout entier (vérifie s'il y a un ou plusieurs navires coulé ou non).
+        Permet de vérifier l'état de la flotte tout entier (vérifie s'il y a un ou plusieurs navires touchés, coulés ou non).
         Param. :
             m : pointeur de matrice se situant la flotte, type : pointeur de Matrice.
             armada : la flotte que l'on veut vérifier, type : tableau de pointeur de Navire.
     */
 
+    // Pour chaque navire.
     for(int i = 0; i < TAILLE_FLOTTE; i++){
-        verifierNavire(m, armada[i]);
+        // Pour chaque taille de navire.
+        for(int ref = 0; ref < armada[i]->taille; ref++){
+            // On récup. la position.
+            int x = armada[i]->posX[ref];
+            int y = armada[i]->posY[ref];
+            if(m->value[x][y] == '#'){
+                modifierEtatNavire(x, y, armada[i]);
+                verifierNavire(m, armada[i]);
+            }
+        }
     }
 }
 
@@ -1101,7 +1136,7 @@ void verifierNavire(Matrice *m, Navire *n){
             n->etat = COULE;
             n->armementPrincipale = 4;
             n->armementSecondaire = 4;
-            printf("Le navire a coule .. \n");
+            printf("Le navire est en train de couler .. \n");
         }
     } else {
         if(n->etat == COULE){
@@ -1437,3 +1472,411 @@ void afficherPlateauDeJeu(Matrice *mat_1, Matrice *mat_2){
     for(int i = 0; i < mat_2->taille*2; i++) printf(" ");
     printf(" [x] \n\n");
 }
+
+void initialiserIA(Matrice *matOrigine, IA *ordinateur, int taille_matrice){
+    /*
+        Permet d'initialiser notre IA pour le jeu.
+        Param. :
+            matOrigine : c'est la matrice d'origine de l'adversaire, type : pointeur de matrice.
+            ordinateur : c'est l'adresse de notre IA, type : adresse de l'IA.
+            taille_matrice : taille de la grille, type : entier.
+    */
+    IA notre_IA;
+    notre_IA.etat_IA = R;
+    notre_IA.matrice = matOrigine;
+    notre_IA.matScanner = genererMatriceVide("Scanner", taille_matrice);
+    notre_IA.posXtouche = -1;
+    notre_IA.posYtouche = -1;
+    notre_IA.angle = 0;
+
+    *ordinateur = notre_IA;
+}
+
+void afficherInfoIA(IA *ordinateur){
+    /*
+        Permet d'afficher l'état de l'IA.
+        Param. :
+            ordinateur : c'est l'adresse de notre IA, type : adresse de l'IA.
+    */
+    printf("Etat de l'IA :  ");
+    if(ordinateur->etat_IA == R) printf("Recherche de navire. \n");
+    if(ordinateur->etat_IA == O) printf("Determine l'orientation. \n");
+    if(ordinateur->etat_IA == D) printf("Cherche a détruire un navire. \n");
+    // Si l'IA a touché un navire alors on peut le dire.
+    if(ordinateur->posXtouche != -1 && ordinateur->posYtouche != -1){
+        printf("Dernier position touché : %d%c. Angle : %d. \n", 1+ordinateur->posXtouche, 65+ordinateur->posYtouche, ordinateur->angle);
+    }
+    printf("Matce d'origine : \n");
+    afficherMatrice(ordinateur->matrice);
+    printf("Matrice scanner de la zone ennemie : \n");
+    afficherMatrice(ordinateur->matScanner);
+}
+
+void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur){
+    /*
+        Permet à notre IA d'eefctuer une tir.
+        Param. :
+            ordinateur : c'est l'adresse de notre IA, type : adresse de l'IA.
+            matriceJoueur : matrice du joueur avec ces navires, type : pointeur de Matrice.
+            armadaJoueur : la flotte entière du joueur, type : tableau de pointeurs de Navire.
+    */
+    int aleaX, aleaY;
+    int maxi = matriceJoueur->taille-1, mini = 0;
+    int init = 0;
+
+    if(ordinateur->etat_IA == R){
+        int posOK = 0;
+        int touche = 0;
+        // Tir une case sur deux en aléatoire là où on a pas déjà tiré bien sûr ..
+        while(posOK == 0){
+            aleaX = generationIntAleatoire(maxi, mini);
+            aleaY = generationIntAleatoire(maxi, mini);
+            // Si sur la matrice d'observation de l'IA, on a un '.' alors on place le tir.
+            if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                // Si sur la matrice du joueur, il n'y avait rien, on place un 'X' sur les deux matrices.
+                if(matriceJoueur->value[aleaX][aleaY] == '.'){
+                    matriceJoueur->value[aleaX][aleaY] = 'X';
+                    ordinateur->matScanner->value[aleaX][aleaY] = 'X';
+                }
+                // Par contre, s'il a un navire alors on place un '#' sur la matrice d'observation et celle du joueur.
+                if(matriceJoueur->value[aleaX][aleaY] == 'O'){
+                    matriceJoueur->value[aleaX][aleaY] = '#';
+                    ordinateur->matScanner->value[aleaX][aleaY] = '#';
+                    touche = 1;
+                }
+                posOK = 1;
+            }
+        }
+
+        // Si on touche un navire (on enregistre le x et y), on passe à l'état 'O'.
+        if(posOK == 1 && touche == 1){
+            ordinateur->posXtouche = aleaX;
+            ordinateur->posYtouche = aleaY;
+            ordinateur->etat_IA = O;
+            init = 1;
+        }
+    }
+
+    if(init == 0 && ordinateur->etat_IA == O){
+        aleaX = ordinateur->posXtouche;
+        aleaY = ordinateur->posYtouche;
+        // Comme pour la fonction de placement (même systeme 1, 2, 3 ou 4 pour l'angle), on détermine l'angle (<=> l'orientation) du navire ennemie.
+        int angle = 0;
+        int angleOK = 0;
+        int trouve = 0;
+        // Tant que l'angle n'est pas bon (Autrement dit, on regarde si on peut tirer en fonction de l'angle).
+        while(angleOK == 0){
+            angle = generationIntAleatoire(4, 1);
+
+            if(angle == 1 && aleaY-1 >= mini && ordinateur->matScanner->value[aleaX][aleaY-1] == '.'){
+                // On fait le tir et on regarde si on a touché.
+                // Si sur la matrice du joueur, il n'y avait rien, on place un 'X' sur les deux matrices. On n'a rien trouvé ..
+                if(matriceJoueur->value[aleaX][aleaY-1] == '.'){
+                    matriceJoueur->value[aleaX][aleaY-1] = 'X';
+                    ordinateur->matScanner->value[aleaX][aleaY-1] = 'X';
+                }
+                // Par contre, s'il a un navire alors on place un '#' sur la matrice d'observation et celle du joueur. On a trouvé l'orientation !
+                if(matriceJoueur->value[aleaX][aleaY-1] == 'O'){
+                    matriceJoueur->value[aleaX][aleaY-1] = '#';
+                    ordinateur->matScanner->value[aleaX][aleaY-1] = '#';
+                    trouve = 1;
+                }
+                // Le tir a été fait, l'angle peut être trouvé ou non, dans tout les cas on a fait un tir.
+                angleOK = 1;
+            }
+
+            if(angle == 2 && aleaX-1 >= mini && ordinateur->matScanner->value[aleaX-1][aleaY] == '.'){
+                // On fait pareil .. le tir et on regarde si on a touché ou pas.
+                if(matriceJoueur->value[aleaX-1][aleaY] == '.'){
+                    matriceJoueur->value[aleaX-1][aleaY] = 'X';
+                    ordinateur->matScanner->value[aleaX-1][aleaY] = 'X';
+                }
+
+                if(matriceJoueur->value[aleaX-1][aleaY] == 'O'){
+                    matriceJoueur->value[aleaX-1][aleaY] = '#';
+                    ordinateur->matScanner->value[aleaX-1][aleaY] = '#';
+                    trouve = 1;
+                }
+
+                angleOK = 1;
+            }
+
+            if(angle == 3 && aleaY+1 <= maxi && ordinateur->matScanner->value[aleaX][aleaY+1] == '.'){
+                // On fait pareil .. le tir et on regarde si on a touché ou pas.
+                if(matriceJoueur->value[aleaX][aleaY+1] == '.'){
+                    matriceJoueur->value[aleaX][aleaY+1] = 'X';
+                    ordinateur->matScanner->value[aleaX][aleaY+1] = 'X';
+                }
+
+                if(matriceJoueur->value[aleaX][aleaY+1] == 'O'){
+                    matriceJoueur->value[aleaX][aleaY+1] = '#';
+                    ordinateur->matScanner->value[aleaX][aleaY+1] = '#';
+                    trouve = 1;
+                }
+
+                angleOK = 1;
+            }
+
+            if(angle == 4 && aleaX+1 <= maxi && ordinateur->matScanner->value[aleaX+1][aleaY] == '.'){
+                // On fait pareil .. le tir et on regarde si on a touché ou pas.
+                if(matriceJoueur->value[aleaX+1][aleaY] == '.'){
+                    matriceJoueur->value[aleaX+1][aleaY] = 'X';
+                    ordinateur->matScanner->value[aleaX+1][aleaY] = 'X';
+                }
+
+                if(matriceJoueur->value[aleaX+1][aleaY] == 'O'){
+                    matriceJoueur->value[aleaX+1][aleaY] = '#';
+                    ordinateur->matScanner->value[aleaX+1][aleaY] = '#';
+                    trouve = 1;
+                }
+
+                angleOK = 1;
+            }
+        }
+
+        // Si on le trouve (on enregistre l'angle), on passe à l'état 'D'.
+        if(trouve == 1){
+            ordinateur->angle = angle;
+            ordinateur->etat_IA = D;
+            init = 2;
+        }
+    }
+
+    if(init == 0 && ordinateur->etat_IA == D){
+        aleaX = ordinateur->posXtouche;
+        aleaY = ordinateur->posYtouche;
+        int angle = ordinateur->angle;
+        // On tir dans la bonne direction tant qu'on ne touche pas l'eau.
+        int sens = 0;
+        printf("T1 \n");
+        while(sens == 0){
+            if(angle == 1){
+                // Si on a déjà touché à cette endroit alors on décale.
+                if(ordinateur->matScanner->value[aleaX][aleaY] == '#'){
+                    aleaY--;
+                    if(aleaY < mini){
+                        sens = 2; // On est au bout ..
+                        break;
+                    }
+                }
+
+                // Si on a pas tiré à cette endroit alors on tir et on met à jour les matrices.
+                if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                    if(matriceJoueur->value[aleaX][aleaY] == '.'){
+                        matriceJoueur->value[aleaX][aleaY] = 'X';
+                        ordinateur->matScanner->value[aleaX][aleaY] = 'X';
+                        sens = 2; // On arrive au bout d'un côté !
+                    }
+
+                    if(matriceJoueur->value[aleaX][aleaY] == 'O'){
+                        matriceJoueur->value[aleaX][aleaY] = '#';
+                        ordinateur->matScanner->value[aleaX][aleaY] = '#';
+                        sens = 1; // Il reste peut être un morceau de navire.
+                    }
+                }
+
+                // Si on a déjà tiré à cette endroit sans touché .. On est arrivé au bout.
+                if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
+                    sens = 2; // On arrive au bout d'un côté !
+                }
+            }
+
+            if(angle == 2){
+                if(ordinateur->matScanner->value[aleaX][aleaY] == '#'){
+                    aleaX--;
+                    if(aleaX < mini){
+                        sens = 2; // On est au bout ..
+                        break;
+                    }
+                }
+
+                if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                    if(matriceJoueur->value[aleaX][aleaY] == '.'){
+                        matriceJoueur->value[aleaX][aleaY] = 'X';
+                        ordinateur->matScanner->value[aleaX][aleaY] = 'X';
+                        sens = 2; // On arrive au bout d'un côté !
+                    }
+
+                    if(matriceJoueur->value[aleaX][aleaY] == 'O'){
+                        matriceJoueur->value[aleaX][aleaY] = '#';
+                        ordinateur->matScanner->value[aleaX][aleaY] = '#';
+                        sens = 1; // Il reste peut être un morceau de navire.
+                    }
+                }
+
+                if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
+                    sens = 2; // On arrive au bout d'un côté !
+                }
+            }
+
+            if(angle == 3){
+                if(ordinateur->matScanner->value[aleaX][aleaY] == '#'){
+                    aleaY++;
+                    if(aleaY > maxi){
+                        sens = 2; // On est au bout ..
+                        break;
+                    }
+                }
+
+                if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                    if(matriceJoueur->value[aleaX][aleaY] == '.'){
+                        matriceJoueur->value[aleaX][aleaY] = 'X';
+                        ordinateur->matScanner->value[aleaX][aleaY] = 'X';
+                        sens = 2; // On arrive au bout d'un côté !
+                    }
+
+                    if(matriceJoueur->value[aleaX][aleaY] == 'O'){
+                        matriceJoueur->value[aleaX][aleaY] = '#';
+                        ordinateur->matScanner->value[aleaX][aleaY] = '#';
+                        sens = 1; // Il reste peut être un morceau de navire.
+                    }
+                }
+
+                if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
+                    sens = 2; // On arrive au bout d'un côté !
+                }
+            }
+
+            if(angle == 4){
+                if(ordinateur->matScanner->value[aleaX][aleaY] == '#'){
+                    aleaX++;
+                    if(aleaX > maxi){
+                        sens = 2; // On est au bout ..
+                        break;
+                    }
+                }
+
+                if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                    if(matriceJoueur->value[aleaX][aleaY] == '.'){
+                        matriceJoueur->value[aleaX][aleaY] = 'X';
+                        ordinateur->matScanner->value[aleaX][aleaY] = 'X';
+                        sens = 2; // On arrive au bout d'un côté !
+                    }
+
+                    if(matriceJoueur->value[aleaX][aleaY] == 'O'){
+                        matriceJoueur->value[aleaX][aleaY] = '#';
+                        ordinateur->matScanner->value[aleaX][aleaY] = '#';
+                        sens = 1; // Il reste peut être un morceau de navire.
+                    }
+                }
+
+                if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
+                    sens = 2; // On arrive au bout d'un côté !
+                }
+            }
+        }
+
+        printf("T2 \n");
+        // Si on touche l'eau (sens => 2), on regarde dans l'autre sens parce que le navire n'est peut être pas coulé entièrement.
+        // Pour cela, on va modifier l'angle pour que l'IA qui regardera dans ce sens si elle n'a pas touché l'eau de l'autre côté.
+        if(sens == 2){
+            if(angle == 1) ordinateur->angle = 3;
+            if(angle == 2) ordinateur->angle = 4;
+            if(angle == 3) ordinateur->angle = 1;
+            if(angle == 4) ordinateur->angle = 2;
+
+            // On dit que le navire est mort si en parcourant dans les deux sens on a un 'X' après les '#'.
+            int verification = 0;
+            // Pour aller plus vite on reprend les coordonées où on découvert le navire.
+            aleaX = ordinateur->posXtouche;
+            aleaY = ordinateur->posYtouche;
+            angle = ordinateur->angle;
+            printf("T3 \n");
+            // On va donc vérifier si on a un 'X' après un '#' dans le nouveau sens (si c'est le cas on repassera en R sinon on reste en D mais avec un nouveau angle).
+            while(verification == 0){
+                if(angle == 1){
+                    // Si on a déjà touché à cette endroit alors on décale.
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == '#'){
+                        aleaY--;
+                        if(aleaY < mini){
+                            verification = 2; // On est au bout ..
+                            break;
+                        }
+                    }
+
+                    // Si on a pas tiré à cette endroit alors il reste peut être un morceau au navire.
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                        verification = 1;
+                    }
+
+                    // Si on a tiré mais qu'il n'y a rien non plus au bout.
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
+                        verification = 2;
+                    }
+                }
+
+                if(angle == 2){
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == '#'){
+                        aleaX--;
+                        if(aleaX < mini){
+                            verification = 2; // On est au bout ..
+                            break;
+                        }
+                    }
+
+                    // Si on a pas tiré à cette endroit alors il reste peut être un morceau au navire.
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                        verification = 1;
+                    }
+
+                    // Si on a tiré mais qu'il n'y a rien non plus au bout.
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
+                        verification = 2;
+                    }
+                }
+
+                if(angle == 3){
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == '#'){
+                        aleaY++;
+                        if(aleaY > maxi){
+                            verification = 2; // On est au bout ..
+                            break;
+                        }
+                    }
+
+                    // Si on a pas tiré à cette endroit alors il reste peut être un morceau au navire.
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                        verification = 1;
+                    }
+
+                    // Si on a tiré mais qu'il n'y a rien non plus au bout.
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
+                        verification = 2;
+                    }
+                }
+
+                if(angle == 4){
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == '#'){
+                        aleaX++;
+                        if(aleaX > maxi){
+                            verification = 2; // On est au bout ..
+                            break;
+                        }
+                    }
+
+                    // Si on a pas tiré à cette endroit alors il reste peut être un morceau au navire.
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                        verification = 1;
+                    }
+
+                    // Si on a tiré mais qu'il n'y a rien non plus au bout.
+                    if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
+                        verification = 2;
+                    }
+                }
+            }
+
+            // On repasse à l'état 'R' pour rechercher une autre navire si on a tiré mais qu'il n'y a rien non plus au bout.
+            if(verification == 2){
+                ordinateur->posXtouche = -1;
+                ordinateur->posYtouche = -1;
+                ordinateur->angle = 0;
+                ordinateur->etat_IA = R;
+            }
+        }
+    }
+
+    verifierFlotteEntiere(matriceJoueur, armadaJoueur);
+}
+
+// Fin.

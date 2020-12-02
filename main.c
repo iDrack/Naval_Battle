@@ -11,15 +11,17 @@ int main(){
     Navire *armadaJoueur[TAILLE_FLOTTE];
     Navire *armadaAdversaire[TAILLE_FLOTTE];
     int taille_matrice = 10, choix = 0, tour = 1, toucheJoueur = 0, joueurTirSpecial = 0;
+    IA ordinateur;
 
     // ----- Menu Principal -----
 
     printf("\nBienvenue dans la bataille navale.\n\n");
     choisirTaille(&taille_matrice); //Choix de la taille du champs de bataille.
-    // Initialisation des matrice
-    Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
-    Matrice *matriceIntermediaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice);
-    Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice);
+    // Initialisation des matrice.
+    Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice); // Matrice de l'IA.
+    Matrice *matriceIntermediaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice); // Matrice Brouillard pour le joueur.
+    Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice); // Matrice du joueur.
+
     // Laisse le choix au joueur de creer sa flotte ou non.
     while(choix < 1 || choix > 2){
         printf("Voulez-vous créer votre armada ?\n1. Oui\n2. Non\n>");
@@ -32,6 +34,8 @@ int main(){
         placementAleatoire(matriceJoueur, armadaJoueur); // Quand le joueur ne place pas lui meme ses navires.
     }
     placementAleatoire(matriceAdversaire, armadaAdversaire); // Generation de la grille de l'adversaire.
+    // Initialisation de l'IA :
+    initialiserIA(matriceAdversaire, &ordinateur, taille_matrice);
     // ---- Fin Menu Principal ----
 
     // ----- Boucle Principal -----
@@ -45,14 +49,15 @@ int main(){
             // Durant le tour du joueur, on affiche sa grille, sa flotte ainsi que ses tirs disponibles.
             printf("\033[0;36mà vous de jouer.\033[0m\n\n");
             afficherPlateauDeJeu(matriceJoueur, matriceIntermediaire);
+            printf("Votre armada : \n");
             afficherArmada(armadaJoueur);
-            printf("Nombre de navires ennemis restants:\033[0;36m% d\033[0m\n\n",(5-nbNaviresCoulees(armadaAdversaire)));
+            printf("Nombre de navires ennemis restants :\033[0;36m %d\033[0m\n\n",(5-nbNaviresCoulees(armadaAdversaire)));
             // Ici, on demande au joueur le tir qu'il veut faire ainsi que les coordonnées.
-            effectuerTir(matriceAdversaire, matriceIntermediaire, matriceJoueur,armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial, tour);
-        }else{
+            }else{
             // Durant le tour de l'IA, on affiche la matrice intermédiaire, une matrice où le joueur peut voir là où il a tiré mais il ne verra pas les bateaux adverses.
             // Puis on fait jouer l'automate.
             printf("\033[0;36mvotre adversaire a joué.\033[0m\n\n");
+            tourDeNotreIA(&ordinateur, matriceJoueur, armadaJoueur);
             afficherPlateauDeJeu(matriceJoueur, matriceIntermediaire);
         }
         puts("-------------------------------------------------------------------------------------------");
@@ -71,7 +76,9 @@ int main(){
     printf("Champ de bataille : \n");
     afficherPlateauDeJeu(matriceJoueur, matriceAdversaire);
     printf("Flottes : \n");
+    printf("Votre armada : \n");
     afficherArmada(armadaJoueur);
+    printf("Armada adverse : \n");
     afficherArmada(armadaAdversaire);
 
     // --- Fin Boucle principal ---
