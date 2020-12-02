@@ -8,8 +8,10 @@ typedef enum etat {OK,TOUCHE,COULE} Etat;
 typedef enum navireType {PORTEAVION,CROISER,DESTROYER,SOUSMARIN,TORPILLEUR} NavireType;
 typedef enum tirSpecial {NORMAL,BARAGE,CANONS,BOMBARDEMENT,INDISPONIBLE} TirType;
 typedef enum orientation {H,V} Orientation; // H = Horizontal, V = Vertical
+typedef enum etape {R,O,D} Etape;
 typedef struct matrice Matrice;
 typedef struct navire Navire;
+typedef struct intelligenceArtificielle IA;
 
 struct matrice{
     int taille; // Taille de notre matrice.
@@ -28,6 +30,15 @@ struct navire{
     // Tir(s) :
     TirType armementPrincipale;
     TirType armementSecondaire;
+};
+
+struct intelligenceArtificielle{
+    Etape etat_IA;
+    Matrice* matrice; // Pointeur de Matrice.
+    Matrice* matScanner; // Pointeur de Matrice servant de scanner.
+    int posXtouche; // Dernière position X où l'IA a touché un navire.
+    int posYtouche; // Dernière position Y où l'IA a touché un navire.
+    int angle; // Angle/Orientation (comme pour mon placement) => 1 : -y | 2 : -x | 3 : +y | 4 : +x
 };
 
 // -- Fonctions :
@@ -67,15 +78,21 @@ int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m);
 void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale,int tour);
 // Fonction "modifierEtatNavire" permettant de modifier l'état du navire situé à la position posX et posY en paramètre.
 void modifierEtatNavire(int positionX, int positionY, Navire *n);
-// Fonction "verifierFlotteEntiere" qui permet de vérifier l'état de la flotte tout entier (vérifie s'il y a un ou plusieurs navires coulé ou non).
+// Fonction "verifierFlotteEntiere" qui permet de vérifier l'état de la flotte tout entier (vérifie s'il y a un ou plusieurs navires touchés, coulés ou non).
 void verifierFlotteEntiere(Matrice *m, Navire **armada);
 // Fonction "verifierNavire" qui permet de vérifier l'état d'un navire (s'il est coulé, ok ou touché).
 void verifierNavire(Matrice *m, Navire *n);
-// Fonction permetttant de retourner le nombre de navire encore en jeu de l'armada séléctionné.
+// Fonction "nbNaviresCoulees" permetttant de retourner le nombre de navire encore en jeu de l'armada séléctionné.
 int nbNaviresCoulees(Navire **armada);
-// Fonction permettant de sauvegarder une partie
+// Fonction "sauvegarde" permettant de sauvegarder une partie.
 void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour);
 // Fonction "afficherPlateauDeJeu" qui permet d'afficher dans la sortie standard les matrices passée en paramètre.
 void afficherPlateauDeJeu(Matrice *mat_1, Matrice *mat_2);
+// Fonction "initialiserIA" permetttant d'initialiser l'IA pour adversaire.
+void initialiserIA(Matrice *matOrigine, IA *ordinateur, int taille_matrice);
+// Fonction "afficherInfoIA" permettant d'afficher les informations de notre IA.
+void afficherInfoIA(IA *ordinateur);
+// Fonction "tourDeNotreIA" permettant à notre IA d'effectue ces actions sur la durée.
+void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur);
 
 #endif
