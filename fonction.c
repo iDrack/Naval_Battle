@@ -1562,21 +1562,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
         while(posOK == 0){
             aleaX = generationIntAleatoire(maxi, mini);
             aleaY = generationIntAleatoire(maxi, mini);
-/*
-            int emplacement = 0;
-            if(aleaX+1 <= maxi && ordinateur->matScanner->value[aleaX+1][aleaY] == 'X'){
-                emplacement = 1;
-            }
-            if(aleaY+1 <= maxi && ordinateur->matScanner->value[aleaX][aleaY+1] == 'X'){
-                emplacement = 1;
-            }
-            if(aleaX-1 >= mini && ordinateur->matScanner->value[aleaX+1][aleaY] == 'X'){
-                emplacement = 1;
-            }
-            if(aleaY-1 >= mini && ordinateur->matScanner->value[aleaX+1][aleaY] == 'X'){
-                emplacement = 1;
-            }
-*/
+
             // Si sur la matrice d'observation de l'IA, on a un '.' alors on place le tir.
             if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
                 // Si sur la matrice du joueur, il n'y avait rien, on place un 'X' sur les deux matrices.
