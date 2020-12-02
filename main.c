@@ -10,10 +10,7 @@ int main(){
     // Initialisation de toutes les variables
     Navire *armadaJoueur[TAILLE_FLOTTE];
     Navire *armadaAdversaire[TAILLE_FLOTTE];
-    int taille_matrice = 10, choix = 0, tour = 1, toucheJoueur = 0, joueurTirSpecial = 0, div;
-    int tmp=generationIntAleatoire(0,11);
-    if(tmp%2==0)div=1;
-    else div=0;
+    int taille_matrice = 10, choix = 0, tour = 1, toucheJoueur = 0, joueurTirSpecial = 0;
 
     // ----- Menu Principal -----
 
@@ -35,23 +32,23 @@ int main(){
         placementAleatoire(matriceJoueur, armadaJoueur); // Quand le joueur ne place pas lui meme ses navires.
     }
     placementAleatoire(matriceAdversaire, armadaAdversaire); // Generation de la grille de l'adversaire.
-
     // ---- Fin Menu Principal ----
 
     // ----- Boucle Principal -----
     // La partie s'arrête une fois qu'un joueur n'a plus de flotte.
+    printf("%d\n",matriceJoueur->taille);
 
     while(nbNaviresCoulees(armadaJoueur) != 5 && nbNaviresCoulees(armadaAdversaire) != 5){
         // Le joueur joue sur les tours déterminé par div afin d'avoir un commencement aléatoire .
         printf("\033[0;36mTour n°%d, \033[0m",tour);
-        if(tour % 2 == div){
+        if(tour % 2 == 1){
             // Durant le tour du joueur, on affiche sa grille, sa flotte ainsi que ses tirs disponibles.
             printf("\033[0;36mà vous de jouer.\033[0m\n\n");
             afficherPlateauDeJeu(matriceJoueur, matriceIntermediaire);
             afficherArmada(armadaJoueur);
             printf("Nombre de navires ennemis restants:\033[0;36m% d\033[0m\n\n",(5-nbNaviresCoulees(armadaAdversaire)));
             // Ici, on demande au joueur le tir qu'il veut faire ainsi que les coordonnées.
-            effectuerTir(matriceAdversaire, matriceIntermediaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial,tour);
+            effectuerTir(matriceAdversaire, matriceIntermediaire, matriceJoueur,armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial, tour);
         }else{
             // Durant le tour de l'IA, on affiche la matrice intermédiaire, une matrice où le joueur peut voir là où il a tiré mais il ne verra pas les bateaux adverses.
             // Puis on fait jouer l'automate.

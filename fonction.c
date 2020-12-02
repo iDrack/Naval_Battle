@@ -857,12 +857,13 @@ int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m){
     return tableau;
 }
 
-void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale, int tour){
+void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale, int tour){
     /*
         Effectue un tir sur la matrice vidé.
         Param. :
             m : pointeur de la matrice que le joueur attaque, type : pointeur de Matrice.
             m2 : pointeur de la matrice que le joueur attaque et que l'on affiche, type : pointeur de Matrice.
+            m3 : pointeur sur la matrice du joueur, type : pointeur de Matrice.
             armadaJoueur : la flotte du joueur, type : tableau de pointeur de navire.
             armadaAdversaire : la flotte de l'adversaire, type : tableau de pointeur de navire.
             toucheNavire : on attend l'adresse d'un entier permettant de savoir si le tour d'avant il y a eu une touche ou pas, type : adresse (donc pointeur) d'entier.
@@ -900,14 +901,19 @@ void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armad
         }
     }
     printf("Sauvegarder [5], ");
+    printf("Charger [6], ");
     printf("Tir normal [0]. \n");
     int tmpChoix = -1;
     printf(">");
     scanf("%d", &tmpChoix);
     choixTir = tmpChoix;
     if(choixTir == 5){
-        sauvegarde(armadaJoueur,armadaAdversaire,tour);
+        sauvegarde(armadaJoueur,armadaAdversaire, tour, m3, m2, m);
         puts("\033[0;32mSauvegarde terminée.\033[0;m");
+    }if(choixTir == 6){
+        charger(&tour, m3, m, m2, armadaJoueur, armadaAdversaire);
+        puts("\033[0;32mPartie chargée.\033[0;m");
+        return;
     }
     printf("\n");
     while(choixTir < 0 || choixTir > 5 || tableau_de_tir[choixTir] != 1){
@@ -1121,7 +1127,7 @@ int nbNaviresCoulees(Navire **armada){
     return ret;
 }
 
-void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour){
+void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, Matrice *mI, Matrice *mA){
     /*
         Permet de sauvegarder une partie
         Param. :
@@ -1133,7 +1139,7 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour){
     int x, y;
     FILE* f;
     f = fopen(".save","w");
-    fprintf(f,"%d\n",tour);
+    fprintf(f,"%d %d\n",tour,mJ->taille);
     for(int i=0; i<TAILLE_FLOTTE;i++){
         switch(aJoueur[i]->nom){
             case PORTEAVION:
@@ -1163,15 +1169,21 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour){
                 e = 'C';
                 break;
         }
-        x=aJoueur[i]->posX[0];
-        y=aJoueur[i]->posY[0];
-        if(aJoueur[i]->posX[1] != x){
-            o = 'V';
-        }else{
-            o = 'H';
+        fprintf(f,"%c%c",n,e);
+        for(int j=0;j<aJoueur[i]->taille;j++){
+            x=aJoueur[i]->posX[j];
+            y=aJoueur[i]->posY[j];
+            fprintf(f,"%d%d",x,y);
         }
-        fprintf(f,"%c %c %d %d %c\n",n,e,x,y,o);
+        fprintf(f,"\n");
     }
+    for(int i=0;i<mJ->taille;i++){
+        for(int j=0;j<mJ->taille;j++){
+            fprintf(f,"%c",mJ->value[i][j]);
+        }
+        fprintf(f,"\n");
+    }
+    // La même chose pour l'adversaire
     for(int i=0; i<TAILLE_FLOTTE;i++){
         switch(aAdversaire[i]->nom){
             case PORTEAVION:
@@ -1201,17 +1213,183 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour){
                 e = 'C';
                 break;
         }
-        x=aAdversaire[i]->posX[0];
-        y=aAdversaire[i]->posY[0];
-        if(aAdversaire[i]->posX[1] != x){
-            o = 'V';
-        }else{
-            o = 'H';
+        fprintf(f,"%c%c",n,e);
+        for(int j=0;j<aAdversaire[i]->taille;j++){
+            x=aAdversaire[i]->posX[j];
+            y=aAdversaire[i]->posY[j];
+            fprintf(f,"%d%d",x,y);
         }
-        fprintf(f,"%c %c %d %d %c\n",n,e,x,y,o);
+        fprintf(f,"\n");
+    }
+    for(int i=0;i<mI->taille;i++){
+        for(int j=0;j<mI->taille;j++){
+            fprintf(f,"%c",(mI->value[i][j]));
+        }
+        fprintf(f,"\n");
+    }
+    for(int i=0;i<mA->taille;i++){
+        for(int j=0;j<mA->taille;j++){
+            fprintf(f,"%c",(mA->value[i][j]));
+        }
+        fprintf(f,"\n");
     }
     fclose(f);
 }
+
+void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navire **aA){
+    /*
+        Permet de charger une partie sauvegarder.
+        Param. :
+            tour : nombre de tours, Type : pointeur d'entier
+            m : Matrice du joueur, Type : pointeur de Matrice
+            m2 : Matrice de l'adversaire, Type : pointeur de Matrice
+            m3 : Matrice de l'adversaire que l'on affiche, Type : pointeur de Matrice
+            aJ : armada du joueur, Type : pointeur de tableau de Navire
+            aA : armada de l'adversaire, Type : pointeur de tableau de Navire
+    */
+    int t;
+    char n, e, x, y, tmp;
+    FILE *f = fopen(".save","r");
+    // On récupére le tour
+    t = fgetc(f);
+    // Avant de continuer, on vérifie bien que le fichier n'est pas vide
+    if(t == -1){
+        printf("\033[0;31mAucune sauvegarde trouvée.\033[0;m\n");
+        return;
+    }
+    // On modifie le tour 
+    *tour=(t-48); 
+    printf("%d\n",*tour);
+    // On récupére la taille des matrices puis on les recréer
+    fscanf(f,"%d",&t);
+    m->taille = t;
+    m->titre = "Matrice du joueur";
+    m2->taille = t;
+    m2->titre = "Matrice de l'adversaire";
+    m3->taille = t;
+    m3->titre = "Matrice intermédiaire";
+    // On reconstruit la flotte du joueur
+    for(int i=0;i<TAILLE_FLOTTE;i++){
+        aJ[i]->matrice = m;
+        n = fgetc(f);
+        while(n == '\n'){     
+            n = fgetc(f);
+        }
+        // TODO Ajouter l'armement
+        switch(n){
+            case 'P':
+                aJ[i]->nom = PORTEAVION;
+                aJ[i]->taille = 5;
+                break;
+            case 'C':
+                aJ[i]->nom = CROISER;
+                aJ[i]->armementSecondaire = getTypeTirSpecial(aJ[i]->nom);
+                aJ[i]->taille = 4;
+                break;
+            case 'D':
+                aJ[i]->nom = DESTROYER;
+                aJ[i]->taille = 3;
+                break;
+            case 'S':
+                aJ[i]->nom = SOUSMARIN;
+                aJ[i]->taille = 3;
+                break;
+            case 'T':
+                aJ[i]->nom = TORPILLEUR;
+                aJ[i]->taille = 2;
+                break;
+        }        
+        e = fgetc(f);
+        switch(e){
+            case 'O':
+                aJ[i]->etat = OK;
+                break;
+            case 'T':
+                aJ[i]->etat = TOUCHE;
+                break;
+            case 'C':
+                aJ[i]->etat = COULE;
+                break;
+        }
+        for(int j=0;j<aJ[i]->taille;j++){
+            aJ[i]->posX[j] = fgetc(f)-48;
+            aJ[i]->posY[j] = fgetc(f)-48;
+        }
+    }
+    // On reconstruit la matrice du joueur
+    for(int i=0;i<m->taille;i++){
+        for(int j=0;j<m->taille;j++){
+            tmp = fgetc(f);
+            if(tmp == '\n')tmp = fgetc(f);
+            m->value[i][j] = tmp;
+        }
+    }
+    // On fait la même chose pour l'adversaire
+    for(int i=0;i<TAILLE_FLOTTE;i++){
+        aA[i]->matrice = m;
+        n = fgetc(f);
+        while(n == '\n'){     
+            n = fgetc(f);
+        }
+        // TODO Ajouter l'armement
+        switch(n){
+            case 'P':
+                aA[i]->nom = PORTEAVION;
+                aA[i]->taille = 5;
+                break;
+            case 'C':
+                aA[i]->nom = CROISER;
+                aA[i]->armementSecondaire = getTypeTirSpecial(aJ[i]->nom);
+                aA[i]->taille = 4;
+                break;
+            case 'D':
+                aA[i]->nom = DESTROYER;
+                aA[i]->taille = 3;
+                break;
+            case 'S':
+                aA[i]->nom = SOUSMARIN;
+                aA[i]->taille = 3;
+                break;
+            case 'T':
+                aA[i]->nom = TORPILLEUR;
+                aA[i]->taille = 2;
+                break;
+        }        
+        e = fgetc(f);
+        switch(e){
+            case 'O':
+                aA[i]->etat = OK;
+                break;
+            case 'T':
+                aA[i]->etat = TOUCHE;
+                break;
+            case 'C':
+                aA[i]->etat = COULE;
+                break;
+        }
+        for(int j=0;j<aA[i]->taille;j++){
+            aA[i]->posX[j] = fgetc(f)-48;
+            aA[i]->posY[j] = fgetc(f)-48;
+        }
+        
+    }
+    for(int i=0;i<m3->taille;i++){
+        for(int j=0;j<m3->taille;j++){
+            tmp = fgetc(f);
+            if(tmp == '\n')tmp = fgetc(f);
+            m3->value[i][j] = tmp;
+        }
+    }
+    for(int i=0;i<m2->taille;i++){
+        for(int j=0;j<m2->taille;j++){
+            tmp = fgetc(f);
+            if(tmp == '\n')tmp = fgetc(f);
+            m2->value[i][j] = tmp;
+        }
+    }
+    fclose(f);
+}
+
 void afficherPlateauDeJeu(Matrice *mat_1, Matrice *mat_2){
     /*
         Permet d'afficher dans la sortie standard les matrices passée en paramètre.
@@ -1226,7 +1404,7 @@ void afficherPlateauDeJeu(Matrice *mat_1, Matrice *mat_2){
     printf("     ");
     for(int i = 0; i < mat_1->taille; i++) printf("%c ", 65+i);
     printf("[y] ");
-    printf("     ");
+    printf("      ");
     for(int i = 0; i < mat_2->taille; i++) printf("%c ", 65+i);
     printf("[y] \n");
 
