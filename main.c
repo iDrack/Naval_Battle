@@ -54,8 +54,9 @@ int main(){
             // Durant le tour du joueur, on affiche sa grille, sa flotte ainsi que ses tirs disponibles.
             printf("\033[0;36mà vous de jouer.\033[0m\n\n");
             afficherPlateauDeJeu(matriceJoueur, matriceIntermediaire);
+            printf("Votre armada : \n");
             afficherArmada(armadaJoueur);
-            printf("Nombre de navires ennemis restants:\033[0;36m% d\033[0m\n\n",(5-nbNaviresCoulees(armadaAdversaire)));
+            printf("Nombre de navires ennemis restants :\033[0;36m %d\033[0m\n\n",(5-nbNaviresCoulees(armadaAdversaire)));
             // Ici, on demande au joueur le tir qu'il veut faire ainsi que les coordonnées.
             effectuerTir(matriceAdversaire, matriceIntermediaire, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial, tour);
         }else{
@@ -81,7 +82,9 @@ int main(){
     printf("Champ de bataille : \n");
     afficherPlateauDeJeu(matriceJoueur, matriceAdversaire);
     printf("Flottes : \n");
+    printf("Votre armada : \n");
     afficherArmada(armadaJoueur);
+    printf("Armada adverse : \n");
     afficherArmada(armadaAdversaire);
 
     // --- Fin Boucle principal ---

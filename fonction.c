@@ -278,7 +278,7 @@ void afficherArmada(Navire **armada){
         Param. :
             armada : tableau de pointeur de navire, type: tableau de pointeur de navire.
     */
-    puts("Votre armada : ");
+    //puts("Votre armada : ");
     char* st;
     char* st2;
     for(int i = 0; i < TAILLE_FLOTTE; i++){
@@ -320,14 +320,14 @@ void afficherArmada(Navire **armada){
                 break;
         }
         if(st != "") {
-            if(st2 == "OK")printf("#%d %s\tEtat : \033[0;32m%s\033[0m\n", i, st, st2);
-            else if(st2 == "TOUCHÉ")printf("#%d %s\tEtat : \033[0;33m%s\033[0m\n", i, st, st2);
-            else if(st2 == "COULÉ")printf("#%d %s\tEtat : \033[0;31m%s\033[0m\n", i, st, st2);
-            else printf("#%d %s\tEtat : %s\n", i, st, st2);
+            if(st2 == "OK") printf("\033[0;36m #%d\033[0m %s\tEtat : \033[0;32m%s\033[0m\n", i, st, st2);
+            else if(st2 == "TOUCHÉ") printf("\033[0;36m #%d\033[0m %s\tEtat : \033[0;33m%s\033[0m\n", i, st, st2);
+            else if(st2 == "COULÉ") printf("\033[0;36m #%d\033[0m %s\tEtat : \033[0;31m%s\033[0m\n", i, st, st2);
+            else printf("\033[0;36m #%d\033[0m %s\tEtat : %s\n", i, st, st2);
         }
         afficherNavireArmement(armada[i]);
         afficherNavirePos(armada[i]);
-        printf("\n\n");
+        printf("\n");
     }
 }
 
@@ -878,7 +878,7 @@ void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armad
     for(int i = 0; i < TYPE_TIR; i++) tableau_de_tir[i] = 0;
     tableau_de_tir[0] = 1;
     // Demander un tir spéciale (donner la liste) ou normal.
-    printf("Actions : \n");
+    printf("Actions possibles : \n");
     // Si le joueur a touché au dernier tour jouer et qu'il n'a pas utilisé de tir spéciale alors il le peut maintenant :
     if(*toucheNavire == 1 && *actionSpeciale == 0){
         for(int i = 1; i < TYPE_TIR; i++){
@@ -903,8 +903,7 @@ void effectuerTir(Matrice *m, Matrice *m2, Navire **armadaJoueur, Navire **armad
             }
         }
     }
-    printf("Sauvegarder [5], ");
-    printf("Tir normal [0]. \n");
+    printf("Sauvegarder [5], Tir normal [0]. \n");
     int tmpChoix = -1;
     printf(">");
     scanf("%d", &tmpChoix);
