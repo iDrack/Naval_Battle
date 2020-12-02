@@ -1174,15 +1174,16 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, M
     /*
         Permet de sauvegarder une partie
         Param. :
-            aJoueur : armada du joueur, type : tableau de pointeurs de Navire;
-            aAdversaire : aramda de l'IA, type : tableau de pointeurs de Navire
-            tour : tour auquel nous avons fait la sauvegarde, type : int
+            aJoueur : armada du joueur, type : tableau de pointeurs de Navire.
+            aAdversaire : aramda de l'IA, type : tableau de pointeurs de Navire.
+            tour : tour auquel nous avons fait la sauvegarde, type : int.
     */
     char n, e, o;
     int x, y;
     FILE* f;
     f = fopen(".save","w");
     fprintf(f,"%d %d\n",tour,mJ->taille);
+
     for(int i=0; i<TAILLE_FLOTTE;i++){
         switch(aJoueur[i]->nom){
             case PORTEAVION:
@@ -1201,6 +1202,7 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, M
                 n = 'T';
                 break;
         }
+
         switch(aJoueur[i]->etat){
             case OK:
                 e = 'O';
@@ -1213,6 +1215,7 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, M
                 break;
         }
         fprintf(f,"%c%c",n,e);
+
         for(int j=0;j<aJoueur[i]->taille;j++){
             x=aJoueur[i]->posX[j];
             y=aJoueur[i]->posY[j];
@@ -1220,12 +1223,14 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, M
         }
         fprintf(f,"\n");
     }
+
     for(int i=0;i<mJ->taille;i++){
         for(int j=0;j<mJ->taille;j++){
             fprintf(f,"%c",mJ->value[i][j]);
         }
         fprintf(f,"\n");
     }
+
     // La même chose pour l'adversaire
     for(int i=0; i<TAILLE_FLOTTE;i++){
         switch(aAdversaire[i]->nom){
@@ -1245,6 +1250,7 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, M
                 n = 'T';
                 break;
         }
+
         switch(aAdversaire[i]->etat){
             case OK:
                 e = 'O';
@@ -1257,6 +1263,7 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, M
                 break;
         }
         fprintf(f,"%c%c",n,e);
+
         for(int j=0;j<aAdversaire[i]->taille;j++){
             x=aAdversaire[i]->posX[j];
             y=aAdversaire[i]->posY[j];
@@ -1264,18 +1271,21 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, M
         }
         fprintf(f,"\n");
     }
+
     for(int i=0;i<mI->taille;i++){
         for(int j=0;j<mI->taille;j++){
             fprintf(f,"%c",(mI->value[i][j]));
         }
         fprintf(f,"\n");
     }
+
     for(int i=0;i<mA->taille;i++){
         for(int j=0;j<mA->taille;j++){
             fprintf(f,"%c",(mA->value[i][j]));
         }
         fprintf(f,"\n");
     }
+
     fclose(f);
 }
 
@@ -1283,12 +1293,12 @@ void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navir
     /*
         Permet de charger une partie sauvegarder.
         Param. :
-            tour : nombre de tours, Type : pointeur d'entier
-            m : Matrice du joueur, Type : pointeur de Matrice
-            m2 : Matrice de l'adversaire, Type : pointeur de Matrice
-            m3 : Matrice de l'adversaire que l'on affiche, Type : pointeur de Matrice
-            aJ : armada du joueur, Type : pointeur de tableau de Navire
-            aA : armada de l'adversaire, Type : pointeur de tableau de Navire
+            tour : nombre de tours, type : pointeur d'entier.
+            m : Matrice du joueur, type : pointeur de Matrice.
+            m2 : Matrice de l'adversaire, type : pointeur de Matrice.
+            m3 : Matrice de l'adversaire que l'on affiche, type : pointeur de Matrice.
+            aJ : armada du joueur, type : pointeur de tableau de Navire.
+            aA : armada de l'adversaire, type : pointeur de tableau de Navire.
     */
     int t;
     char n, e, x, y, tmp;
@@ -1300,8 +1310,8 @@ void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navir
         printf("\033[0;31mAucune sauvegarde trouvée.\033[0;m\n");
         return;
     }
-    // On modifie le tour 
-    *tour=(t-48); 
+    // On modifie le tour
+    *tour=(t-48);
     printf("%d\n",*tour);
     // On récupére la taille des matrices puis on les recréer
     fscanf(f,"%d",&t);
@@ -1311,14 +1321,17 @@ void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navir
     m2->titre = "Matrice de l'adversaire";
     m3->taille = t;
     m3->titre = "Matrice intermédiaire";
+
     // On reconstruit la flotte du joueur
     for(int i=0;i<TAILLE_FLOTTE;i++){
         aJ[i]->matrice = m;
         n = fgetc(f);
-        while(n == '\n'){     
+        while(n == '\n'){
             n = fgetc(f);
         }
-        // TODO Ajouter l'armement
+
+        // TODO Ajouter l'armement.
+
         switch(n){
             case 'P':
                 aJ[i]->nom = PORTEAVION;
@@ -1341,7 +1354,8 @@ void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navir
                 aJ[i]->nom = TORPILLEUR;
                 aJ[i]->taille = 2;
                 break;
-        }        
+        }
+
         e = fgetc(f);
         switch(e){
             case 'O':
@@ -1354,27 +1368,32 @@ void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navir
                 aJ[i]->etat = COULE;
                 break;
         }
+
         for(int j=0;j<aJ[i]->taille;j++){
             aJ[i]->posX[j] = fgetc(f)-48;
             aJ[i]->posY[j] = fgetc(f)-48;
         }
     }
+
     // On reconstruit la matrice du joueur
     for(int i=0;i<m->taille;i++){
         for(int j=0;j<m->taille;j++){
             tmp = fgetc(f);
-            if(tmp == '\n')tmp = fgetc(f);
+            if(tmp == '\n') tmp = fgetc(f);
             m->value[i][j] = tmp;
         }
     }
+
     // On fait la même chose pour l'adversaire
     for(int i=0;i<TAILLE_FLOTTE;i++){
         aA[i]->matrice = m;
         n = fgetc(f);
-        while(n == '\n'){     
+        while(n == '\n'){
             n = fgetc(f);
         }
-        // TODO Ajouter l'armement
+
+        // TODO Ajouter l'armement.
+
         switch(n){
             case 'P':
                 aA[i]->nom = PORTEAVION;
@@ -1397,7 +1416,8 @@ void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navir
                 aA[i]->nom = TORPILLEUR;
                 aA[i]->taille = 2;
                 break;
-        }        
+        }
+
         e = fgetc(f);
         switch(e){
             case 'O':
@@ -1410,26 +1430,29 @@ void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navir
                 aA[i]->etat = COULE;
                 break;
         }
+
         for(int j=0;j<aA[i]->taille;j++){
             aA[i]->posX[j] = fgetc(f)-48;
             aA[i]->posY[j] = fgetc(f)-48;
         }
-        
     }
+
     for(int i=0;i<m3->taille;i++){
         for(int j=0;j<m3->taille;j++){
             tmp = fgetc(f);
-            if(tmp == '\n')tmp = fgetc(f);
+            if(tmp == '\n') tmp = fgetc(f);
             m3->value[i][j] = tmp;
         }
     }
+
     for(int i=0;i<m2->taille;i++){
         for(int j=0;j<m2->taille;j++){
             tmp = fgetc(f);
-            if(tmp == '\n')tmp = fgetc(f);
+            if(tmp == '\n') tmp = fgetc(f);
             m2->value[i][j] = tmp;
         }
     }
+
     fclose(f);
 }
 
@@ -1539,6 +1562,21 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
         while(posOK == 0){
             aleaX = generationIntAleatoire(maxi, mini);
             aleaY = generationIntAleatoire(maxi, mini);
+/*
+            int emplacement = 0;
+            if(aleaX+1 <= maxi && ordinateur->matScanner->value[aleaX+1][aleaY] == 'X'){
+                emplacement = 1;
+            }
+            if(aleaY+1 <= maxi && ordinateur->matScanner->value[aleaX][aleaY+1] == 'X'){
+                emplacement = 1;
+            }
+            if(aleaX-1 >= mini && ordinateur->matScanner->value[aleaX+1][aleaY] == 'X'){
+                emplacement = 1;
+            }
+            if(aleaY-1 >= mini && ordinateur->matScanner->value[aleaX+1][aleaY] == 'X'){
+                emplacement = 1;
+            }
+*/
             // Si sur la matrice d'observation de l'IA, on a un '.' alors on place le tir.
             if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
                 // Si sur la matrice du joueur, il n'y avait rien, on place un 'X' sur les deux matrices.

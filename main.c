@@ -28,17 +28,21 @@ int main(){
         scanf("%d",&choix);
         printf("\n");
     }
+
     if(choix == 1){
         genererArmadaJoueur(matriceJoueur,armadaJoueur); // Quand le joueur veut choisir ses navires.
-    }else if(choix==2){
+    } else if(choix==2){
         placementAleatoire(matriceJoueur, armadaJoueur); // Quand le joueur ne place pas lui meme ses navires.
     }
+
     placementAleatoire(matriceAdversaire, armadaAdversaire); // Generation de la grille de l'adversaire.
     // Initialisation de l'IA :
     initialiserIA(matriceAdversaire, &ordinateur, taille_matrice);
+
     // ---- Fin Menu Principal ----
 
     // ----- Boucle Principal -----
+
     // La partie s'arrête une fois qu'un joueur n'a plus de flotte.
     while(nbNaviresCoulees(armadaJoueur) != 5 && nbNaviresCoulees(armadaAdversaire) != 5){
         // Le joueur joue sur les tours impaires et commence donc la partie.
@@ -92,3 +96,4 @@ int main(){
 
     return EXIT_SUCCESS;
 }
+
