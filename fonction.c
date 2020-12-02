@@ -914,6 +914,14 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, N
     if(choixTir == 5){
         sauvegarde(armadaJoueur,armadaAdversaire, tour, m3, m2, m);
         puts("\033[0;32mSauvegarde terminée.\033[0;m");
+        int tmp;
+        printf("\nQuitter ?\nOui [1], Non [2].\n>");
+        scanf("%d", &tmp);
+        while(tmp != 1 && tmp != 2){
+            printf("\nQuitter ?\nOui [1], Non [2].\n>");
+            scanf("%d", &tmp);
+        }
+        if(tmp == 1)exit(EXIT_SUCCESS);
     }if(choixTir == 6){
         charger(&tour, m3, m, m2, armadaJoueur, armadaAdversaire);
         puts("\033[0;32mPartie chargée.\033[0;m");
