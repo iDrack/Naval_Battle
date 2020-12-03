@@ -39,6 +39,8 @@ struct intelligenceArtificielle{
     int posXtouche; // Dernière position X où l'IA a touché un navire.
     int posYtouche; // Dernière position Y où l'IA a touché un navire.
     int angle; // Angle/Orientation (comme pour mon placement) => 1 : -y | 2 : -x | 3 : +y | 4 : +x
+    int toucheNavire; // Si l'IA a touché un ennemie juste avant alors toucheNavire = 1, 0 sinon.
+    int tirSpecialPossible; // Si l'IA peut faire un tir spéciale ou non.
 };
 
 // -- Fonctions :
@@ -95,6 +97,6 @@ void initialiserIA(Matrice *matOrigine, IA *ordinateur, int taille_matrice);
 // Fonction "afficherInfoIA" permettant d'afficher les informations de notre IA.
 void afficherInfoIA(IA *ordinateur);
 // Fonction "tourDeNotreIA" permettant à notre IA d'effectue ces actions sur la durée.
-void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur);
+void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur, Navire **armadaIA);
 
 #endif
