@@ -858,13 +858,14 @@ int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m){
     return tableau;
 }
 
-void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale, int tour){
+void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Matrice *m4, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale, int tour){
     /*
         Effectue un tir sur la matrice vidé.
         Param. :
             m : pointeur de la matrice que le joueur attaque, type : pointeur de Matrice.
             m2 : pointeur de la matrice que le joueur attaque et que l'on affiche, type : pointeur de Matrice.
             m3 : pointeur sur la matrice du joueur, type : pointeur de Matrice.
+            m4 : pointeur sur la matrice intermédiaire utilisé par l'IA, type : pointeur de Matrice.
             armadaJoueur : la flotte du joueur, type : tableau de pointeur de navire.
             armadaAdversaire : la flotte de l'adversaire, type : tableau de pointeur de navire.
             toucheNavire : on attend l'adresse d'un entier permettant de savoir si le tour d'avant il y a eu une touche ou pas, type : adresse (donc pointeur) d'entier.
@@ -908,7 +909,7 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, N
     scanf("%d", &tmpChoix);
     choixTir = tmpChoix;
     if(choixTir == 5){
-        sauvegarde(armadaJoueur,armadaAdversaire, tour, m3, m2, m);
+        sauvegarde(armadaJoueur,armadaAdversaire, tour, m3, m2, m, m4);
         puts("\033[0;32mSauvegarde terminée.\033[0;m");
         int tmp;
         printf("\nQuitter ?\nOui [1], Non [2].\n>");
@@ -1170,13 +1171,17 @@ int nbNaviresCoulees(Navire **armada){
     return ret;
 }
 
-void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, Matrice *mI, Matrice *mA){
+void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, Matrice *mI, Matrice *mA, Matrice *mIA){
     /*
         Permet de sauvegarder une partie
         Param. :
             aJoueur : armada du joueur, type : tableau de pointeurs de Navire.
             aAdversaire : aramda de l'IA, type : tableau de pointeurs de Navire.
             tour : tour auquel nous avons fait la sauvegarde, type : int.
+            mJ : matrice du joueur, type : pointeur de Matrice.
+            mI : matrice intermédiaire, type : pointeur de Matrice.
+            mA : matrice de l'adversaire, type : pointeur de Matrice.
+            mIA : matrice intermédiaire utilisé par l'IA, type : pointeur de Matrice.
     */
     char n, e, o;
     int x, y;
@@ -1286,10 +1291,17 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, M
         fprintf(f,"\n");
     }
 
+    for(int i=0;i<mIA->taille;i++){
+        for(int j=0;j<mIA->taille;j++){
+            fprintf(f,"%c",(mIA->value[i][j]));
+        }
+        fprintf(f,"\n");
+    }
+
     fclose(f);
 }
 
-int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navire **aA){
+int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Matrice *m4, Navire **aJ, Navire **aA){
     /*
         Permet de charger une partie sauvegarder.
         Param. :
@@ -1297,6 +1309,7 @@ int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navire
             m : Matrice du joueur, Type : pointeur de Matrice
             m2 : Matrice de l'adversaire, Type : pointeur de Matrice
             m3 : Matrice de l'adversaire que l'on affiche, Type : pointeur de Matrice
+            m4 : matrice intermédiaire de utilisé par l'IA, Type : pointeur de Matrice
             aJ : armada du joueur, Type : pointeur de tableau de Navire
             aA : armada de l'adversaire, Type : pointeur de tableau de Navire
         Return :
@@ -1452,6 +1465,14 @@ int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navire
             tmp = fgetc(f);
             if(tmp == '\n') tmp = fgetc(f);
             m2->value[i][j] = tmp;
+        }
+    }
+
+    for(int i=0;i<m4->taille;i++){
+        for(int j=0;j<m4->taille;j++){
+            tmp = fgetc(f);
+            if(tmp == '\n') tmp = fgetc(f);
+            m4->value[i][j] = tmp;
         }
     }
 

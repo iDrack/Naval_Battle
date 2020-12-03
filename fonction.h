@@ -77,7 +77,7 @@ int generationIntAleatoire(int maximum, int minimum);
 // Fonction "fonctionTir" qui renvoie un pointeur sur un tableau alloué dynamiquement.
 int** fonctionTir(int posX, int posY, int choixTir, int direction, Matrice *m);
 // Fonction "effectuerTir" qui permet au joueur d'effectuer un tir sur la matrice cible passé en paramètre.
-void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3,Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale, int tour);
+void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Matrice *m4, Navire **armadaJoueur, Navire **armadaAdversaire, int *toucheNavire, int *actionSpeciale, int tour);
 // Fonction "modifierEtatNavire" permettant de modifier l'état du navire situé à la position posX et posY en paramètre.
 void modifierEtatNavire(int positionX, int positionY, Navire *n);
 // Fonction "verifierFlotteEntiere" qui permet de vérifier l'état de la flotte tout entier (vérifie s'il y a un ou plusieurs navires touchés, coulés ou non).
@@ -87,11 +87,11 @@ void verifierNavire(Matrice *m, Navire *n);
 // Fonction "nbNaviresCoulees" permetttant de retourner le nombre de navire encore en jeu de l'armada séléctionné.
 int nbNaviresCoulees(Navire **armada);
 // Fonction "sauvegarde" permettant de sauvegarder une partie
-void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, Matrice *mAI, Matrice *mA);
+void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, Matrice *mI, Matrice *mA, Matrice *mIA);
 // Fonction "afficherPlateauDeJeu" qui permet d'afficher dans la sortie standard les matrices passée en paramètre.
 void afficherPlateauDeJeu(Matrice *mat_1, Matrice *mat_2);
 // Fonction "charger" permet de charger une partie sauvegarder.
-int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navire **aA);
+int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Matrice *m4, Navire **aJ, Navire **aA);
 // Fonction "initialiserIA" permettant d'initialiser notre IA
 void initialiserIA(Matrice *matOrigine, IA *ordinateur, int taille_matrice);
 // Fonction "afficherInfoIA" permettant d'afficher les informations de notre IA.

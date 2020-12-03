@@ -18,6 +18,9 @@ int main(){
     placementAleatoire(matriceAdversaire, armadaAdversaire);
     int taille_matrice = 10, choix = 0, choix2 = 0, tour, toucheJoueur = 0, joueurTirSpecial = 0;
     IA ordinateur;
+    
+    // Initialisation de l'IA :
+    initialiserIA(matriceAdversaire, &ordinateur, 10);
 
     // ----- Menu Principal -----
     printf("Bienvenu\n");
@@ -27,7 +30,7 @@ int main(){
         printf("\n");
     }
     if(choix2 == 1){
-        choix2 = charger(&tour, matriceJoueur, matriceAdversaire, matriceIntermediaire, armadaJoueur, armadaAdversaire);
+        choix2 = charger(&tour, matriceJoueur, matriceAdversaire, matriceIntermediaire, ordinateur.matScanner,armadaJoueur, armadaAdversaire);
     }
     if(choix2 == 2){
         tour = 1;
@@ -69,7 +72,7 @@ int main(){
             afficherArmada(armadaJoueur);
             printf("Nombre de navires ennemis restants :\033[0;36m %d\033[0m\n\n",(5-nbNaviresCoulees(armadaAdversaire)));
             // Ici, on demande au joueur le tir qu'il veut faire ainsi que les coordonnées.
-            effectuerTir(matriceAdversaire, matriceIntermediaire, matriceJoueur, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial, tour);
+            effectuerTir(matriceAdversaire, matriceIntermediaire, matriceJoueur, ordinateur.matScanner, armadaJoueur, armadaAdversaire, &toucheJoueur, &joueurTirSpecial, tour);
         }else{
             // Durant le tour de l'IA, on affiche la matrice intermédiaire, une matrice où le joueur peut voir là où il a tiré mais il ne verra pas les bateaux adverses.
             // Puis on fait jouer l'automate.
