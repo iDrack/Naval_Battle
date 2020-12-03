@@ -935,68 +935,75 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, N
         printf("\n");
     }
 
-    // Si c'est un tir normale alors actionSpeciale est à 0.
+    // Si c'est un tir normale alors actionSpeciale est à 0, sinon ..
     if(choixTir == 0){
         *actionSpeciale = 0;
-    }
-    // On consomme le tir spéciale (on le remplace par un tir normal) et on modifie la variable des tirs spéciaux :
-    for(int i = 1; i < TYPE_TIR; i++){
-        if(armadaJoueur[i]->armementPrincipale == 1 && choixTir == 1){
-            //armadaJoueur[i]->armementPrincipale = 0;
-            // On consomme le tir pour lui mais aussi pour tous les autres navires ayant la même capacité (évitant ainsi la répétition de tir spéciaux dans une flotte avec plusieurs navire de même type).
-            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
-                if(armadaJoueur[elem]->armementPrincipale == 1){
-                    armadaJoueur[elem]->armementPrincipale = 0;
+    } else { // Sinon ..
+        // On consomme le tir spéciale (on le remplace par un tir normal) et on modifie la variable des tirs spéciaux :
+        for(int i = 1; i < TYPE_TIR; i++){
+            if(armadaJoueur[i]->armementPrincipale == 1 && choixTir == 1){
+                //armadaJoueur[i]->armementPrincipale = 0;
+                // On consomme le tir pour lui mais aussi pour tous les autres navires ayant la même capacité (évitant ainsi la répétition de tir spéciaux dans une flotte avec plusieurs navire de même type).
+                for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                    if(armadaJoueur[elem]->armementPrincipale == 1){
+                        armadaJoueur[elem]->armementPrincipale = 0;
+                    }
                 }
+                *actionSpeciale = 1;
+                break;
             }
-            *actionSpeciale = 1;
-            break;
-        }
 
-        if(armadaJoueur[i]->armementPrincipale == 2 && choixTir == 2){
-            //armadaJoueur[i]->armementPrincipale = 0;
-            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
-                if(armadaJoueur[elem]->armementPrincipale == 2){
-                    armadaJoueur[elem]->armementPrincipale = 0;
+            if(armadaJoueur[i]->armementPrincipale == 2 && choixTir == 2){
+                //armadaJoueur[i]->armementPrincipale = 0;
+                for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                    if(armadaJoueur[elem]->armementPrincipale == 2){
+                        armadaJoueur[elem]->armementPrincipale = 0;
+                    }
                 }
+                *actionSpeciale = 1;
+                break;
             }
-            *actionSpeciale = 1;
-            break;
-        }
 
-        if(armadaJoueur[i]->nom == CROISER && armadaJoueur[i]->armementSecondaire == 2 && choixTir == 3){
-            //armadaJoueur[i]->armementSecondaire = 0;
-            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
-                if(armadaJoueur[elem]->nom == CROISER && armadaJoueur[elem]->armementSecondaire == 2){
-                    armadaJoueur[elem]->armementSecondaire = 0;
+            if(armadaJoueur[i]->nom == CROISER && armadaJoueur[i]->armementSecondaire == 2 && choixTir == 3){
+                //armadaJoueur[i]->armementSecondaire = 0;
+                for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                    if(armadaJoueur[elem]->nom == CROISER && armadaJoueur[elem]->armementSecondaire == 2){
+                        armadaJoueur[elem]->armementSecondaire = 0;
+                    }
                 }
+                *actionSpeciale = 1;
+                break;
             }
-            *actionSpeciale = 1;
-            break;
-        }
 
-        if(armadaJoueur[i]->armementPrincipale == 3 && choixTir == 4){
-            //armadaJoueur[i]->armementPrincipale = 0;
-            for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
-                if(armadaJoueur[elem]->armementPrincipale == 3){
-                    armadaJoueur[elem]->armementPrincipale = 0;
+            if(armadaJoueur[i]->armementPrincipale == 3 && choixTir == 4){
+                //armadaJoueur[i]->armementPrincipale = 0;
+                for(int elem = 0; elem < TAILLE_FLOTTE; elem++){
+                    if(armadaJoueur[elem]->armementPrincipale == 3){
+                        armadaJoueur[elem]->armementPrincipale = 0;
+                    }
                 }
+                *actionSpeciale = 1;
+                break;
             }
-            *actionSpeciale = 1;
-            break;
         }
     }
 
     // On choisit la position :
     int posX = -1, posY = -1;
     printf("Choisir les coordonnées : \n");
+    char tmpX;
     printf("x = ");
-    scanf("%d", &posX);
-    while(posX < 0 || posX > m->taille){
+    scanf("%s", &tmpX);
+    posX = atoi(&tmpX);
+    while(posX < 1 || posX > m->taille){
         printf("Choisir un 'x' correct : \n");
         printf("x = ");
-        scanf("%d", &posX);
+        scanf("%s", &tmpX);
+        posX = atoi(&tmpX);
+        // Si c'est une petite ou grande lettre, on n'en veut pas. ^^
+        if(tmpX >= 97 && tmpX <= 122 || tmpX >= 65 && tmpX <= 90) posX = -1;
     }
+    posX = atoi(&tmpX);
     printf("Choisir pour 'y' maintenant : \n");
     char tmpY;
     printf("y = ");
@@ -1043,7 +1050,7 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, N
     // L'objectif étant de répondre à la demande : ".. à condition qu'au tour précédent il ait touché un bateau et qu'il n'ait pas utilisé de tir spécial."
     for(int i = 0; i < tmp_taille; i++){
         //printf("%d%c  ", tab[i][0]+1, 65+tab[i][1]);
-        if(tab[i][0] >= 0 && tab[i][0] <= m->taille && tab[i][1] >= 0 && tab[i][1] <= m->taille){
+        if(tab[i][0] >= 0 && tab[i][0] <= m->taille-1 && tab[i][1] >= 0 && tab[i][1] <= m->taille-1){
             if(m->value[tab[i][0]][tab[i][1]] == 'O'){
                 m->value[tab[i][0]][tab[i][1]] = '#';
                 if(m2 != NULL) m2->value[tab[i][0]][tab[i][1]] = '#';
@@ -1056,6 +1063,7 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, N
                     for(int ref = 0; ref < armadaAdversaire[num]->taille; ref++){
                         //printf("Pos %d%c \n", armadaAdversaire[num]->posX[ref]+1, 65+armadaAdversaire[num]->posY[ref]);
                         if(armadaAdversaire[num]->posX[ref] == tab[i][0] && armadaAdversaire[num]->posY[ref] == tab[i][1]){
+                            printf("Navire touche en %d%c ! \n", tab[i][0]+1, tab[i][1]+65);
                             modifierEtatNavire(tab[i][0], tab[i][1], armadaAdversaire[num]);
                             verifierNavire(m, armadaAdversaire[num]);
                             trouve = 1;
@@ -1097,7 +1105,7 @@ void modifierEtatNavire(int positionX, int positionY, Navire *n){
 
     if(n->etat != COULE){
         n->etat = TOUCHE;
-        printf("Navire touche en %d%c ! \n", positionX+1, positionY+65);
+        //printf("Navire touche en %d%c ! \n", positionX+1, positionY+65);
     }
 }
 
@@ -1705,11 +1713,11 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
 
         // Gestion des tirs spéciaux :
         int tableau_de_tir[TYPE_TIR];
-        int choixTirIA;
+        int choixTirIA = 0;
         for(int i = 0; i < TYPE_TIR; i++) tableau_de_tir[i] = 0;
         if(ordinateur->toucheNavire == 1 && ordinateur->tirSpecialPossible == 0){
             // On vérifie les tirs possibles.
-            printf("t: %d et speP : %d \n", ordinateur->toucheNavire, ordinateur->tirSpecialPossible);
+            //printf("t: %d et speP : %d \n", ordinateur->toucheNavire, ordinateur->tirSpecialPossible);
             tableau_de_tir[0] = 1;
             for(int i = 1; i < TYPE_TIR; i++){
                 if(tableau_de_tir[1] == 0 && armadaIA[i]->armementPrincipale == 1){
@@ -1730,12 +1738,41 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
             }
             // Parmis ces tirs, on choisit en random.
             choixTirIA = generationIntAleatoire(TYPE_TIR-1, 0);
-            while(tableau_de_tir[choixTirIA] != 1){
+            while(choixTirIA < 0 || choixTirIA > 4 || tableau_de_tir[choixTirIA] != 1){
                 choixTirIA = generationIntAleatoire(TYPE_TIR-1, 0);
             }
-            printf("Tir utilise : %d. \n", choixTirIA);
-            // On appel la fonction de tir, et prépare des variables pour effectuer le tir dans le while ci dessous.
+            //printf("Tir utilise : %d. \n", choixTirIA);
+            // On appel la fonction de tir plus bas, et prépare des variables pour effectuer le tir dans le 'while' juste après le 'if'.
             // En fonction du tir, on modifie tout de suite la valeur de tirSpecialPossible et on consomme tout de suite le tir.
+            if(choixTirIA == 0){
+                ordinateur->tirSpecialPossible = 0;
+            } else {
+                for(int i = 1; i < TYPE_TIR; i++){
+                    if(armadaIA[i]->armementPrincipale == 1 && choixTirIA == 1){
+                        armadaIA[i]->armementPrincipale = 0;
+                        ordinateur->tirSpecialPossible = 1;
+                        break;
+                    }
+
+                    if(armadaIA[i]->armementPrincipale == 2 && choixTirIA == 2){
+                        armadaIA[i]->armementPrincipale = 0;
+                        ordinateur->tirSpecialPossible = 1;
+                        break;
+                    }
+
+                    if(armadaIA[i]->nom == CROISER && armadaIA[i]->armementSecondaire == 2 && choixTirIA == 3){
+                        armadaIA[i]->armementSecondaire = 0;
+                        ordinateur->tirSpecialPossible = 1;
+                        break;
+                    }
+
+                    if(armadaIA[i]->armementPrincipale == 3 && choixTirIA == 4){
+                        armadaIA[i]->armementPrincipale = 0;
+                        ordinateur->tirSpecialPossible = 1;
+                        break;
+                    }
+                }
+            }
         }
 
         // On tir dans la bonne direction tant qu'on ne touche pas l'eau.
@@ -1753,6 +1790,44 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
 
                 // Si on a pas tiré à cette endroit alors on tir et on met à jour les matrices.
                 if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                    // ######## Tir ########
+                    //printf("On tir avec un %d !! \n", choixTirIA);
+                    int **tab = fonctionTir(aleaX, aleaY, choixTirIA, 1, matriceJoueur); // On utilise notre fonction qui retourne un pointeur de tableau.
+                    int tmp_taille = 0;
+                    if(choixTirIA == 0){
+                        tmp_taille = 1;
+                    } else if(choixTirIA == 1){
+                        tmp_taille = matriceJoueur->taille;
+                    } else if(choixTirIA == 4) {
+                        tmp_taille = 9;
+                    } else {
+                        tmp_taille = 5;
+                    }
+
+                    // On part du principe que l'IA n'a pas touché, comme pour le tir du joueur ..
+                    ordinateur->toucheNavire = 0;
+                    // On parcours notre tableau retourné par la fonction de tir.
+                    for(int i = 0; i < tmp_taille; i++){
+                        // On vérifi que l'on est pas en dehors de la grille puis on met à jour les matrices.
+                        if(tab[i][0] >= 0 && tab[i][0] <= matriceJoueur->taille-1 && tab[i][1] >= 0 && tab[i][1] <= matriceJoueur->taille-1){
+                            if(matriceJoueur->value[tab[i][0]][tab[i][1]] == '.'){
+                                matriceJoueur->value[tab[i][0]][tab[i][1]] = 'X';
+                                ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = 'X';
+                            }
+
+                            if(matriceJoueur->value[tab[i][0]][tab[i][1]] == 'O'){
+                                matriceJoueur->value[tab[i][0]][tab[i][1]] = '#';
+                                ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = '#';
+                                ordinateur->toucheNavire = 1;
+                            }
+
+                            //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
+                        }
+                    }
+
+                    sens = 1;
+                    //printf("Sens : %d \n", sens);
+                    /*
                     if(matriceJoueur->value[aleaX][aleaY] == '.'){
                         matriceJoueur->value[aleaX][aleaY] = 'X';
                         ordinateur->matScanner->value[aleaX][aleaY] = 'X';
@@ -1766,6 +1841,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                         ordinateur->toucheNavire = 1;
                         sens = 1; // Il reste peut être un morceau de navire.
                     }
+                    */
                 }
 
                 // Si on a déjà tiré à cette endroit sans touché .. On est arrivé au bout.
@@ -1784,6 +1860,44 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                    // ######## Tir ########
+                    //printf("On tir avec un %d !! \n", choixTirIA);
+                    int **tab = fonctionTir(aleaX, aleaY, choixTirIA, 0, matriceJoueur); // On utilise notre fonction qui retourne un pointeur de tableau.
+                    int tmp_taille = 0;
+                    if(choixTirIA == 0){
+                        tmp_taille = 1;
+                    } else if(choixTirIA == 1){
+                        tmp_taille = matriceJoueur->taille;
+                    } else if(choixTirIA == 4) {
+                        tmp_taille = 9;
+                    } else {
+                        tmp_taille = 5;
+                    }
+
+                    // On part du principe que l'IA n'a pas touché, comme pour le tir du joueur ..
+                    ordinateur->toucheNavire = 0;
+                    // On parcours notre tableau retourné par la fonction de tir.
+                    for(int i = 0; i < tmp_taille; i++){
+                        // On vérifi que l'on est pas en dehors de la grille puis on met à jour les matrices.
+                        if(tab[i][0] >= 0 && tab[i][0] <= matriceJoueur->taille-1 && tab[i][1] >= 0 && tab[i][1] <= matriceJoueur->taille-1){
+                            if(matriceJoueur->value[tab[i][0]][tab[i][1]] == '.'){
+                                matriceJoueur->value[tab[i][0]][tab[i][1]] = 'X';
+                                ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = 'X';
+                            }
+
+                            if(matriceJoueur->value[tab[i][0]][tab[i][1]] == 'O'){
+                                matriceJoueur->value[tab[i][0]][tab[i][1]] = '#';
+                                ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = '#';
+                                ordinateur->toucheNavire = 1;
+                            }
+
+                            //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
+                        }
+                    }
+
+                    sens = 1;
+                    //printf("Sens : %d \n", sens);
+                    /*
                     if(matriceJoueur->value[aleaX][aleaY] == '.'){
                         matriceJoueur->value[aleaX][aleaY] = 'X';
                         ordinateur->matScanner->value[aleaX][aleaY] = 'X';
@@ -1797,6 +1911,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                         ordinateur->toucheNavire = 1;
                         sens = 1; // Il reste peut être un morceau de navire.
                     }
+                    */
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
@@ -1814,6 +1929,44 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                    // ######## Tir ########
+                    //printf("On tir avec un %d !! \n", choixTirIA);
+                    int **tab = fonctionTir(aleaX, aleaY, choixTirIA, 1, matriceJoueur); // On utilise notre fonction qui retourne un pointeur de tableau.
+                    int tmp_taille = 0;
+                    if(choixTirIA == 0){
+                        tmp_taille = 1;
+                    } else if(choixTirIA == 1){
+                        tmp_taille = matriceJoueur->taille;
+                    } else if(choixTirIA == 4) {
+                        tmp_taille = 9;
+                    } else {
+                        tmp_taille = 5;
+                    }
+
+                    // On part du principe que l'IA n'a pas touché, comme pour le tir du joueur ..
+                    ordinateur->toucheNavire = 0;
+                    // On parcours notre tableau retourné par la fonction de tir.
+                    for(int i = 0; i < tmp_taille; i++){
+                        // On vérifi que l'on est pas en dehors de la grille puis on met à jour les matrices.
+                        if(tab[i][0] >= 0 && tab[i][0] <= matriceJoueur->taille-1 && tab[i][1] >= 0 && tab[i][1] <= matriceJoueur->taille-1){
+                            if(matriceJoueur->value[tab[i][0]][tab[i][1]] == '.'){
+                                matriceJoueur->value[tab[i][0]][tab[i][1]] = 'X';
+                                ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = 'X';
+                            }
+
+                            if(matriceJoueur->value[tab[i][0]][tab[i][1]] == 'O'){
+                                matriceJoueur->value[tab[i][0]][tab[i][1]] = '#';
+                                ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = '#';
+                                ordinateur->toucheNavire = 1;
+                            }
+
+                            //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
+                        }
+                    }
+
+                    sens = 1;
+                    //printf("Sens : %d \n", sens);
+                    /*
                     if(matriceJoueur->value[aleaX][aleaY] == '.'){
                         matriceJoueur->value[aleaX][aleaY] = 'X';
                         ordinateur->matScanner->value[aleaX][aleaY] = 'X';
@@ -1827,6 +1980,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                         ordinateur->toucheNavire = 1;
                         sens = 1; // Il reste peut être un morceau de navire.
                     }
+                    */
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
@@ -1844,6 +1998,44 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+                    // ######## Tir ########
+                    //printf("On tir avec un %d !! \n", choixTirIA);
+                    int **tab = fonctionTir(aleaX, aleaY, choixTirIA, 0, matriceJoueur); // On utilise notre fonction qui retourne un pointeur de tableau.
+                    int tmp_taille = 0;
+                    if(choixTirIA == 0){
+                        tmp_taille = 1;
+                    } else if(choixTirIA == 1){
+                        tmp_taille = matriceJoueur->taille;
+                    } else if(choixTirIA == 4) {
+                        tmp_taille = 9;
+                    } else {
+                        tmp_taille = 5;
+                    }
+
+                    // On part du principe que l'IA n'a pas touché, comme pour le tir du joueur ..
+                    ordinateur->toucheNavire = 0;
+                    // On parcours notre tableau retourné par la fonction de tir.
+                    for(int i = 0; i < tmp_taille; i++){
+                        // On vérifi que l'on est pas en dehors de la grille puis on met à jour les matrices.
+                        if(tab[i][0] >= 0 && tab[i][0] <= matriceJoueur->taille-1 && tab[i][1] >= 0 && tab[i][1] <= matriceJoueur->taille-1){
+                            if(matriceJoueur->value[tab[i][0]][tab[i][1]] == '.'){
+                                matriceJoueur->value[tab[i][0]][tab[i][1]] = 'X';
+                                ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = 'X';
+                            }
+
+                            if(matriceJoueur->value[tab[i][0]][tab[i][1]] == 'O'){
+                                matriceJoueur->value[tab[i][0]][tab[i][1]] = '#';
+                                ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = '#';
+                                ordinateur->toucheNavire = 1;
+                            }
+
+                            //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
+                        }
+                    }
+
+                    sens = 1;
+                    //printf("Sens : %d \n", sens);
+                    /*
                     if(matriceJoueur->value[aleaX][aleaY] == '.'){
                         matriceJoueur->value[aleaX][aleaY] = 'X';
                         ordinateur->matScanner->value[aleaX][aleaY] = 'X';
@@ -1857,6 +2049,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                         ordinateur->toucheNavire = 1;
                         sens = 1; // Il reste peut être un morceau de navire.
                     }
+                    */
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
@@ -1867,6 +2060,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
 
         // Si on touche l'eau (sens => 2), on regarde dans l'autre sens parce que le navire n'est peut être pas coulé entièrement.
         // Pour cela, on va modifier l'angle pour que l'IA qui regardera dans ce sens si elle n'a pas touché l'eau de l'autre côté.
+        // (aucun tir dans cette condition)
         if(sens == 2){
             if(angle == 1) ordinateur->angle = 3;
             if(angle == 2) ordinateur->angle = 4;
@@ -1969,13 +2163,13 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                 ordinateur->posYtouche = -1;
                 ordinateur->angle = 0;
                 ordinateur->etat_IA = R;
+
+                // Faire un tir en aléa pour ne pas perdre un tour ..
             }
         }
     }
 
     verifierFlotteEntiere(matriceJoueur, armadaJoueur);
-
-    //afficherInfoIA(ordinateur); // TEMPORAIRE
 }
 
 // Fin.
