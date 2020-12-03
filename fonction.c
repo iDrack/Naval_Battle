@@ -1144,15 +1144,15 @@ void verifierNavire(Matrice *m, Navire *n){
             n->etat = COULE;
             n->armementPrincipale = 4;
             n->armementSecondaire = 4;
-            printf("Le navire est en train de couler .. \n");
+            //printf("Le navire est en train de couler .. \n");
         }
     } else {
         if(n->etat == COULE){
-            printf("Navire est deja coulé .. \n");
+            //printf("Navire est deja coulé .. \n");
         }
 
         if(n->etat == OK){
-            printf("Navire sans probleme. \n");
+            //printf("Navire sans probleme. \n");
         }
     }
 }
@@ -1519,6 +1519,8 @@ void initialiserIA(Matrice *matOrigine, IA *ordinateur, int taille_matrice){
     notre_IA.posXtouche = -1;
     notre_IA.posYtouche = -1;
     notre_IA.angle = 0;
+    notre_IA.toucheNavire = 0;
+    notre_IA.tirSpecialPossible = 0;
 
     *ordinateur = notre_IA;
 }
@@ -1541,6 +1543,8 @@ void afficherInfoIA(IA *ordinateur){
     afficherMatrice(ordinateur->matrice);
     printf("Matrice scanner de la zone ennemie : \n");
     afficherMatrice(ordinateur->matScanner);
+    printf("A touche un navire ennemie : %d. \n", ordinateur->toucheNavire);
+    printf("Peut utiliser un tir spécial : %d. \n", ordinateur->tirSpecialPossible);
 }
 
 void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur){
@@ -1563,17 +1567,28 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
             aleaX = generationIntAleatoire(maxi, mini);
             aleaY = generationIntAleatoire(maxi, mini);
 
+            int uneCaseSurDeux = 0;
+            if(aleaX % 2 == 0 && aleaY % 2 == 1){
+                uneCaseSurDeux = 1;
+            }
+
+            if(aleaX % 2 == 1 && aleaY % 2 == 0){
+                uneCaseSurDeux = 1;
+            }
+
             // Si sur la matrice d'observation de l'IA, on a un '.' alors on place le tir.
-            if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
+            if(uneCaseSurDeux == 1 && ordinateur->matScanner->value[aleaX][aleaY] == '.'){
                 // Si sur la matrice du joueur, il n'y avait rien, on place un 'X' sur les deux matrices.
                 if(matriceJoueur->value[aleaX][aleaY] == '.'){
                     matriceJoueur->value[aleaX][aleaY] = 'X';
                     ordinateur->matScanner->value[aleaX][aleaY] = 'X';
+                    ordinateur->toucheNavire = 0;
                 }
                 // Par contre, s'il a un navire alors on place un '#' sur la matrice d'observation et celle du joueur.
                 if(matriceJoueur->value[aleaX][aleaY] == 'O'){
                     matriceJoueur->value[aleaX][aleaY] = '#';
                     ordinateur->matScanner->value[aleaX][aleaY] = '#';
+                    ordinateur->toucheNavire = 1;
                     touche = 1;
                 }
                 posOK = 1;
@@ -1606,11 +1621,13 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                 if(matriceJoueur->value[aleaX][aleaY-1] == '.'){
                     matriceJoueur->value[aleaX][aleaY-1] = 'X';
                     ordinateur->matScanner->value[aleaX][aleaY-1] = 'X';
+                    ordinateur->toucheNavire = 0;
                 }
                 // Par contre, s'il a un navire alors on place un '#' sur la matrice d'observation et celle du joueur. On a trouvé l'orientation !
                 if(matriceJoueur->value[aleaX][aleaY-1] == 'O'){
                     matriceJoueur->value[aleaX][aleaY-1] = '#';
                     ordinateur->matScanner->value[aleaX][aleaY-1] = '#';
+                    ordinateur->toucheNavire = 1;
                     trouve = 1;
                 }
                 // Le tir a été fait, l'angle peut être trouvé ou non, dans tout les cas on a fait un tir.
@@ -1622,11 +1639,13 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                 if(matriceJoueur->value[aleaX-1][aleaY] == '.'){
                     matriceJoueur->value[aleaX-1][aleaY] = 'X';
                     ordinateur->matScanner->value[aleaX-1][aleaY] = 'X';
+                    ordinateur->toucheNavire = 0;
                 }
 
                 if(matriceJoueur->value[aleaX-1][aleaY] == 'O'){
                     matriceJoueur->value[aleaX-1][aleaY] = '#';
                     ordinateur->matScanner->value[aleaX-1][aleaY] = '#';
+                    ordinateur->toucheNavire = 1;
                     trouve = 1;
                 }
 
@@ -1638,11 +1657,13 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                 if(matriceJoueur->value[aleaX][aleaY+1] == '.'){
                     matriceJoueur->value[aleaX][aleaY+1] = 'X';
                     ordinateur->matScanner->value[aleaX][aleaY+1] = 'X';
+                    ordinateur->toucheNavire = 0;
                 }
 
                 if(matriceJoueur->value[aleaX][aleaY+1] == 'O'){
                     matriceJoueur->value[aleaX][aleaY+1] = '#';
                     ordinateur->matScanner->value[aleaX][aleaY+1] = '#';
+                    ordinateur->toucheNavire = 1;
                     trouve = 1;
                 }
 
@@ -1654,11 +1675,13 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                 if(matriceJoueur->value[aleaX+1][aleaY] == '.'){
                     matriceJoueur->value[aleaX+1][aleaY] = 'X';
                     ordinateur->matScanner->value[aleaX+1][aleaY] = 'X';
+                    ordinateur->toucheNavire = 0;
                 }
 
                 if(matriceJoueur->value[aleaX+1][aleaY] == 'O'){
                     matriceJoueur->value[aleaX+1][aleaY] = '#';
                     ordinateur->matScanner->value[aleaX+1][aleaY] = '#';
+                    ordinateur->toucheNavire = 1;
                     trouve = 1;
                 }
 
@@ -1680,7 +1703,6 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
         int angle = ordinateur->angle;
         // On tir dans la bonne direction tant qu'on ne touche pas l'eau.
         int sens = 0;
-        printf("T1 \n");
         while(sens == 0){
             if(angle == 1){
                 // Si on a déjà touché à cette endroit alors on décale.
@@ -1697,12 +1719,14 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     if(matriceJoueur->value[aleaX][aleaY] == '.'){
                         matriceJoueur->value[aleaX][aleaY] = 'X';
                         ordinateur->matScanner->value[aleaX][aleaY] = 'X';
+                        ordinateur->toucheNavire = 0;
                         sens = 2; // On arrive au bout d'un côté !
                     }
 
                     if(matriceJoueur->value[aleaX][aleaY] == 'O'){
                         matriceJoueur->value[aleaX][aleaY] = '#';
                         ordinateur->matScanner->value[aleaX][aleaY] = '#';
+                        ordinateur->toucheNavire = 1;
                         sens = 1; // Il reste peut être un morceau de navire.
                     }
                 }
@@ -1726,12 +1750,14 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     if(matriceJoueur->value[aleaX][aleaY] == '.'){
                         matriceJoueur->value[aleaX][aleaY] = 'X';
                         ordinateur->matScanner->value[aleaX][aleaY] = 'X';
+                        ordinateur->toucheNavire = 0;
                         sens = 2; // On arrive au bout d'un côté !
                     }
 
                     if(matriceJoueur->value[aleaX][aleaY] == 'O'){
                         matriceJoueur->value[aleaX][aleaY] = '#';
                         ordinateur->matScanner->value[aleaX][aleaY] = '#';
+                        ordinateur->toucheNavire = 1;
                         sens = 1; // Il reste peut être un morceau de navire.
                     }
                 }
@@ -1754,12 +1780,14 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     if(matriceJoueur->value[aleaX][aleaY] == '.'){
                         matriceJoueur->value[aleaX][aleaY] = 'X';
                         ordinateur->matScanner->value[aleaX][aleaY] = 'X';
+                        ordinateur->toucheNavire = 0;
                         sens = 2; // On arrive au bout d'un côté !
                     }
 
                     if(matriceJoueur->value[aleaX][aleaY] == 'O'){
                         matriceJoueur->value[aleaX][aleaY] = '#';
                         ordinateur->matScanner->value[aleaX][aleaY] = '#';
+                        ordinateur->toucheNavire = 1;
                         sens = 1; // Il reste peut être un morceau de navire.
                     }
                 }
@@ -1782,12 +1810,14 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     if(matriceJoueur->value[aleaX][aleaY] == '.'){
                         matriceJoueur->value[aleaX][aleaY] = 'X';
                         ordinateur->matScanner->value[aleaX][aleaY] = 'X';
+                        ordinateur->toucheNavire = 0;
                         sens = 2; // On arrive au bout d'un côté !
                     }
 
                     if(matriceJoueur->value[aleaX][aleaY] == 'O'){
                         matriceJoueur->value[aleaX][aleaY] = '#';
                         ordinateur->matScanner->value[aleaX][aleaY] = '#';
+                        ordinateur->toucheNavire = 1;
                         sens = 1; // Il reste peut être un morceau de navire.
                     }
                 }
@@ -1798,7 +1828,6 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
             }
         }
 
-        printf("T2 \n");
         // Si on touche l'eau (sens => 2), on regarde dans l'autre sens parce que le navire n'est peut être pas coulé entièrement.
         // Pour cela, on va modifier l'angle pour que l'IA qui regardera dans ce sens si elle n'a pas touché l'eau de l'autre côté.
         if(sens == 2){
@@ -1813,7 +1842,6 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
             aleaX = ordinateur->posXtouche;
             aleaY = ordinateur->posYtouche;
             angle = ordinateur->angle;
-            printf("T3 \n");
             // On va donc vérifier si on a un 'X' après un '#' dans le nouveau sens (si c'est le cas on repassera en R sinon on reste en D mais avec un nouveau angle).
             while(verification == 0){
                 if(angle == 1){
@@ -1909,6 +1937,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
     }
 
     verifierFlotteEntiere(matriceJoueur, armadaJoueur);
+    afficherInfoIA(ordinateur); // TEMPORAIRE
 }
 
 // Fin.

@@ -81,7 +81,7 @@ int main(){
     printf("Flottes : \n");
     printf("Votre armada : \n");
     afficherArmada(armadaJoueur);
-    printf("Armada adverse : \n");
+    printf("\nArmada adverse : \n");
     afficherArmada(armadaAdversaire);
 
     // --- Fin Boucle principal ---
