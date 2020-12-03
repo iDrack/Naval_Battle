@@ -75,7 +75,6 @@ int main(){
             // Puis on fait jouer l'automate.
             printf("\033[0;36mvotre adversaire a joué.\033[0m\n\n");
             tourDeNotreIA(&ordinateur, matriceJoueur, armadaJoueur, armadaAdversaire);
-            afficherPlateauDeJeu(matriceJoueur, matriceIntermediaire);
         }
         puts("-------------------------------------------------------------------------------------------");
         // On augmente le nombre de tours.
@@ -95,6 +94,7 @@ int main(){
     printf("Flottes : \n");
     printf("Votre armada : \n");
     afficherArmada(armadaJoueur);
+    puts("-------------------------------------------------------------------------------------------");
     printf("\nArmada adverse : \n");
     afficherArmada(armadaAdversaire);
 
