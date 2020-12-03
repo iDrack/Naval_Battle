@@ -1326,8 +1326,8 @@ int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Matrice *m4, Navire
         printf("\033[0;31mAucune sauvegarde trouvée.\033[0;m\n");
         return 2;
     }
-    // On modifie le tour 
-    *tour=(t); 
+    // On modifie le tour
+    *tour=(t);
     // On récupére la taille des matrices puis on les recréer
     fscanf(f,"%d",&t);
     m->taille = t;
@@ -1609,6 +1609,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     matriceJoueur->value[aleaX][aleaY] = 'X';
                     ordinateur->matScanner->value[aleaX][aleaY] = 'X';
                     ordinateur->toucheNavire = 0;
+                    printf("Tir en %d%c dans l'eau. \n", aleaX+1, aleaY+65);
                 }
                 // Par contre, s'il a un navire alors on place un '#' sur la matrice d'observation et celle du joueur.
                 if(matriceJoueur->value[aleaX][aleaY] == 'O'){
@@ -1616,6 +1617,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     ordinateur->matScanner->value[aleaX][aleaY] = '#';
                     ordinateur->toucheNavire = 1;
                     touche = 1;
+                    printf("Tir en %d%c à touché. \n", aleaX+1, aleaY+65);
                 }
                 posOK = 1;
             }
@@ -1648,6 +1650,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     matriceJoueur->value[aleaX][aleaY-1] = 'X';
                     ordinateur->matScanner->value[aleaX][aleaY-1] = 'X';
                     ordinateur->toucheNavire = 0;
+                    printf("Tir en %d%c dans l'eau. \n", aleaX+1, aleaY+65-1);
                 }
                 // Par contre, s'il a un navire alors on place un '#' sur la matrice d'observation et celle du joueur. On a trouvé l'orientation !
                 if(matriceJoueur->value[aleaX][aleaY-1] == 'O'){
@@ -1655,6 +1658,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     ordinateur->matScanner->value[aleaX][aleaY-1] = '#';
                     ordinateur->toucheNavire = 1;
                     trouve = 1;
+                    printf("Tir en %d%c à touché. \n", aleaX+1, aleaY+65-1);
                 }
                 // Le tir a été fait, l'angle peut être trouvé ou non, dans tout les cas on a fait un tir.
                 angleOK = 1;
@@ -1666,6 +1670,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     matriceJoueur->value[aleaX-1][aleaY] = 'X';
                     ordinateur->matScanner->value[aleaX-1][aleaY] = 'X';
                     ordinateur->toucheNavire = 0;
+                    printf("Tir en %d%c dans l'eau. \n", aleaX, aleaY+65);
                 }
 
                 if(matriceJoueur->value[aleaX-1][aleaY] == 'O'){
@@ -1673,6 +1678,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     ordinateur->matScanner->value[aleaX-1][aleaY] = '#';
                     ordinateur->toucheNavire = 1;
                     trouve = 1;
+                    printf("Tir en %d%c à touché. \n", aleaX, aleaY+65);
                 }
 
                 angleOK = 1;
@@ -1684,6 +1690,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     matriceJoueur->value[aleaX][aleaY+1] = 'X';
                     ordinateur->matScanner->value[aleaX][aleaY+1] = 'X';
                     ordinateur->toucheNavire = 0;
+                    printf("Tir en %d%c dans l'eau. \n", aleaX+1, aleaY+65+1);
                 }
 
                 if(matriceJoueur->value[aleaX][aleaY+1] == 'O'){
@@ -1691,6 +1698,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     ordinateur->matScanner->value[aleaX][aleaY+1] = '#';
                     ordinateur->toucheNavire = 1;
                     trouve = 1;
+                    printf("Tir en %d%c à touché. \n", aleaX+1, aleaY+65+1);
                 }
 
                 angleOK = 1;
@@ -1702,6 +1710,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     matriceJoueur->value[aleaX+1][aleaY] = 'X';
                     ordinateur->matScanner->value[aleaX+1][aleaY] = 'X';
                     ordinateur->toucheNavire = 0;
+                    printf("Tir en %d%c dans l'eau. \n", aleaX+2, aleaY+65);
                 }
 
                 if(matriceJoueur->value[aleaX+1][aleaY] == 'O'){
@@ -1709,6 +1718,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     ordinateur->matScanner->value[aleaX+1][aleaY] = '#';
                     ordinateur->toucheNavire = 1;
                     trouve = 1;
+                    printf("Tir en %d%c à touché. \n", aleaX+2, aleaY+65);
                 }
 
                 angleOK = 1;
@@ -1830,12 +1840,14 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                             if(matriceJoueur->value[tab[i][0]][tab[i][1]] == '.'){
                                 matriceJoueur->value[tab[i][0]][tab[i][1]] = 'X';
                                 ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = 'X';
+                                printf("Tir en %d%c dans l'eau. \n", tab[i][0]+1, tab[i][1]+65);
                             }
 
                             if(matriceJoueur->value[tab[i][0]][tab[i][1]] == 'O'){
                                 matriceJoueur->value[tab[i][0]][tab[i][1]] = '#';
                                 ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = '#';
                                 ordinateur->toucheNavire = 1;
+                                printf("Tir en %d%c à touché. \n", tab[i][0]+1, tab[i][1]+65);
                             }
 
                             //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
@@ -1900,12 +1912,14 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                             if(matriceJoueur->value[tab[i][0]][tab[i][1]] == '.'){
                                 matriceJoueur->value[tab[i][0]][tab[i][1]] = 'X';
                                 ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = 'X';
+                                printf("Tir en %d%c dans l'eau. \n", tab[i][0]+1, tab[i][1]+65);
                             }
 
                             if(matriceJoueur->value[tab[i][0]][tab[i][1]] == 'O'){
                                 matriceJoueur->value[tab[i][0]][tab[i][1]] = '#';
                                 ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = '#';
                                 ordinateur->toucheNavire = 1;
+                                printf("Tir en %d%c à touché. \n", tab[i][0]+1, tab[i][1]+65);
                             }
 
                             //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
@@ -1969,12 +1983,14 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                             if(matriceJoueur->value[tab[i][0]][tab[i][1]] == '.'){
                                 matriceJoueur->value[tab[i][0]][tab[i][1]] = 'X';
                                 ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = 'X';
+                                printf("Tir en %d%c dans l'eau. \n", tab[i][0]+1, tab[i][1]+65);
                             }
 
                             if(matriceJoueur->value[tab[i][0]][tab[i][1]] == 'O'){
                                 matriceJoueur->value[tab[i][0]][tab[i][1]] = '#';
                                 ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = '#';
                                 ordinateur->toucheNavire = 1;
+                                printf("Tir en %d%c à touché. \n", tab[i][0]+1, tab[i][1]+65);
                             }
 
                             //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
@@ -2038,12 +2054,14 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                             if(matriceJoueur->value[tab[i][0]][tab[i][1]] == '.'){
                                 matriceJoueur->value[tab[i][0]][tab[i][1]] = 'X';
                                 ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = 'X';
+                                printf("Tir en %d%c dans l'eau. \n", tab[i][0]+1, tab[i][1]+65);
                             }
 
                             if(matriceJoueur->value[tab[i][0]][tab[i][1]] == 'O'){
                                 matriceJoueur->value[tab[i][0]][tab[i][1]] = '#';
                                 ordinateur->matScanner->value[tab[i][0]][tab[i][1]] = '#';
                                 ordinateur->toucheNavire = 1;
+                                printf("Tir en %d%c à touché. \n", tab[i][0]+1, tab[i][1]+65);
                             }
 
                             //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
