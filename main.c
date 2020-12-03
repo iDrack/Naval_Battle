@@ -60,7 +60,7 @@ int main(){
             // Durant le tour de l'IA, on affiche la matrice intermédiaire, une matrice où le joueur peut voir là où il a tiré mais il ne verra pas les bateaux adverses.
             // Puis on fait jouer l'automate.
             printf("\033[0;36mvotre adversaire a joué.\033[0m\n\n");
-            tourDeNotreIA(&ordinateur, matriceJoueur, armadaJoueur);
+            tourDeNotreIA(&ordinateur, matriceJoueur, armadaJoueur, armadaAdversaire);
             afficherPlateauDeJeu(matriceJoueur, matriceIntermediaire);
         }
         puts("-------------------------------------------------------------------------------------------");

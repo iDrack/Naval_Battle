@@ -97,6 +97,6 @@ void initialiserIA(Matrice *matOrigine, IA *ordinateur, int taille_matrice);
 // Fonction "afficherInfoIA" permettant d'afficher les informations de notre IA.
 void afficherInfoIA(IA *ordinateur);
 // Fonction "tourDeNotreIA" permettant à notre IA d'effectue ces actions sur la durée.
-void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur);
+void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur, Navire **armadaIA);
 
 #endif

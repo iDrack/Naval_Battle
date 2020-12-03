@@ -1547,13 +1547,14 @@ void afficherInfoIA(IA *ordinateur){
     printf("Peut utiliser un tir spécial : %d. \n", ordinateur->tirSpecialPossible);
 }
 
-void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur){
+void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur, Navire **armadaIA){
     /*
         Permet à notre IA d'eefctuer une tir.
         Param. :
             ordinateur : c'est l'adresse de notre IA, type : adresse de l'IA.
             matriceJoueur : matrice du joueur avec ces navires, type : pointeur de Matrice.
             armadaJoueur : la flotte entière du joueur, type : tableau de pointeurs de Navire.
+            armadaIA : la flotte entière de l'IA, type : tableau de pointeurs de Navire.
     */
     int aleaX, aleaY;
     int maxi = matriceJoueur->taille-1, mini = 0;
@@ -1567,7 +1568,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
             aleaX = generationIntAleatoire(maxi, mini);
             aleaY = generationIntAleatoire(maxi, mini);
 
-            int uneCaseSurDeux = 0;
+            int uneCaseSurDeux = 0; // Permet (lors de la recherche uniquement) de tiré une case sur deux pour détecter un navire !
             if(aleaX % 2 == 0 && aleaY % 2 == 1){
                 uneCaseSurDeux = 1;
             }
@@ -1701,6 +1702,42 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
         aleaX = ordinateur->posXtouche;
         aleaY = ordinateur->posYtouche;
         int angle = ordinateur->angle;
+
+        // Gestion des tirs spéciaux :
+        int tableau_de_tir[TYPE_TIR];
+        int choixTirIA;
+        for(int i = 0; i < TYPE_TIR; i++) tableau_de_tir[i] = 0;
+        if(ordinateur->toucheNavire == 1 && ordinateur->tirSpecialPossible == 0){
+            // On vérifie les tirs possibles.
+            printf("t: %d et speP : %d \n", ordinateur->toucheNavire, ordinateur->tirSpecialPossible);
+            tableau_de_tir[0] = 1;
+            for(int i = 1; i < TYPE_TIR; i++){
+                if(tableau_de_tir[1] == 0 && armadaIA[i]->armementPrincipale == 1){
+                    tableau_de_tir[1] = 1;
+                }
+
+                if(tableau_de_tir[2] == 0 && armadaIA[i]->armementPrincipale == 2){
+                    tableau_de_tir[2] = 1;
+                }
+
+                if(tableau_de_tir[3] == 0 && armadaIA[i]->nom == CROISER && armadaIA[i]->armementSecondaire == 2){
+                    tableau_de_tir[3] = 1;
+                }
+
+                if(tableau_de_tir[4] == 0 && armadaIA[i]->armementPrincipale == 3){
+                    tableau_de_tir[4] = 1;
+                }
+            }
+            // Parmis ces tirs, on choisit en random.
+            choixTirIA = generationIntAleatoire(TYPE_TIR-1, 0);
+            while(tableau_de_tir[choixTirIA] != 1){
+                choixTirIA = generationIntAleatoire(TYPE_TIR-1, 0);
+            }
+            printf("Tir utilise : %d. \n", choixTirIA);
+            // On appel la fonction de tir, et prépare des variables pour effectuer le tir dans le while ci dessous.
+            // En fonction du tir, on modifie tout de suite la valeur de tirSpecialPossible et on consomme tout de suite le tir.
+        }
+
         // On tir dans la bonne direction tant qu'on ne touche pas l'eau.
         int sens = 0;
         while(sens == 0){
@@ -1937,7 +1974,8 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
     }
 
     verifierFlotteEntiere(matriceJoueur, armadaJoueur);
-    afficherInfoIA(ordinateur); // TEMPORAIRE
+
+    //afficherInfoIA(ordinateur); // TEMPORAIRE
 }
 
 // Fin.
