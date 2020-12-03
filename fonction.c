@@ -570,8 +570,6 @@ void placementAleatoire(Matrice *m, Navire **armada){
             armada : liste des navire du joueur ou de l'adversaire, type : liste de pointeur de Navire.
     */
     generationArmadaStandard(m, armada);
-    printf("Placement aleatoire .. \n\n");
-
     int **tableau2D = (int **)malloc(m->taille * sizeof(int*)); // Mémoire (lignes).
     // Mémoire (colonnes).
     for(char i = 0; i < m->taille; i++){
@@ -698,7 +696,6 @@ void generationArmadaStandard(Matrice *m, Navire **armada){
             armada : notre tableau de navire (pointeur), type : tableau de pointeur de navire.
     */
     NavireType nt;
-    printf("Creation d'une flotte standard .. \n");
 
     for(int i = 0; i < TAILLE_FLOTTE; i++){
         // On place en mémoire le navire.
@@ -905,7 +902,6 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, N
         }
     }
     printf("Sauvegarder [5], ");
-    printf("Charger [6], ");
     printf("Tir normal [0]. \n");
     int tmpChoix = -1;
     printf(">");
@@ -922,10 +918,6 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Navire **armadaJoueur, N
             scanf("%d", &tmp);
         }
         if(tmp == 1)exit(EXIT_SUCCESS);
-    }if(choixTir == 6){
-        charger(&tour, m3, m, m2, armadaJoueur, armadaAdversaire);
-        puts("\033[0;32mPartie chargée.\033[0;m");
-        return;
     }
     printf("\n");
     while(choixTir < 0 || choixTir > 5 || tableau_de_tir[choixTir] != 1){
@@ -1279,7 +1271,7 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, M
     fclose(f);
 }
 
-void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navire **aA){
+int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navire **aA){
     /*
         Permet de charger une partie sauvegarder.
         Param. :
@@ -1289,20 +1281,22 @@ void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navir
             m3 : Matrice de l'adversaire que l'on affiche, Type : pointeur de Matrice
             aJ : armada du joueur, Type : pointeur de tableau de Navire
             aA : armada de l'adversaire, Type : pointeur de tableau de Navire
+        Return :
+            Entier déterminant si le chargement à réussit.
     */
     int t;
     char n, e, x, y, tmp;
     FILE *f = fopen(".save","r");
     // On récupére le tour
-    t = fgetc(f);
+    //t = fgetc(f);
+    fscanf(f,"%d",&t);
     // Avant de continuer, on vérifie bien que le fichier n'est pas vide
     if(t == -1){
         printf("\033[0;31mAucune sauvegarde trouvée.\033[0;m\n");
-        return;
+        return 2;
     }
     // On modifie le tour 
-    *tour=(t-48); 
-    printf("%d\n",*tour);
+    *tour=(t); 
     // On récupére la taille des matrices puis on les recréer
     fscanf(f,"%d",&t);
     m->taille = t;
@@ -1431,6 +1425,8 @@ void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navir
         }
     }
     fclose(f);
+    puts("\033[0;32mPartie chargée.\033[0;m");
+    return 1;
 }
 
 void afficherPlateauDeJeu(Matrice *mat_1, Matrice *mat_2){

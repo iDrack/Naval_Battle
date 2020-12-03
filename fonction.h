@@ -89,7 +89,7 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, M
 // Fonction "afficherPlateauDeJeu" qui permet d'afficher dans la sortie standard les matrices passée en paramètre.
 void afficherPlateauDeJeu(Matrice *mat_1, Matrice *mat_2);
 // Fonction "charger" permet de charger une partie sauvegarder.
-void charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navire **aA);
+int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Navire **aJ, Navire **aA);
 // Fonction "initialiserIA" permettant d'initialiser notre IA
 void initialiserIA(Matrice *matOrigine, IA *ordinateur, int taille_matrice);
 // Fonction "afficherInfoIA" permettant d'afficher les informations de notre IA.

@@ -8,32 +8,48 @@
 int main(){
     srand(time(NULL));
     // Initialisation de toutes les variables
-    Navire *armadaJoueur[TAILLE_FLOTTE];
-    Navire *armadaAdversaire[TAILLE_FLOTTE];
-    int taille_matrice = 10, choix = 0, tour = 1, toucheJoueur = 0, joueurTirSpecial = 0;
+    Navire *armadaJoueur[TAILLE_FLOTTE], *armadaAdversaire[TAILLE_FLOTTE];
+    // Il faut générer les matrices au moins une fois.
+    Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", 10); // Matrice de l'IA.
+    Matrice *matriceIntermediaire = genererMatriceVide("Matrice de l'adversaire", 10); // Matrice Brouillard pour le joueur.
+    Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", 10); // Matrice du joueur.
+    // Pareil pour les flottes.
+    placementAleatoire(matriceJoueur, armadaJoueur);
+    placementAleatoire(matriceAdversaire, armadaAdversaire);
+    int taille_matrice = 10, choix = 0, choix2 = 0, tour, toucheJoueur = 0, joueurTirSpecial = 0;
     IA ordinateur;
 
     // ----- Menu Principal -----
-
-    printf("\nBienvenue dans la bataille navale.\n\n");
-    choisirTaille(&taille_matrice); //Choix de la taille du champs de bataille.
-    // Initialisation des matrice.
-    Matrice *matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice); // Matrice de l'IA.
-    Matrice *matriceIntermediaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice); // Matrice Brouillard pour le joueur.
-    Matrice *matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice); // Matrice du joueur.
-
-    // Laisse le choix au joueur de creer sa flotte ou non.
-    while(choix < 1 || choix > 2){
-        printf("Voulez-vous créer votre armada ?\n1. Oui\n2. Non\n>");
-        scanf("%d",&choix);
+    printf("Bienvenu\n");
+    while(choix2 < 1 || choix2 > 2){
+        printf("Voulez-vous charger une partie ?\n1. Oui\n2. Non\n>");
+        scanf("%d",&choix2);
         printf("\n");
     }
-    if(choix == 1){
-        genererArmadaJoueur(matriceJoueur,armadaJoueur); // Quand le joueur veut choisir ses navires.
-    }else if(choix==2){
-        placementAleatoire(matriceJoueur, armadaJoueur); // Quand le joueur ne place pas lui meme ses navires.
+    if(choix2 == 1){
+        choix2 = charger(&tour, matriceJoueur, matriceAdversaire, matriceIntermediaire, armadaJoueur, armadaAdversaire);
     }
-    placementAleatoire(matriceAdversaire, armadaAdversaire); // Generation de la grille de l'adversaire.
+    if(choix2 == 2){
+        tour = 1;
+        choisirTaille(&taille_matrice); //Choix de la taille du champs de bataille.
+        // Initialisation des matrices.
+        matriceAdversaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice); // Matrice de l'IA.
+        matriceIntermediaire = genererMatriceVide("Matrice de l'adversaire", taille_matrice); // Matrice Brouillard pour le joueur.
+        matriceJoueur = genererMatriceVide("Matrice du joueur", taille_matrice); // Matrice du joueur.
+        // Laisse le choix au joueur de creer sa flotte ou non.
+        while(choix < 1 || choix > 2){
+            printf("Voulez-vous créer votre armada ?\n1. Oui\n2. Non\n>");
+            scanf("%d",&choix);
+            printf("\n");
+        }
+        if(choix == 1){
+            genererArmadaJoueur(matriceJoueur,armadaJoueur); // Quand le joueur veut choisir ses navires.
+        }else if(choix==2){
+            placementAleatoire(matriceJoueur, armadaJoueur); // Quand le joueur ne place pas lui meme ses navires.
+        }
+        placementAleatoire(matriceAdversaire, armadaAdversaire); // Generation de la grille de l'adversaire.        
+    }
+
     // Initialisation de l'IA :
     initialiserIA(matriceAdversaire, &ordinateur, taille_matrice);
     // ---- Fin Menu Principal ----
