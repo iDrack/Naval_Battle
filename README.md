@@ -25,7 +25,7 @@ Jeu de bataille naval réalisé par Charles Kempa & Thomas Dignoire.
 * Les cases comportant des coups "dans l'eau" sont marquées d'un "X".
 * Les cases où un tir a touché sont marquées par un "#".
 
-### Règles précises
+#### Règles précises
 
 * Chaque joueur a une flotte (standard) composée de 5 navires : 1 porte-avion (5 cases), 1 croiseur (4 cases), 1 destroyer (3 cases), 1 sous-marin (3 cases), 1 torpilleur (2 cases).
 * Les bateaux sont placés aléatoirement sur la grille au début de la partie, de telle sorte qu'ils ne se touchent pas.
@@ -37,22 +37,22 @@ Si le navire concerné est encore en jeu, le joueur peut utiliser chacun de ces 
 -> Tir en "plus" (croiseur) : permet de viser en une seule fois un "+" centré sur une case et de 3.
 -> Tir en carré (porte avion) : permet de viser en une seule fois un carré de 3 cases par 3 centré.
 
-### Intelligence Artificielle
+#### Intelligence Artificielle
 
 * L'ordinateur (IA) joue une case sur deux.
 * L'ordinateur (IA) posséde 3 états : R (recherche un navire), O (le navire est trouvé, on détermine l'orientation) et D (on coule le navire).
 
-### Contraintes techniques
+#### Contraintes techniques
 
 * Pour chacun des différents tirs, y compris le tir standard, une fonction renvoie un pointeur sur un tableau allouée dynamiquement des différentes cases cibles, en fonction des coordonnées centrales entrées en paramètres.
 * La compilation est effectué par Makefile.
-* Le programme comporte, pour le moment, quelques fuite mémoire.
+* ```diff - Le programme comporte, pour le moment, quelques fuite mémoire. ```
 * Le projet est à été fait en binôme.
 
 ## Bonus
 
-* 
-* 
-* 
-* 
+* Possibilité au joueur de choisir où placer ses navires.
+* Possibilité de sauvegarder une partie et d'y revenir.
+* Possibilité de choisir 5 navires dans une listes de navires (tous entre 1 et 5 cases), en choisissant éventuellement plusieurs fois le même type de navire.
+* La taille de la grille peut être modifié.
 * 
