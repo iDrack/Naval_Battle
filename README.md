@@ -58,7 +58,10 @@ Si le navire concerné est encore en jeu, le joueur peut utiliser chacun de ces 
 * La taille de la grille peut être modifié.
 * ``Pas de socket pour le moment. ``
 
-## Liens utiles
+## Information et liens utiles
 
 * (gitHub)[https://github.com/iDrack/Naval_Battle] : https://github.com/iDrack/Naval_Battle
 * (Trello)[https://trello.com/b/zV3UGXll/bataille-navale] : https://trello.com/b/zV3UGXll/bataille-navale
+
+- Les fonctions possédent une en-tête avec une description de celle-ci avec le détail de ces paramètres. 
+N'hésitez pas à jetter un oeil sur le code, propre et commenté.

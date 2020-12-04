@@ -870,7 +870,7 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Matrice *m4, Navire **ar
             armadaAdversaire : la flotte de l'adversaire, type : tableau de pointeur de navire.
             toucheNavire : on attend l'adresse d'un entier permettant de savoir si le tour d'avant il y a eu une touche ou pas, type : adresse (donc pointeur) d'entier.
             actionSpeciale : on attend aussi l'adresse d'un entier pour, cette fois, savoir s'il est possible d'effectuer un tir spéciale ou pas, type : adresse (donc pointeur) d'entier.
-            tour : tour actuel, type : int
+            tour : tour actuel, type : int (entier).
     */
     int choixTir, direction;
     int tableau_de_tir[TYPE_TIR];
@@ -1127,7 +1127,7 @@ void verifierFlotteEntiere(Matrice *m, Navire **armada){
 
 void verifierNavire(Matrice *m, Navire *n){
     /*
-        Permet de vérifier l'état d'un seul navire de l'armada passé en paramètre (vérifie s'il est coulé ou non).
+        Permet de vérifier l'état d'un seul navire de l'armada passé en paramètre (vérifie s'il est touché, coulé ou non).
         Param. :
             m : pointeur de matrice se situant la flotte, type : pointeur de Matrice.
             n : navire à vérifier, type : pointeur de navire.
@@ -1552,7 +1552,7 @@ void initialiserIA(Matrice *matOrigine, IA *ordinateur, int taille_matrice){
 
 void afficherInfoIA(IA *ordinateur){
     /*
-        Permet d'afficher l'état de l'IA.
+        Permet d'afficher l'état de l'IA, utilisé lors du développement uniquement.
         Param. :
             ordinateur : c'est l'adresse de notre IA, type : adresse de l'IA.
     */

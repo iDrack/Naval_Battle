@@ -95,7 +95,8 @@ int main(){
         // Si le joueur n'a plus de navire, l'IA gagne.
         printf("\n\033[0;31mMalheureusement votre flotte a été détruite. Défaite.\033[0m\n");
     }
-    // Affichage des statstiques
+
+    // Affichage des statstiques :
     printf("Champ de bataille : \n");
     afficherPlateauDeJeu(matriceJoueur, matriceAdversaire);
     printf("Flottes : \n");
@@ -107,13 +108,11 @@ int main(){
 
     // --- Fin Boucle principal ---
 
-/*
-    // -------- Zone Test --------
-
-    //
-
-    // -------- Zone Test --------
-*/
+    // On libére toute la mémoire prise.
+    free(matriceAdversaire);
+    free(matriceIntermediaire);
+    free(matriceJoueur);
+    free(ordinateur.matScanner);
 
     return EXIT_SUCCESS;
 }
