@@ -46,7 +46,7 @@ Si le navire concerné est encore en jeu, le joueur peut utiliser chacun de ces 
 
 * Pour chacun des différents tirs, y compris le tir standard, une fonction renvoie un pointeur sur un tableau allouée dynamiquement des différentes cases cibles, en fonction des coordonnées centrales entrées en paramètres.
 * La compilation est effectué par Makefile.
-* <span style="color: red"> Le programme comporte, pour le moment, quelques fuite mémoire. </span>
+* ``Le programme comporte, pour le moment, quelques fuites mémoire.``
 * Le projet est à été fait en binôme.
 
 ## Bonus (4/5)
@@ -55,4 +55,4 @@ Si le navire concerné est encore en jeu, le joueur peut utiliser chacun de ces 
 * Possibilité de sauvegarder une partie et d'y revenir.
 * Possibilité de choisir 5 navires dans une listes de navires (tous entre 1 et 5 cases), en choisissant éventuellement plusieurs fois le même type de navire.
 * La taille de la grille peut être modifié.
-* 
+* -
