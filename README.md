@@ -46,10 +46,10 @@ Si le navire concerné est encore en jeu, le joueur peut utiliser chacun de ces 
 
 * Pour chacun des différents tirs, y compris le tir standard, une fonction renvoie un pointeur sur un tableau allouée dynamiquement des différentes cases cibles, en fonction des coordonnées centrales entrées en paramètres.
 * La compilation est effectué par Makefile.
-* ```diff - Le programme comporte, pour le moment, quelques fuite mémoire. ```
+* <span style="color: red"> Le programme comporte, pour le moment, quelques fuite mémoire. </span>
 * Le projet est à été fait en binôme.
 
-## Bonus
+## Bonus (4/5)
 
 * Possibilité au joueur de choisir où placer ses navires.
 * Possibilité de sauvegarder une partie et d'y revenir.
