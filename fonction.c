@@ -1149,11 +1149,11 @@ void verifierNavire(Matrice *m, Navire *n){
         }
     } else {
         if(n->etat == COULE){
-            //printf("Navire est deja coulé .. \n");
+            printf("Navire est deja coulé .. \n");
         }
 
         if(n->etat == OK){
-            //printf("Navire sans probleme. \n");
+            //printf("Navire sans problèmes. \n");
         }
     }
 }
