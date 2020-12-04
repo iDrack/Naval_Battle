@@ -1149,7 +1149,7 @@ void verifierNavire(Matrice *m, Navire *n){
         }
     } else {
         if(n->etat == COULE){
-            printf("Navire est deja coulé .. \n");
+            //printf("Navire est deja coulé .. \n");
         }
 
         if(n->etat == OK){
@@ -1737,6 +1737,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
         aleaX = ordinateur->posXtouche;
         aleaY = ordinateur->posYtouche;
         int angle = ordinateur->angle;
+        int tirEffectue = 0;
 
         // Gestion des tirs spéciaux :
         int tableau_de_tir[TYPE_TIR];
@@ -1744,7 +1745,6 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
         for(int i = 0; i < TYPE_TIR; i++) tableau_de_tir[i] = 0;
         if(ordinateur->toucheNavire == 1 && ordinateur->tirSpecialPossible == 0){
             // On vérifie les tirs possibles.
-            //printf("t: %d et speP : %d \n", ordinateur->toucheNavire, ordinateur->tirSpecialPossible);
             tableau_de_tir[0] = 1;
             for(int i = 1; i < TYPE_TIR; i++){
                 if(tableau_de_tir[1] == 0 && armadaIA[i]->armementPrincipale == 1){
@@ -1763,12 +1763,13 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                     tableau_de_tir[4] = 1;
                 }
             }
+
             // Parmis ces tirs, on choisit en random.
             choixTirIA = generationIntAleatoire(TYPE_TIR-1, 0);
             while(choixTirIA < 0 || choixTirIA > 4 || tableau_de_tir[choixTirIA] != 1){
                 choixTirIA = generationIntAleatoire(TYPE_TIR-1, 0);
             }
-            //printf("Tir utilise : %d. \n", choixTirIA);
+
             // On appel la fonction de tir plus bas, et prépare des variables pour effectuer le tir dans le 'while' juste après le 'if'.
             // En fonction du tir, on modifie tout de suite la valeur de tirSpecialPossible et on consomme tout de suite le tir.
             if(choixTirIA == 0){
@@ -1818,7 +1819,6 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                 // Si on a pas tiré à cette endroit alors on tir et on met à jour les matrices.
                 if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
                     // ######## Tir ########
-                    //printf("On tir avec un %d !! \n", choixTirIA);
                     int **tab = fonctionTir(aleaX, aleaY, choixTirIA, 1, matriceJoueur); // On utilise notre fonction qui retourne un pointeur de tableau.
                     int tmp_taille = 0;
                     if(choixTirIA == 0){
@@ -1849,28 +1849,11 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                                 ordinateur->toucheNavire = 1;
                                 printf("Tir en %d%c à touché. \n", tab[i][0]+1, tab[i][1]+65);
                             }
-
-                            //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
                         }
                     }
 
                     sens = 1;
-                    //printf("Sens : %d \n", sens);
-                    /*
-                    if(matriceJoueur->value[aleaX][aleaY] == '.'){
-                        matriceJoueur->value[aleaX][aleaY] = 'X';
-                        ordinateur->matScanner->value[aleaX][aleaY] = 'X';
-                        ordinateur->toucheNavire = 0;
-                        sens = 2; // On arrive au bout d'un côté !
-                    }
-
-                    if(matriceJoueur->value[aleaX][aleaY] == 'O'){
-                        matriceJoueur->value[aleaX][aleaY] = '#';
-                        ordinateur->matScanner->value[aleaX][aleaY] = '#';
-                        ordinateur->toucheNavire = 1;
-                        sens = 1; // Il reste peut être un morceau de navire.
-                    }
-                    */
+                    tirEffectue = 1;
                 }
 
                 // Si on a déjà tiré à cette endroit sans touché .. On est arrivé au bout.
@@ -1890,7 +1873,6 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
                     // ######## Tir ########
-                    //printf("On tir avec un %d !! \n", choixTirIA);
                     int **tab = fonctionTir(aleaX, aleaY, choixTirIA, 0, matriceJoueur); // On utilise notre fonction qui retourne un pointeur de tableau.
                     int tmp_taille = 0;
                     if(choixTirIA == 0){
@@ -1921,28 +1903,11 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                                 ordinateur->toucheNavire = 1;
                                 printf("Tir en %d%c à touché. \n", tab[i][0]+1, tab[i][1]+65);
                             }
-
-                            //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
                         }
                     }
 
                     sens = 1;
-                    //printf("Sens : %d \n", sens);
-                    /*
-                    if(matriceJoueur->value[aleaX][aleaY] == '.'){
-                        matriceJoueur->value[aleaX][aleaY] = 'X';
-                        ordinateur->matScanner->value[aleaX][aleaY] = 'X';
-                        ordinateur->toucheNavire = 0;
-                        sens = 2; // On arrive au bout d'un côté !
-                    }
-
-                    if(matriceJoueur->value[aleaX][aleaY] == 'O'){
-                        matriceJoueur->value[aleaX][aleaY] = '#';
-                        ordinateur->matScanner->value[aleaX][aleaY] = '#';
-                        ordinateur->toucheNavire = 1;
-                        sens = 1; // Il reste peut être un morceau de navire.
-                    }
-                    */
+                    tirEffectue = 1;
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
@@ -1961,7 +1926,6 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
                     // ######## Tir ########
-                    //printf("On tir avec un %d !! \n", choixTirIA);
                     int **tab = fonctionTir(aleaX, aleaY, choixTirIA, 1, matriceJoueur); // On utilise notre fonction qui retourne un pointeur de tableau.
                     int tmp_taille = 0;
                     if(choixTirIA == 0){
@@ -1992,28 +1956,11 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                                 ordinateur->toucheNavire = 1;
                                 printf("Tir en %d%c à touché. \n", tab[i][0]+1, tab[i][1]+65);
                             }
-
-                            //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
                         }
                     }
 
                     sens = 1;
-                    //printf("Sens : %d \n", sens);
-                    /*
-                    if(matriceJoueur->value[aleaX][aleaY] == '.'){
-                        matriceJoueur->value[aleaX][aleaY] = 'X';
-                        ordinateur->matScanner->value[aleaX][aleaY] = 'X';
-                        ordinateur->toucheNavire = 0;
-                        sens = 2; // On arrive au bout d'un côté !
-                    }
-
-                    if(matriceJoueur->value[aleaX][aleaY] == 'O'){
-                        matriceJoueur->value[aleaX][aleaY] = '#';
-                        ordinateur->matScanner->value[aleaX][aleaY] = '#';
-                        ordinateur->toucheNavire = 1;
-                        sens = 1; // Il reste peut être un morceau de navire.
-                    }
-                    */
+                    tirEffectue = 1;
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
@@ -2032,7 +1979,6 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == '.'){
                     // ######## Tir ########
-                    //printf("On tir avec un %d !! \n", choixTirIA);
                     int **tab = fonctionTir(aleaX, aleaY, choixTirIA, 0, matriceJoueur); // On utilise notre fonction qui retourne un pointeur de tableau.
                     int tmp_taille = 0;
                     if(choixTirIA == 0){
@@ -2063,28 +2009,11 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                                 ordinateur->toucheNavire = 1;
                                 printf("Tir en %d%c à touché. \n", tab[i][0]+1, tab[i][1]+65);
                             }
-
-                            //printf("%d%c \n", tab[i][0]+1, tab[i][1]+65);
                         }
                     }
 
                     sens = 1;
-                    //printf("Sens : %d \n", sens);
-                    /*
-                    if(matriceJoueur->value[aleaX][aleaY] == '.'){
-                        matriceJoueur->value[aleaX][aleaY] = 'X';
-                        ordinateur->matScanner->value[aleaX][aleaY] = 'X';
-                        ordinateur->toucheNavire = 0;
-                        sens = 2; // On arrive au bout d'un côté !
-                    }
-
-                    if(matriceJoueur->value[aleaX][aleaY] == 'O'){
-                        matriceJoueur->value[aleaX][aleaY] = '#';
-                        ordinateur->matScanner->value[aleaX][aleaY] = '#';
-                        ordinateur->toucheNavire = 1;
-                        sens = 1; // Il reste peut être un morceau de navire.
-                    }
-                    */
+                    tirEffectue = 1;
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
@@ -2198,9 +2127,14 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
                 ordinateur->posYtouche = -1;
                 ordinateur->angle = 0;
                 ordinateur->etat_IA = R;
-
-                // Faire un tir en aléa pour ne pas perdre un tour ..
             }
+        }
+
+        // Si l'IA n'a pas tiré.
+        // Pour plusieurs raisons : il a fait un tir sur toute une ligne et le navire est mort, à l'autre bout du navire il y a déjà eu un tir dans l'eau, elle est en bout de grille, etc.
+        if(tirEffectue == 0){
+            // Alors il va jouer ..
+            tourDeNotreIA(ordinateur, matriceJoueur, armadaJoueur, armadaIA);
         }
     }
 
