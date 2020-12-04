@@ -18,7 +18,7 @@ int main(){
     placementAleatoire(matriceAdversaire, armadaAdversaire);
     int taille_matrice = 10, choix = 0, choix2 = 0, tour, toucheJoueur = 0, joueurTirSpecial = 0;
     IA ordinateur;
-    
+
     // Initialisation de l'IA :
     initialiserIA(matriceAdversaire, &ordinateur, 10);
 
@@ -29,9 +29,11 @@ int main(){
         scanf("%d",&choix2);
         printf("\n");
     }
+
     if(choix2 == 1){
         choix2 = charger(&tour, matriceJoueur, matriceAdversaire, matriceIntermediaire, ordinateur.matScanner,armadaJoueur, armadaAdversaire);
     }
+
     if(choix2 == 2){
         tour = 1;
         choisirTaille(&taille_matrice); //Choix de la taille du champs de bataille.
@@ -45,12 +47,14 @@ int main(){
             scanf("%d",&choix);
             printf("\n");
         }
+
         if(choix == 1){
             genererArmadaJoueur(matriceJoueur,armadaJoueur); // Quand le joueur veut choisir ses navires.
         }else if(choix==2){
             placementAleatoire(matriceJoueur, armadaJoueur); // Quand le joueur ne place pas lui meme ses navires.
         }
-        placementAleatoire(matriceAdversaire, armadaAdversaire); // Generation de la grille de l'adversaire.        
+
+        placementAleatoire(matriceAdversaire, armadaAdversaire); // Generation de la grille de l'adversaire.
     }
 
     // Initialisation de l'IA :

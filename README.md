@@ -41,6 +41,7 @@ Si le navire concerné est encore en jeu, le joueur peut utiliser chacun de ces 
 
 * L'ordinateur (IA) joue une case sur deux.
 * L'ordinateur (IA) posséde 3 états : R (recherche un navire), O (le navire est trouvé, on détermine l'orientation) et D (on coule le navire).
+* L'ordinateur (IA) utilise les tirs spéciaux. Elle a les mêmes contraintes que le joueur : un seul tir de chaque par partie et l'IA doit avoir touché un navire au tour précédent sans y avoir utilisé un tir spécial.
 
 #### Contraintes techniques
 
