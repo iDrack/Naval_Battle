@@ -1,4 +1,4 @@
-# Naval_battle
+# Naval_battle / Bataille Naval
 
 Jeu de bataille naval réalisé par Charles Kempa & Thomas Dignoire.
 
@@ -55,4 +55,4 @@ Si le navire concerné est encore en jeu, le joueur peut utiliser chacun de ces 
 * Possibilité de sauvegarder une partie et d'y revenir.
 * Possibilité de choisir 5 navires dans une listes de navires (tous entre 1 et 5 cases), en choisissant éventuellement plusieurs fois le même type de navire.
 * La taille de la grille peut être modifié.
-* -
+* ``Pas de socket pour le moment. ``
