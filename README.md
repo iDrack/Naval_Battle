@@ -47,7 +47,8 @@ Si le navire concerné est encore en jeu, le joueur peut utiliser chacun de ces 
 
 * Pour chacun des différents tirs, y compris le tir standard, une fonction renvoie un pointeur sur un tableau allouée dynamiquement des différentes cases cibles, en fonction des coordonnées centrales entrées en paramètres.
 * La compilation est effectué par Makefile.
-* ``Le programme comporte, pour le moment, quelques fuites mémoire.``
+* ``Le programme comporte, pour le moment, quelques fuites mémoires.`` Nous avons fait de notre mieux pour cela mais il en reste toujours.
+Exemple d'utilisation de valgrind avec les détails : `` valgrind --leak-check=yes ./executable ``
 * Le projet est à été fait en binôme.
 
 ## Bonus (4/5)

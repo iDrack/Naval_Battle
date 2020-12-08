@@ -278,7 +278,6 @@ void afficherArmada(Navire **armada){
         Param. :
             armada : tableau de pointeur de navire, type: tableau de pointeur de navire.
     */
-    //puts("Votre armada : ");
     char* st;
     char* st2;
     for(int i = 0; i < TAILLE_FLOTTE; i++){
@@ -342,9 +341,10 @@ int sortieMatrice(Matrice *m, int x, int y, int taille, Orientation o){
             o : Orientation que l'on utilise, Type Orientation.
         Return : Boolean int.
     */
-    if(x > m->taille || y > m->taille)return 1;
-    if(o==V && x+taille > m->taille)return 1;
-    if(o==H && y+taille > m->taille)return 1;
+    if(x > m->taille || y > m->taille) return 1;
+    if(o==V && x+taille > m->taille) return 1;
+    if(o==H && y+taille > m->taille) return 1;
+
     return 0;
 }
 
@@ -361,6 +361,7 @@ int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab
         Return : Boolean int.
     */
     int maxi=m->taille-1, mini=0;
+
     for(int i=0;i<taille;i++){
         if(o==V){
             if(tab[y+i][x] == 1)return 1;
@@ -368,12 +369,14 @@ int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab
             if(tab[y][x+i] == 1)return 1;
         }
     }
+
     if(o == V){
         for(int i=0;i<taille;i++){
             tab[y+i][x] = 1;
             if(x+1 <= maxi) tab[y+i][x+1] = 1;
             if(x-1 >= mini) tab[y+i][x-1] = 1;
         }
+
         if(y-1 >= mini) tab[y-1][x] = 1;
         if(y*taille <= maxi) tab[y+taille][x] = 1;
     }else if(o == H){
@@ -382,9 +385,11 @@ int naviresColles(Matrice *m, int x, int y, int taille, Orientation o, int** tab
             if(y+1 <= maxi) tab[y+1][x+i] = 1;
             if(y-1 >= mini) tab[y-1][x+i] = 1;
         }
+
         if(x-1 >= mini) tab[y][x-1] = 1;
         if(x+taille <= maxi) tab[y][x+taille] = 1;
     }
+
     return 0;
 }
 
@@ -720,6 +725,7 @@ void generationArmadaStandard(Matrice *m, Navire **armada){
                 nt = TORPILLEUR;
                 break;
         }
+
         armada[i]->armementPrincipale = getTypeTirSpecial(nt);
         armada[i]->etat = OK;
         armada[i]->matrice = m;
@@ -1042,13 +1048,11 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Matrice *m4, Navire **ar
     *toucheNavire = 0; // On dit que le joueur n'a pas touché par défaut, mais si c'est le cas alors c'est mise à jour plus bas (lorsqu'on a un "#").
     // L'objectif étant de répondre à la demande : ".. à condition qu'au tour précédent il ait touché un bateau et qu'il n'ait pas utilisé de tir spécial."
     for(int i = 0; i < tmp_taille; i++){
-        //printf("%d%c  ", tab[i][0]+1, 65+tab[i][1]);
         if(tab[i][0] >= 0 && tab[i][0] <= m->taille-1 && tab[i][1] >= 0 && tab[i][1] <= m->taille-1){
             if(m->value[tab[i][0]][tab[i][1]] == 'O'){
                 m->value[tab[i][0]][tab[i][1]] = '#';
                 if(m2 != NULL) m2->value[tab[i][0]][tab[i][1]] = '#';
                 *toucheNavire = 1;
-                //printf("(--> %d%c a touche ! ) ", tab[i][0]+1, 65+tab[i][1]);
                 // Rechercher le(s) navire(s) de l'adversaire pour modifier le statue du navire en touché.
                 int trouve = 0;
                 for(int num = 0; num < TAILLE_FLOTTE; num++){
@@ -1074,17 +1078,10 @@ void effectuerTir(Matrice *m, Matrice *m2, Matrice *m3, Matrice *m4, Navire **ar
                 if(m2 != NULL) m2->value[tab[i][0]][tab[i][1]] = 'X';
                 printf("Ne touche rien en %d%c. \n", tab[i][0]+1, 65+tab[i][1]);
             }
-
-            /*
-            if(m->value[tab[i][0]][tab[i][1]] == '#'){
-                printf("Nous avions deja touche le navire a cette endroit commandant .. \n");
-            }
-            */
         }
     }
-    // Affichage de la matrice de l'adversaire (débug/développement) :
-    //printf("\n");
-    //afficherMatrice(m);
+
+    free(tab);
 }
 
 void modifierEtatNavire(int positionX, int positionY, Navire *n){
@@ -1098,7 +1095,6 @@ void modifierEtatNavire(int positionX, int positionY, Navire *n){
 
     if(n->etat != COULE){
         n->etat = TOUCHE;
-        //printf("Navire touche en %d%c ! \n", positionX+1, positionY+65);
     }
 }
 
@@ -1168,6 +1164,7 @@ int nbNaviresCoulees(Navire **armada){
     for(int i=0;i<TAILLE_FLOTTE;i++){
         if(armada[i]->etat == COULE)ret++;
     }
+
     return ret;
 }
 
@@ -1854,6 +1851,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
 
                     sens = 1;
                     tirEffectue = 1;
+                    free(tab);
                 }
 
                 // Si on a déjà tiré à cette endroit sans touché .. On est arrivé au bout.
@@ -1908,6 +1906,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
 
                     sens = 1;
                     tirEffectue = 1;
+                    free(tab);
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
@@ -1961,6 +1960,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
 
                     sens = 1;
                     tirEffectue = 1;
+                    free(tab);
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
@@ -2014,6 +2014,7 @@ void tourDeNotreIA(IA *ordinateur, Matrice *matriceJoueur, Navire **armadaJoueur
 
                     sens = 1;
                     tirEffectue = 1;
+                    free(tab);
                 }
 
                 if(ordinateur->matScanner->value[aleaX][aleaY] == 'X'){
