@@ -6,8 +6,9 @@ all : executable
 
 # On cherche à créer le fichier exécutable "executable".
 # Pour faire notre exécutable, il fait fonction.o et main.o. Pour cela on fait la commande juste en dessous.
+# On utilise le -static -g pour Valgrind afin de déceler d'éventuelles fuites mémoires.
 executable: fonction.o main.o
-	gcc fonction.o main.o -g -o executable 
+	gcc fonction.o main.o -static -g -o executable 
 	make -s clean
 
 # Deux cas se présentent ici, ci-dessous plus bas : 

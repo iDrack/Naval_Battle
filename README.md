@@ -41,14 +41,14 @@ Si le navire concerné est encore en jeu, le joueur peut utiliser chacun de ces 
 
 * L'ordinateur (IA) joue une case sur deux.
 * L'ordinateur (IA) posséde 3 états : R (recherche un navire), O (le navire est trouvé, on détermine l'orientation) et D (on coule le navire).
-* L'ordinateur (IA) utilise les tirs spéciaux. Elle a les mêmes contraintes que le joueur : un seul tir de chaque par partie et l'IA doit avoir touché un navire au tour précédent sans y avoir utilisé un tir spécial.
+* L'ordinateur (IA) utilise les tirs spéciaux. Elle a les mêmes contraintes que le joueur : un seul tir de chaque par partie et l'IA doit avoir touché un navire au tour précédent sans y avoir utilisé un tir spécial. Elle utilise un tir spécial de manière aléatoire lors de son état de destruction (D).
 
 ### Contraintes techniques
 
 * Pour chacun des différents tirs, y compris le tir standard, une fonction renvoie un pointeur sur un tableau allouée dynamiquement des différentes cases cibles, en fonction des coordonnées centrales entrées en paramètres.
 * La compilation est effectué par Makefile.
-* ``Le programme comporte, pour le moment, quelques fuites mémoires.`` Nous avons fait de notre mieux pour cela mais il en reste toujours.
-Exemple d'utilisation de valgrind avec les détails : `` valgrind --leak-check=yes ./executable ``
+* Valgrind (pour les fuites mémoires) : ``in use at exit: 0 bytes in 0 blocks`` Il n'y a pas de fuite mémoire.
+Exemple d'utilisation de valgrind avec les détails : `` valgrind --tool=memcheck --leak-check=yes --track-origins=yes ./executable ``
 * Le projet est à été fait en binôme.
 
 ## Bonus (4/5)
