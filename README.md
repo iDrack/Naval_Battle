@@ -1,7 +1,7 @@
 ---
 title: Projet de C Avancé, Bataille Navale
 author: Charles Kempa & Thomas Dignoire
-date: 18 Novembre 2020 - 13 Décembre 2020
+date: Novembre 2020 - Décembre 2020
 ---
 # Naval_battle / Bataille Navale
 
