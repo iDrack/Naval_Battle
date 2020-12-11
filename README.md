@@ -1,6 +1,12 @@
-# Naval_battle / Bataille Naval
+---
+title: Projet C Avancé, Bataille Navale
+author: Charles Kempa & Thomas Dignoire
+---
+# Naval_battle / Bataille Navale
 
 Jeu de bataille naval réalisé par Charles Kempa & Thomas Dignoire.
+
+Ce jeu a été réalisé en tant que projet final de C Avancé.
 
 ## Makefile et lancement
 
@@ -9,6 +15,8 @@ Jeu de bataille naval réalisé par Charles Kempa & Thomas Dignoire.
 * ./executable : lancement du programme.
 
 ## Contenus
+
+![Exemple d'un plateau de jeu](capture.png "Plateau de jeu")
 
 * Une grille de bataille navale qui posséde 10 lignes (de 1 à 10) et 10 colonnes (de A à J), sa taille peut être changer par le joueur.
 * Pour effectuer un tir sur une case, les adversaires donnent chacun leur tour les coordonnées de la case qu'ils souhaitent viser (par exemple "4E").

@@ -23,7 +23,7 @@ int main(){
     initialiserIA(matriceAdversaire, &ordinateur, 10);
 
     // ----- Menu Principal -----
-    printf("Bienvenu\n");
+    printf("Ennemis en approche !\nÀ vos postes !\n\n");
     while(choix2 < 1 || choix2 > 2){
         printf("Voulez-vous charger une partie ?\n1. Oui\n2. Non\n>");
         scanf("%d",&choix2);

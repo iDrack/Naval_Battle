@@ -1223,6 +1223,44 @@ void sauvegarde(Navire **aJoueur, Navire **aAdversaire, int tour, Matrice *mJ, M
             y=aJoueur[i]->posY[j];
             fprintf(f,"%d%d",x,y);
         }
+
+        switch(aJoueur[i]->armementPrincipale){
+            case NORMAL:
+                fprintf(f,"0");
+                break;
+            case BARAGE:
+                fprintf(f,"1");
+                break;
+            case CANONS:
+                fprintf(f,"2");
+                break;
+            case BOMBARDEMENT:
+                fprintf(f,"3");
+                break;
+            case INDISPONIBLE:
+                fprintf(f,"4");
+                break;
+        }
+        if(aJoueur[i]->armementSecondaire){
+            switch(aJoueur[i]->armementSecondaire){
+                case NORMAL:
+                    fprintf(f,"0");
+                    break;
+                case BARAGE:
+                    fprintf(f,"1");
+                    break;
+                case CANONS:
+                    fprintf(f,"2");
+                    break;
+                case BOMBARDEMENT:
+                    fprintf(f,"3");
+                    break;
+                case INDISPONIBLE:
+                    fprintf(f,"4");
+                    break;
+            }
+        }
+
         fprintf(f,"\n");
     }
 
@@ -1319,7 +1357,8 @@ int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Matrice *m4, Navire
     //t = fgetc(f);
     fscanf(f,"%d",&t);
     // Avant de continuer, on vérifie bien que le fichier n'est pas vide
-    if(t == -1){
+
+    if(t == 0){
         printf("\033[0;31mAucune sauvegarde trouvée.\033[0;m\n");
         return 2;
     }
@@ -1341,8 +1380,6 @@ int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Matrice *m4, Navire
         while(n == '\n'){
             n = fgetc(f);
         }
-
-        // TODO Ajouter l'armement.
 
         switch(n){
             case 'P':
@@ -1385,6 +1422,46 @@ int charger(int *tour, Matrice *m, Matrice *m2, Matrice *m3, Matrice *m4, Navire
             aJ[i]->posX[j] = fgetc(f)-48;
             aJ[i]->posY[j] = fgetc(f)-48;
         }
+
+        e = fgetc(f);
+        switch(e){
+            case '0':
+                aJ[i]->armementPrincipale = NORMAL;
+                break;
+            case '1':
+                aJ[i]->armementPrincipale = BARAGE;
+                break;
+            case '2':
+                aJ[i]->armementPrincipale = CANONS;
+                break;
+            case '3':
+                aJ[i]->armementPrincipale = BOMBARDEMENT;
+                break;
+            case '4':
+                aJ[i]->armementPrincipale = INDISPONIBLE;
+                break;
+        }
+        if(aJ[i]->nom == CROISER){
+            e = fgetc(f);
+            switch(e){
+                case '0':
+                    aJ[i]->armementSecondaire = NORMAL;
+                    break;
+                case '1':
+                    aJ[i]->armementSecondaire = BARAGE;
+                    break;
+                case '2':
+                    aJ[i]->armementSecondaire = CANONS;
+                    break;
+                case '3':
+                    aJ[i]->armementSecondaire = BOMBARDEMENT;
+                    break;
+                case '4':
+                    aJ[i]->armementSecondaire = INDISPONIBLE;
+                    break;
+            }
+        }
+
     }
 
     // On reconstruit la matrice du joueur
