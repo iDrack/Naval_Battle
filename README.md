@@ -76,12 +76,10 @@ Exemple d'utilisation de valgrind avec les détails : `` valgrind --tool=memchec
 * Possibilité de sauvegarder une partie et d'y revenir.
 * Possibilité de choisir 5 navires dans une listes de navires (tous entre 1 et 5 cases), en choisissant éventuellement plusieurs fois le même type de navire.
 * La taille de la grille peut être modifié.
-* ``Pas de socket pour le moment. ``
 
 ## Information et liens utiles
 
 * (gitHub)[https://github.com/iDrack/Naval_Battle] : https://github.com/iDrack/Naval_Battle
 * (Trello)[https://trello.com/b/zV3UGXll/bataille-navale] : https://trello.com/b/zV3UGXll/bataille-navale
-
-- Les fonctions possédent une en-tête avec une description de celle-ci avec le détail de ces paramètres. 
+* Les fonctions possédent une en-tête avec une description de celle-ci avec le détail de ces paramètres. 
 N'hésitez pas à jetter un oeil sur le code, propre et commenté.
