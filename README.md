@@ -44,8 +44,14 @@ Si le navire concerné est encore en jeu, le joueur peut utiliser chacun de ces 
 
 
 `` Tir en ligne (sous-marin) `` : permet de viser toute une ligne ou toute une colonne de la grille en une fois.
+
+
 `` Tir en "croix" (croiseur) `` : permet de viser en une seule fois un "x" centré sur une case et de 3.
+
+
 `` Tir en "plus" (croiseur) `` : permet de viser en une seule fois un "+" centré sur une case et de 3.
+
+
 `` Tir en carré (porte avion) `` : permet de viser en une seule fois un carré de 3 cases par 3 centré.
 
 * La partie se termine quand un joueur n'a plus de navires en jeu.
