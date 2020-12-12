@@ -41,10 +41,12 @@ Ce jeu a été réalisé en tant que projet final de C Avancé.
 * Chacun leur tour, les joueurs vont procéder à un tir qui concerne une seule case.
 * Chaque joueurs disposent de 4 tirs spéciaux qui sont chacun lié à un navire. 
 Si le navire concerné est encore en jeu, le joueur peut utiliser chacun de ces tirs spéciaux une et une seule fois dans la partie, à condition qu'au tour précédent il ait touché un navire et qu'il n'ait pas utilisé de tir spécial.
+
 `` Tir en ligne (sous-marin) `` : permet de viser toute une ligne ou toute une colonne de la grille en une fois.
 `` Tir en "croix" (croiseur) `` : permet de viser en une seule fois un "x" centré sur une case et de 3.
 `` Tir en "plus" (croiseur) `` : permet de viser en une seule fois un "+" centré sur une case et de 3.
 `` Tir en carré (porte avion) `` : permet de viser en une seule fois un carré de 3 cases par 3 centré.
+
 * La partie se termine quand un joueur n'a plus de navires en jeu.
 
 ### Intelligence Artificielle
