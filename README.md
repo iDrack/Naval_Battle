@@ -11,9 +11,10 @@ Ce jeu a été réalisé en tant que projet final de C Avancé.
 
 ## Makefile et lancement
 
-* make : pour compiler les fichiers et générer l'exécutable nommé "executable".
-* make clean : supprimer tout les fichiers intermédiaire à la compilation (déjà fait dans le make).
-* ./executable : lancement du programme.
+* `` make `` : pour compiler les fichiers et générer l'exécutable nommé "executable".
+* `` make clean `` : supprimer tout les fichiers intermédiaire à la compilation (déjà fait dans le make).
+* `` ./executable `` : lancement du programme.
+* `` valgrind --tool=memcheck --leak-check=yes --track-origins=yes ./executable `` : détails avec Valgrind.
 
 ## Contenus
 
